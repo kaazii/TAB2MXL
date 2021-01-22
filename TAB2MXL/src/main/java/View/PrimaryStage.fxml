@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <!-- TODO Add Nodes -->
+  <children>
+    <Pane layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: #F0F4F7;&#10;-fx-stroke: black;&#10;-fx-stroke-width: 1;">
+      <children>
+        <Label layoutX="43.0" layoutY="65.0" style="\@font-face {&#10;    font-family: Monsterrat;&#10;    src: url('/Montserrat-Regular.ttf');&#10;}&#10;-fx-font-family: Monsterrat;&#10;-fx-font-size: 13;" text="translate your tablature to musicXML with one button " />
+        <Label layoutX="41.0" layoutY="18.0" prefHeight="70.0" prefWidth="114.0" style="\@font-face {&#10;    font-family: Monsterrat;&#10;    src: url('/Montserrat-Bold.ttf');&#10;}&#10;-fx-font-family: Monsterrat;&#10;-fx-font-size:32;&#10;-fx-font-weight: bold;" text="TAB2XML">
+          <font>
+            <Font size="24.0" />
+          </font>
+        </Label>
+        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="464.0" layoutX="31.0" layoutY="97.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" width="638.0">
+          <effect>
+            <DropShadow blurType="GAUSSIAN" color="#9f9f9f" height="33.14286872318812" radius="16.071431466511314" width="33.14285714285714" />
+          </effect>
+        </Rectangle>
+        <TextArea layoutX="60.0" layoutY="157.0" prefHeight="324.0" prefWidth="547.0" promptText="Paste your tablature here, upload a file, or drag and drop your file here..." style="-fx-stroke: black;&#10;-fx-stroke-width: 5 px;" wrapText="true" />
+        <Button cancelButton="false" defaultButton="false" layoutX="278.0" layoutY="500.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="139.0" style="-fx-background-color:  #F0F4F7;&#10;-fx-background-radius:20,20,20;" text="Translate" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false">
+          <effect>
+            <DropShadow blurType="GAUSSIAN" color="GREY" />
+          </effect>
+          <font>
+            <Font size="18.0" />
+          </font>
+        </Button>
+        <HBox layoutX="40.0" layoutY="97.0" prefHeight="49.0" prefWidth="267.0" spacing="0.0">
+          <children>
+            <Button minWidth="94.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="94.0" style="-fx-font-size: 20;&#10;-fx-background-color: white;" text="Guitar" textOverrun="CLIP" />
+            <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="94.0" style="-fx-font-size: 20;&#10;-fx-background-color: transparent;&#10;-fx-text-fill: #828F9C;" text="Bass" />
+            <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="94.0" style="-fx-font-size: 20;&#10;-fx-background-color:white;&#10;-fx-text-fill: #828F9C;" text="Drum" textAlignment="LEFT" textOverrun="CLIP" />
+          </children>
+          <padding>
+            <Insets top="10.0" />
+          </padding>
+        </HBox>
+        <Button layoutX="625.0" layoutY="390.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" style="-fx-background-image: url(&quot;file-32.png&quot;);&#10;-fx-background-repeat: no-repeat;&#10;-fx-background-position: center;&#10;-fx-background-color: transparent;" text="" />
+        <Button layoutX="625.0" layoutY="441.0" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" style="-fx-background-image: url(&quot;trash-32.png&quot;);&#10;-fx-background-repeat: no-repeat;&#10;-fx-background-position: center;&#10;-fx-background-color: transparent;" text="" />
+      </children>
+    </Pane>
+  </children>
+</AnchorPane>
