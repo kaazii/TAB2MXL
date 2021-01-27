@@ -22,11 +22,11 @@
         </Label>
         <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="464.0" layoutX="31.0" layoutY="97.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" width="638.0">
           <effect>
-            <DropShadow blurType="GAUSSIAN" color="#9f9f9f" height="33.14285714285783" radius="16.07142857142874" width="33.14285714285714" />
+            <DropShadow blurType="GAUSSIAN" color="#9f9f9f" height="33.14285714285748" radius="16.071428571428655" width="33.14285714285714" />
           </effect>
         </Rectangle>
         <TextArea fx:id="textInput" layoutX="60.0" layoutY="157.0" onDragOver="#dragDropFile" prefHeight="324.0" prefWidth="547.0" promptText="Paste your tablature here, upload a file, or drag and drop your file here..." style="-fx-stroke: black;&#10;-fx-stroke-width: 5;&#10;-fx-font-family:consolas;" wrapText="true" />
-        <Button fx:id="translateButton" cancelButton="false" defaultButton="false" layoutX="278.0" layoutY="500.0" mnemonicParsing="false" onMouseEntered="#hoverButtonChange" onMouseExited="#hoverButtonBack" prefHeight="41.0" prefWidth="139.0" style="-fx-background-color:  #F0F4F7;&#10;-fx-background-radius:20,20,20;" text="Translate" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false">
+        <Button fx:id="translateButton" cancelButton="false" defaultButton="false" layoutX="278.0" layoutY="500.0" mnemonicParsing="false" onAction="#translate" onMouseEntered="#hoverButtonChange" onMouseExited="#hoverButtonBack" prefHeight="41.0" prefWidth="139.0" style="-fx-background-color:  #F0F4F7;&#10;-fx-background-radius:20,20,20;" text="Translate" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false">
           <effect>
             <DropShadow blurType="GAUSSIAN" color="GREY" />
           </effect>
