@@ -2,6 +2,11 @@ package View;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 import javafx.fxml.FXML;
@@ -91,6 +96,8 @@ public class Controller {
 	public void uploadFile() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Tab File");
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
+		fileChooser.getExtensionFilters().add(extFilter);
 		file = fileChooser.showOpenDialog(fileButton.getScene().getWindow());
 		System.out.println(file);
 		putString();
@@ -99,11 +106,14 @@ public class Controller {
 	}
 	private void putString() {
 		try {
-			Scanner fileIn = new Scanner(file);
-			while(fileIn.hasNextLine()) {
-				textInput.appendText(fileIn.nextLine()+"\n");
+			if(file != null) {
+				Scanner fileIn = new Scanner(file);
+				while(fileIn.hasNextLine()) {
+					textInput.appendText(fileIn.nextLine()+"\n");
+				}
+				fileIn.close();
 			}
-			fileIn.close();
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,14 +122,25 @@ public class Controller {
 	public void clear() {
 		textInput.clear();
 		if(file != null) file = null;
+		translateButton.setText("Translate");
 	}
 	
 	public void dragDropFile() {
 		textInput.setOnDragOver(e -> {
 			Dragboard db = e.getDragboard();
-			if(db.hasFiles()) {
-				e.acceptTransferModes(TransferMode.COPY);
+			if(db.hasFiles() && db.getFiles().size() == 1 /*&& Files.probeContentType(db.getFiles().get(0).equals("))*/) {
 				
+				
+				try {
+					Path path = FileSystems.getDefault().getPath(db.getFiles().get(0).getPath());
+					if(Files.probeContentType(path).equals("text/plain")) {
+						e.acceptTransferModes(TransferMode.COPY);
+					}
+					
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			else {
 				e.consume();
@@ -139,5 +160,35 @@ public class Controller {
 			e.setDropCompleted(success);
 			e.consume();
 		});
+	}
+	
+	public void translate() {
+		if(!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
+			//Translation function geos here
+			textInput.setText("Boom!Translated!");
+			translateButton.setText("Save");
+		}
+		else if(translateButton.getText().equals("Save")) {
+			try {
+			     
+			      FileChooser fileChooser = new FileChooser();
+			      fileChooser.setTitle("Save");
+			      FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
+			      fileChooser.getExtensionFilters().add(extFilter);
+			      File savefile = fileChooser.showSaveDialog(translateButton.getScene().getWindow());
+			      if(savefile != null) {
+			    	  FileWriter myWriter = new FileWriter(savefile);
+			    	  myWriter.write(textInput.getText());
+				      myWriter.close();
+			      }
+			      
+			      
+			      System.out.println("Successfully wrote to the file.");
+			    } catch (IOException e) {
+			      System.out.println("An error occurred.");
+			      e.printStackTrace();
+			    }
+		}
+		
 	}
 }
