@@ -99,7 +99,7 @@ public class Controller {
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
 		fileChooser.getExtensionFilters().add(extFilter);
 		file = fileChooser.showOpenDialog(fileButton.getScene().getWindow());
-		System.out.println(file);
+		//System.out.println(file);
 		putString();
 		
 		
