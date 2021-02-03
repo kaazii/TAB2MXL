@@ -167,9 +167,16 @@ public class Controller {
 		 * check if the text area is empty
 		 * if the button has set to save, this option will 
 		 * change the button to translate
+		 * disable the button for translate
 		 */
 		if(textInput.getText().isEmpty() && translateButton.getText().equals("Save")) {
 			translateButton.setText("Translate");
+		}
+		if(textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
+			translateButton.setDisable(true);
+		}
+		else {
+			translateButton.setDisable(false);
 		}
 	}
 	public void translate() {
