@@ -197,7 +197,6 @@ public class Controller {
 		for (int i = 0; i < lines.length; i++) {
 			System.out.println(lines[i]);
 		}
-		
 		System.out.println(lines.length);
 		
 		//basic checks
