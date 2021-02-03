@@ -1,3 +1,4 @@
+
 package View;
 
 import java.io.File;
@@ -179,33 +180,54 @@ public class Controller {
 			translateButton.setDisable(false);
 		}
 	}
+	
+
 	public void translate() {
-		if(!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
-			//Translation function geos here
-			textInput.setText("Boom!Translated!");
+		if (!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
+			textInput.setText(stringParse(textInput.getText()));
 			translateButton.setText("Save");
-		}
-		else if(translateButton.getText().equals("Save")) {
+		} else if (translateButton.getText().equals("Save")) {
 			try {
-			     
-			      FileChooser fileChooser = new FileChooser();
-			      fileChooser.setTitle("Save");
-			      FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
-			      fileChooser.getExtensionFilters().add(extFilter);
-			      File savefile = fileChooser.showSaveDialog(translateButton.getScene().getWindow());
-			      if(savefile != null) {
-			    	  FileWriter myWriter = new FileWriter(savefile);
-			    	  myWriter.write(textInput.getText());
-				      myWriter.close();
-			      }
-			      
-			      
-			      System.out.println("Successfully wrote to the file.");
-			    } catch (IOException e) {
-			      System.out.println("An error occurred.");
-			      e.printStackTrace();
-			    }
+
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Save");
+				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)",
+						"*.musicxml");
+				fileChooser.getExtensionFilters().add(extFilter);
+				File savefile = fileChooser.showSaveDialog(translateButton.getScene().getWindow());
+				if (savefile != null) {
+					FileWriter myWriter = new FileWriter(savefile);
+					myWriter.write(textInput.getText());
+					myWriter.close();
+				}
+
+				System.out.println("Successfully wrote to the file.");
+			} catch (IOException e) {
+				System.out.println("An error occurred.");
+				e.printStackTrace();
+			}
 		}
+	}
+	
+	public static String stringParse(String input) {
+		String lines[] = input.split("\\r?\\n");
 		
+		//for error testing
+		for (int i = 0; i < lines.length; i++) {
+			System.out.println(lines[i]);
+		}
+		System.out.println(lines.length);
+		
+		//basic checks
+		if (lines[0].toUpperCase().startsWith("E")) {
+			return "This is a Guitar tab.";
+		}
+		else if (lines[0].toUpperCase().startsWith("C")) {
+			return "This is a Drum tab.";
+		}
+		else if (lines[0].toUpperCase().startsWith("G")) {
+			return "This is a Bass tab.";
+		}
+		return "Boom! Translated.";
 	}
 }
