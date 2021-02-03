@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="View.Controller">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
   <!-- TODO Add Nodes -->
   <children>
     <Pane layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: #F0F4F7;&#10;-fx-stroke: black;&#10;-fx-stroke-width: 1;">
@@ -25,7 +25,7 @@
             <DropShadow blurType="GAUSSIAN" color="#9f9f9f" height="33.14285714285748" radius="16.071428571428655" width="33.14285714285714" />
           </effect>
         </Rectangle>
-        <TextArea fx:id="textInput" layoutX="60.0" layoutY="157.0" onDragOver="#dragDropFile" prefHeight="324.0" prefWidth="547.0" promptText="Paste your tablature here, upload a file, or drag and drop your file here..." style="-fx-stroke: black;&#10;-fx-stroke-width: 5;&#10;-fx-font-family:consolas;" wrapText="true" />
+        <TextArea fx:id="textInput" layoutX="60.0" layoutY="157.0" onDragOver="#dragDropFile" onKeyTyped="#checkForEmpty" prefHeight="324.0" prefWidth="547.0" promptText="Paste your tablature here, upload a file, or drag and drop your file here..." style="-fx-stroke: black;&#10;-fx-stroke-width: 5;&#10;-fx-font-family:consolas;" wrapText="true" />
         <Button fx:id="translateButton" cancelButton="false" defaultButton="false" layoutX="278.0" layoutY="500.0" mnemonicParsing="false" onAction="#translate" onMouseEntered="#hoverButtonChange" onMouseExited="#hoverButtonBack" prefHeight="41.0" prefWidth="139.0" style="-fx-background-color:  #F0F4F7;&#10;-fx-background-radius:20,20,20;" text="Translate" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false">
           <effect>
             <DropShadow blurType="GAUSSIAN" color="GREY" />
