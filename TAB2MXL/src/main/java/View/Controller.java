@@ -164,13 +164,12 @@ public class Controller {
 	
 	public void translate() {
 		if(!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
-			//Translation function geos here
-			textInput.setText("Boom!Translated!");
+			//translate goes here
+			textInput.setText(stringParse(textInput.getText()));
 			translateButton.setText("Save");
 		}
 		else if(translateButton.getText().equals("Save")) {
 			try {
-			     
 			      FileChooser fileChooser = new FileChooser();
 			      fileChooser.setTitle("Save");
 			      FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
@@ -189,6 +188,9 @@ public class Controller {
 			      e.printStackTrace();
 			    }
 		}
-		
+	}
+	
+	public static String stringParse(String input) {
+		return "This is a test.";
 	}
 }
