@@ -137,5 +137,4 @@ public class MyFrame implements ActionListener {
 			System.out.println(f);
 		}
 	}
-	
 }
