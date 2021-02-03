@@ -99,60 +99,61 @@ public class Controller {
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
 		fileChooser.getExtensionFilters().add(extFilter);
 		file = fileChooser.showOpenDialog(fileButton.getScene().getWindow());
-		//System.out.println(file);
+		// System.out.println(file);
 		putString();
-		
-		
+
 	}
+
 	private void putString() {
 		try {
-			if(file != null) {
+			if (file != null) {
 				Scanner fileIn = new Scanner(file);
-				while(fileIn.hasNextLine()) {
-					textInput.appendText(fileIn.nextLine()+"\n");
+				while (fileIn.hasNextLine()) {
+					textInput.appendText(fileIn.nextLine() + "\n");
 				}
 				fileIn.close();
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 	public void clear() {
 		textInput.clear();
-		if(file != null) file = null;
+		if (file != null)
+			file = null;
 		translateButton.setText("Translate");
 	}
-	
+
 	public void dragDropFile() {
 		textInput.setOnDragOver(e -> {
 			Dragboard db = e.getDragboard();
-			if(db.hasFiles() && db.getFiles().size() == 1 /*&& Files.probeContentType(db.getFiles().get(0).equals("))*/) {
-				
-				
+			if (db.hasFiles()
+					&& db.getFiles().size() == 1 /* && Files.probeContentType(db.getFiles().get(0).equals(")) */) {
+
 				try {
 					Path path = FileSystems.getDefault().getPath(db.getFiles().get(0).getPath());
-					if(Files.probeContentType(path).equals("text/plain")) {
+					if (Files.probeContentType(path).equals("text/plain")) {
 						e.acceptTransferModes(TransferMode.COPY);
 					}
-					
+
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			}
-			else {
+			} else {
 				e.consume();
 			}
 		});
-		textInput.setOnDragDropped(e->{
+		textInput.setOnDragDropped(e -> {
 			Dragboard db = e.getDragboard();
 			boolean success = false;
-			if(db.hasFiles()) {
+			if (db.hasFiles()) {
 				success = true;
-				
-				for(File f : db.getFiles()) {
+
+				for (File f : db.getFiles()) {
 					file = f;
 				}
 			}
@@ -161,34 +162,36 @@ public class Controller {
 			e.consume();
 		});
 	}
-	
+
 	public void translate() {
-		if(!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
-			//Translation function geos here
-			textInput.setText("Boom!Translated!");
+		if (!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
+			textInput.setText(stringParse(textInput.getText()));
 			translateButton.setText("Save");
-		}
-		else if(translateButton.getText().equals("Save")) {
+		} else if (translateButton.getText().equals("Save")) {
 			try {
-			     
-			      FileChooser fileChooser = new FileChooser();
-			      fileChooser.setTitle("Save");
-			      FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
-			      fileChooser.getExtensionFilters().add(extFilter);
-			      File savefile = fileChooser.showSaveDialog(translateButton.getScene().getWindow());
-			      if(savefile != null) {
-			    	  FileWriter myWriter = new FileWriter(savefile);
-			    	  myWriter.write(textInput.getText());
-				      myWriter.close();
-			      }
-			      
-			      
-			      System.out.println("Successfully wrote to the file.");
-			    } catch (IOException e) {
-			      System.out.println("An error occurred.");
-			      e.printStackTrace();
-			    }
+
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Save");
+				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)",
+						"*.musicxml");
+				fileChooser.getExtensionFilters().add(extFilter);
+				File savefile = fileChooser.showSaveDialog(translateButton.getScene().getWindow());
+				if (savefile != null) {
+					FileWriter myWriter = new FileWriter(savefile);
+					myWriter.write(textInput.getText());
+					myWriter.close();
+				}
+
+				System.out.println("Successfully wrote to the file.");
+			} catch (IOException e) {
+				System.out.println("An error occurred.");
+				e.printStackTrace();
+			}
 		}
+	}
+	
+	public static String stringParse(String input) {
+		return "This is a test.";
 		
 	}
 }
