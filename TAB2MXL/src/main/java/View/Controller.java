@@ -162,6 +162,16 @@ public class Controller {
 		});
 	}
 	
+	public void checkForEmpty() {
+		/*
+		 * check if the text area is empty
+		 * if the button has set to save, this option will 
+		 * change the button to translate
+		 */
+		if(textInput.getText().isEmpty() && translateButton.getText().equals("Save")) {
+			translateButton.setText("Translate");
+		}
+	}
 	public void translate() {
 		if(!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
 			//Translation function geos here
