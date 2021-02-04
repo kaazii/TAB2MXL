@@ -13,6 +13,7 @@ import java.util.Scanner;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
@@ -39,6 +40,8 @@ public class Controller {
 	Button deleteButton;
 	File file;
 	String content;
+	@FXML
+	CheckBox autoDetect;
 
 	public void guitarButtonClicked() {
 		selected = Type.GUITAR;
@@ -109,10 +112,16 @@ public class Controller {
 		try {
 			if(file != null) {
 				Scanner fileIn = new Scanner(file);
+				if(!textInput.getText().isEmpty()) {
+					textInput.clear();
+				}
 				while(fileIn.hasNextLine()) {
 					textInput.appendText(fileIn.nextLine()+"\n");
 				}
 				fileIn.close();
+				if(autoDetect.isSelected()) {
+					detectInst();
+				}
 			}
 			
 		} catch (FileNotFoundException e) {
@@ -158,9 +167,20 @@ public class Controller {
 				}
 			}
 			putString();
+			
 			e.setDropCompleted(success);
 			e.consume();
 		});
+	}
+	
+	public void detectInst() {
+		/*
+		 * gets called directly from the ui to detect the type
+		 * of tablatures
+		 */
+		if(autoDetect.isSelected()) {
+			detect(textInput.getText());
+		}
 	}
 	
 	public void checkForEmpty() {
@@ -179,12 +199,18 @@ public class Controller {
 		else {
 			translateButton.setDisable(false);
 		}
+		if(autoDetect.isSelected()) {
+			detect(textInput.getText());
+		}
+		
+		
 	}
 	
 
 	public void translate() {
 		if (!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
-			textInput.setText(stringParse(textInput.getText()));
+			//textInput.setText(stringParse(textInput.getText()));
+			textInput.setText("Translation");
 			translateButton.setText("Save");
 		} else if (translateButton.getText().equals("Save")) {
 			try {
@@ -209,25 +235,30 @@ public class Controller {
 		}
 	}
 	
-	public static String stringParse(String input) {
+	public void detect(String input) {
 		String lines[] = input.split("\\r?\\n");
 		
 		//for error testing
-		for (int i = 0; i < lines.length; i++) {
-			System.out.println(lines[i]);
-		}
-		System.out.println(lines.length);
+//		for (int i = 0; i < lines.length; i++) {
+//			System.out.println(lines[i]);
+//		}
+//		System.out.println(lines.length);
 		
 		//basic checks
 		if (lines[0].toUpperCase().startsWith("E")) {
-			return "This is a Guitar tab.";
+			guitarButtonClicked();
+			/*
+			 * Guitar
+			 */
+			
 		}
 		else if (lines[0].toUpperCase().startsWith("C")) {
-			return "This is a Drum tab.";
+			drumButtonClicked();
+			//Drum
 		}
 		else if (lines[0].toUpperCase().startsWith("G")) {
-			return "This is a Bass tab.";
+			bassButtonClicked();
+			// Bass
 		}
-		return "Boom! Translated.";
 	}
 }
