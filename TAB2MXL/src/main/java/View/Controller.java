@@ -119,6 +119,9 @@ public class Controller {
 					textInput.appendText(fileIn.nextLine()+"\n");
 				}
 				fileIn.close();
+				if(translateButton.isDisable()) {
+					translateButton.setDisable(false);
+				}
 				if(autoDetect.isSelected()) {
 					detectInst();
 				}
