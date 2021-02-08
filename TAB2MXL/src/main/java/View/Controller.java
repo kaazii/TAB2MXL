@@ -5,15 +5,23 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
@@ -21,8 +29,15 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 public class Controller {
+	
+	ObservableList<String> beatOptions = FXCollections.observableArrayList("1/4", "2/4", "3/4", "4/4");
+	@FXML
+	ChoiceBox beatsChoice ;
 	@FXML
 	Button guitarButton;
 	@FXML
@@ -42,6 +57,9 @@ public class Controller {
 	String content;
 	@FXML
 	CheckBox autoDetect;
+	
+	
+	
 
 	public void guitarButtonClicked() {
 		selected = Type.GUITAR;
@@ -211,6 +229,30 @@ public class Controller {
 	
 
 	public void translate() {
+	
+			
+			
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("OptionBox.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle("Tranlation Options");
+			popup.setScene(new Scene(root, 322, 414));
+			popup.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+			
+			System.out.println(beatsChoice);
+//			beatsChoice.setItems(beatOptions);
+//			beatsChoice.setValue("Beats");
+			
+			
+	
+		
 		if (!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
 			//textInput.setText(stringParse(textInput.getText()));
 			textInput.setText("Translation");
