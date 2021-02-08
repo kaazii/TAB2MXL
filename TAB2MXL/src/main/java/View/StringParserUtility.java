@@ -21,6 +21,6 @@ public final class StringParserUtility {
 		else if (lines[0].toUpperCase().startsWith("G")) {
 			return "This is a Bass tab.";
 		}
-		return "Boom! Translated.";
+		return "Could not recognize the tablature.";
 	}
 }
