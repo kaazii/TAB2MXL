@@ -15,9 +15,7 @@ public class Main {
 		//govind
 		//test
 		//commit to personal branch
-		//develop0
-		//for lab task 3
 		System.out.println("Hola World22");
+
 	}
-	
 }
