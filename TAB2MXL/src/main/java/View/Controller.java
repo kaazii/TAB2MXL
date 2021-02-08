@@ -39,6 +39,8 @@ public class Controller {
 	Button deleteButton;
 	File file;
 	String content;
+	
+	StringParserUtility parser = new StringParserUtility();
 
 	public void guitarButtonClicked() {
 		selected = Type.GUITAR;
@@ -184,7 +186,7 @@ public class Controller {
 
 	public void translate() {
 		if (!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
-			textInput.setText(stringParse(textInput.getText()));
+			textInput.setText(parser.stringParse(textInput.getText()));
 			translateButton.setText("Save");
 		} else if (translateButton.getText().equals("Save")) {
 			try {
@@ -207,27 +209,5 @@ public class Controller {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	public static String stringParse(String input) {
-		String lines[] = input.split("\\r?\\n");
-		
-		//for error testing
-		for (int i = 0; i < lines.length; i++) {
-			System.out.println(lines[i]);
-		}
-		System.out.println(lines.length);
-		
-		//basic checks
-		if (lines[0].toUpperCase().startsWith("E")) {
-			return "This is a Guitar tab.";
-		}
-		else if (lines[0].toUpperCase().startsWith("C")) {
-			return "This is a Drum tab.";
-		}
-		else if (lines[0].toUpperCase().startsWith("G")) {
-			return "This is a Bass tab.";
-		}
-		return "Boom! Translated.";
 	}
 }
