@@ -183,14 +183,13 @@ public class Controller {
 		}
 	}
 	
-
 	public void translate() {
 		if (!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
-			textInput.setText(parser.stringParse(textInput.getText()));
+			//translated text goes here
+			textInput.setText(parser.stringParse(textInput.getText())); //for Amer
 			translateButton.setText("Save");
 		} else if (translateButton.getText().equals("Save")) {
 			try {
-
 				FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Save");
 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)",
