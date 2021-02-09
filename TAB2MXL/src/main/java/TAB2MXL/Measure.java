@@ -14,11 +14,11 @@ public class Measure {
 	public int timeBeats;// user input 	
 	public int timeBeatType;// user input
 	
-	public char clefSign;
+	public static final String clefSign = "TAB";
 	public int clefLine;
 
 	// Create a new measure
-	public Measure(char clefSign, int clefLine, int timeBeats, int timeBeatType, int measureNumber) {
+	public Measure(int clefLine, int timeBeats, int timeBeatType, int measureNumber) {
 		
 		this.measureNumber=measureNumber;
 		
@@ -26,9 +26,7 @@ public class Measure {
 		
 		Measure.divisions = 2; // Change this?
 		
-		this.clefLine=clefLine;
-		this.clefSign=clefSign;
-		
+		this.clefLine=clefLine;		
 		
 		this.timeBeats = timeBeats;
 		this.timeBeatType = timeBeatType;

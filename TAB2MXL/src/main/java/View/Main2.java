@@ -1,5 +1,9 @@
 package View;
 
+import java.util.ArrayList;
+
+import TAB2MXL.Measure;
+import TAB2MXL.XmlGenerator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,7 +21,11 @@ public class Main2 extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
+		// TODO pass in the MEASURE list to XmlGenerator
+		ArrayList<Measure> myList = new ArrayList<Measure>();
+		Measure myMeasure = new Measure(5, 4, 4, 1);
+		myList.add(myMeasure);
+		XmlGenerator.Generate(myList);
 		Parent root = FXMLLoader.load(getClass().getResource("PrimaryStage.fxml"));
 		primaryStage.setTitle("TAB2XML");
 		primaryStage.setScene(new Scene(root, 700,600));
