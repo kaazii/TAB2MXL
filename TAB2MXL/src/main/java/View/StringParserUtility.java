@@ -9,7 +9,7 @@ public final class StringParserUtility {
 		for (int i = 0; i < lines.length; i++) {
 			System.out.println(lines[i]);
 		}
-		System.out.println(lines.length);
+		System.out.println("numLines: " + lines.length);
 		
 		//basic checks
 		if (lines[0].toUpperCase().startsWith("E")) {
