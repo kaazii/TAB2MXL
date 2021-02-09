@@ -10,9 +10,7 @@ public class Main2 extends Application{
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
 		launch(args);
-
 	}
 
 	@Override
@@ -23,5 +21,4 @@ public class Main2 extends Application{
 		primaryStage.setScene(new Scene(root, 700,600));
 		primaryStage.show();
 	}
-
 }
