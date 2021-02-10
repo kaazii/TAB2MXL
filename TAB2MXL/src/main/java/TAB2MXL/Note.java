@@ -4,7 +4,7 @@ public class Note {
 
 	public int duration;
 	public int octave; 
-	public char step;
+	public String step;
 	
 	public int voice; 
 	public String type;
@@ -12,7 +12,7 @@ public class Note {
 	public int string;
 	public int fret;
 	
-	public Note(char step, int octave, int fret, int string) {
+	public Note(String step, int octave, int fret, int string) {
 		this.step = step;
 		this.octave = octave; 
 		this.fret=fret;
