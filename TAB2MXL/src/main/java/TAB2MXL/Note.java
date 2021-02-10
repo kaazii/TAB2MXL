@@ -6,7 +6,7 @@ public class Note {
 	public int octave; 
 	public char step;
 	
-	public int voice; 
+	public int voice=1; 
 	public String type;
 	
 	public int string;
