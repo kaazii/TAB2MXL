@@ -5,7 +5,6 @@ import TAB2MXL.Note;
 
 public final class StringParserUtility {
 	public static String stringParse(String input) {
-		
 		String lines[] = input.split("\\r?\\n");
 		
 		//for error testing
