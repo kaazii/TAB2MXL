@@ -53,7 +53,9 @@ public class Main2 extends Application{
 		myMeasure.notelist.add(n2);
 		
 		myList.add(myMeasure);
-		XmlGenerator.Generate(myList);
+		String xmlString = XmlGenerator.Generate(myList);
+		System.out.println(xmlString);
+		
 		Parent root = FXMLLoader.load(getClass().getResource("PrimaryStage.fxml"));
 		primaryStage.setTitle("TAB2XML");
 		primaryStage.setScene(new Scene(root, 700,600));
