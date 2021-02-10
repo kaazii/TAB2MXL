@@ -3,19 +3,18 @@ package TAB2MXL;
 public class Note {
 
 	public int duration;
-
-	public int octave;
+	public int octave; 
 	public char step;
-
-	public int voice;
+	public int voice; 
 	public String type;
 
 	public int string;
 	public int fret;
 	
-	public Note(char step, int duration, int octave) {
+	public Note(char step, int octave, int fret, int string) {
 		this.step = step;
-		this.duration = duration;
-		this.octave = octave;
+		this.octave = octave; 
+		this.fret=fret;
+		this.string=string;
 	}
 }
