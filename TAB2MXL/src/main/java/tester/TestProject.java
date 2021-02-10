@@ -6,6 +6,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +32,7 @@ public class TestProject {
 	@Before
 	public void setUp() throws Exception {
 		 measure = new Measure(1, 2, 3, 4);
+		 note = new Note("E",4,0,1);
 	    }
 	@Test
 	public void testMeasureConstructor1(){
@@ -97,6 +100,19 @@ public class TestProject {
 		assertTrue(note.getStep().equals("E"));	
 	}
 	
+	@Test
+	public void testDuration() {
+		note.setDuration(10);
+		assertEquals(10, note.getDuration());
+	}
+	
+	@Test
+	public void testVoiceSetter() {
+		
+		note.setVoice(2);
+		assertEquals(2, note.getVoice());
+	}
+	
 	/*@SuppressWarnings("static-access")
 	@Test
 	public void testNoteUtility(){
@@ -105,5 +121,25 @@ public class TestProject {
 		assertSame(noteutility.guitarNote[0][0],note);		
 	}
 	*/
+	@Test
+	public void noteListMeasureTest() {
+		ArrayList<Note> list = new ArrayList<>();
+		list.add(note);
+		measure = new Measure(list);
+		assertSame(note, measure.getNotelist().get(0));
+		
+	}
+	
+	@Test
+	public void measureDivisionTest() {
+		assertEquals(2, Measure.divisions);
+	}
+	
+	@Test
+	public void noteStringTest() {
+		assertEquals(1, note.getString());
+		note.setString(2);
+		assertEquals(2, note.getString());
+	}
 	
 }
