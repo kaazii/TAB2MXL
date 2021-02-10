@@ -45,9 +45,9 @@ public class Controller {
 	@FXML
 	Button drumButton;
 	@FXML
-	Button translateButton;
+	public Button translateButton;
 	@FXML
-	TextArea textInput;
+	public TextArea textInput;
 	Type selected;
 	@FXML
 	Button fileButton;
