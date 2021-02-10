@@ -12,7 +12,6 @@ public final class StringParserUtility {
 	public ArrayList<Measure> measureList = new ArrayList<Measure>();
 
 	public static String stringParse(String input) {
-		
 		String lines[] = input.split("\\r?\\n");
 
 		return "";
@@ -56,10 +55,9 @@ public final class StringParserUtility {
 		return "";
 	}
 
-	public Note getNote(int row, int column) {
+	/*public Note getNote(int row, int column) {
 		// todo
-		return new Note('a', 1, 1, 1);
-	}
+	} */
 
 	/*
 	 * Basic getter function for the measure list.

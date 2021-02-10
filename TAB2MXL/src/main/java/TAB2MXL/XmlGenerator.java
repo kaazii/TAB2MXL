@@ -13,18 +13,23 @@ import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 import java.io.File;
+import java.io.StringWriter;
 import java.util.ArrayList;
 
 public class XmlGenerator {
 
 	public static final String PART_NAME = "Classical Guitar";
 	private static Document doc;
-	
+
 	private static String divisions = String.valueOf(Measure.divisions);
 	private static String fifths = String.valueOf(0);
-	
 
-	public static void Generate(ArrayList<Measure> measureList) {
+	private static String barlineLocation = "right";
+	private static String barStyle = "light-heavy";
+
+	public static String Generate(ArrayList<Measure> measureList) {
+
+		String xmlString = "";
 
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -67,7 +72,10 @@ public class XmlGenerator {
 
 			addMeasures(part1, measureList);
 
-			// write the content into xml file
+			// write the content into a string writer then save to a variable
+			// Source:
+			// https://stackoverflow.com/questions/23520208/how-to-create-xml-file-with-specific-structure-in-java
+			// Answer by Tamil veera Cholan
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -79,22 +87,24 @@ public class XmlGenerator {
 			transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, doctype.getPublicId());
 			transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, doctype.getSystemId());
 			DOMSource source = new DOMSource(doc);
-			//StreamResult result = new StreamResult(new File("D:\\eclipse-workspace\\EECS2311\\test.xml")); -> Amer's version
-			StreamResult result = new StreamResult(new File("C:\\Users\\uwais\\git\\EECS2311\\test.xml"));
+
+			// Create a new stringwriter
+			StringWriter sw = new StringWriter();
+			StreamResult result = new StreamResult(sw);
 			transformer.transform(source, result);
 
-			// Output to console for testing
-			StreamResult consoleResult = new StreamResult(System.out);
-			transformer.transform(source, consoleResult);
+			xmlString = sw.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return xmlString;
 	}
 
 	private static void addMeasures(Element partElement, ArrayList<Measure> measureList) {
 		// Initial, unchanging values
 		int measureNum = 1;
-		
+
 		// Iterate through Measures list
 		for (Measure m : measureList) {
 			// Create measure tag and add number attribute as well as it's value
@@ -103,54 +113,165 @@ public class XmlGenerator {
 			attr.setValue(String.valueOf(measureNum));
 			measureElem.setAttributeNode(attr);
 			partElement.appendChild(measureElem);
-			
+
 			// <attributes>
 			Element measureAttribute = doc.createElement("attributes");
 			measureElem.appendChild(measureAttribute);
-			
+
 			// -<divisions>
 			Element e = doc.createElement("divisions");
 			e.appendChild(doc.createTextNode(XmlGenerator.divisions));
 			measureAttribute.appendChild(e);
-			
+
 			// -<Key>
 			Element key = doc.createElement("key");
 			measureAttribute.appendChild(key);
-			
+
 			// --<fifths>
 			e = doc.createElement("fifths");
 			e.appendChild(doc.createTextNode(XmlGenerator.fifths));
 			key.appendChild(e);
-			
+
 			// -<time>
 			Element time = doc.createElement("time");
 			measureAttribute.appendChild(time);
-			
+
 			// --<beats>
 			e = doc.createElement("beats");
 			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeats)));
 			time.appendChild(e);
-			
+
 			// --<beat-type>
 			e = doc.createElement("beat-type");
 			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeatType)));
 			time.appendChild(e);
-			
+
 			// -<clef>
 			Element clef = doc.createElement("clef");
 			measureAttribute.appendChild(clef);
-			
+
 			// --<sign>
 			e = doc.createElement("sign");
 			e.appendChild(doc.createTextNode(Measure.clefSign));
 			clef.appendChild(e);
-			
+
 			// --<line>
 			e = doc.createElement("line");
 			e.appendChild(doc.createTextNode(String.valueOf(m.clefLine)));
 			clef.appendChild(e);
-			
+
 			measureNum++;
+
+			// -<staff-details>
+			Element staffDetails = doc.createElement("staff-details");
+			addGuitarStaffDetails(staffDetails);
+			measureAttribute.appendChild(staffDetails);
+
+			// Add notes
+			for (Note n : m.noteList) {
+				// <note>
+				Element note = doc.createElement("note");
+				measureElem.appendChild(note);
+
+				// -<pitch>
+				Element pitch = doc.createElement("pitch");
+				note.appendChild(pitch);
+
+				// --<step>
+				e = doc.createElement("step");
+				e.appendChild(doc.createTextNode(n.step));
+				pitch.appendChild(e);
+
+				// --<octave>
+				e = doc.createElement("octave");
+				e.appendChild(doc.createTextNode(String.valueOf(n.octave)));
+				pitch.appendChild(e);
+
+				// -<duration>
+				e = doc.createElement("duration");
+				e.appendChild(doc.createTextNode(String.valueOf(n.duration)));
+				note.appendChild(e);
+
+				// -<voice>
+				e = doc.createElement("voice");
+				e.appendChild(doc.createTextNode(String.valueOf(n.voice)));
+				note.appendChild(e);
+
+				// -<type>
+				e = doc.createElement("type");
+				e.appendChild(doc.createTextNode(n.type));
+				note.appendChild(e);
+
+				// -<notations>
+				Element notations = doc.createElement("notations");
+				note.appendChild(notations);
+
+				// -<technical>
+				Element technical = doc.createElement("technical");
+				notations.appendChild(technical);
+
+				// --<string>
+				e = doc.createElement("string");
+				e.appendChild(doc.createTextNode(String.valueOf(n.string)));
+				technical.appendChild(e);
+
+				// --<fret>
+				e = doc.createElement("fret");
+				e.appendChild(doc.createTextNode(String.valueOf(n.fret)));
+				technical.appendChild(e);
+			}
+
+			// Add barline info
+			// <barline location="right">
+			Element barline = doc.createElement("barline");
+			measureElem.appendChild(barline);
+
+			attr = doc.createAttribute("location");
+			attr.setValue(barlineLocation);
+			barline.setAttributeNode(attr);
+
+			// -<bar-style>
+			e = doc.createElement("bar-style");
+			e.appendChild(doc.createTextNode(barStyle));
+			barline.appendChild(e);
 		}
+	}
+
+	// Adds the guitar-specific staff details instructions to the XML file built
+	// Input is the root element of the <staff-details> tag
+	private static void addGuitarStaffDetails(Element staffDetailsElement) {
+		// ts => tuning-step
+		// to => tuning octave
+		int guitarStaffLines = 6;
+
+		// 2d array for each <tuning-step> and its respective <tuning-octave>
+		String[][] tuning = { { "E", "2" }, { "A", "2" }, { "D", "3" }, { "G", "3" }, { "B", "3" }, { "E", "4" } };
+
+		// -<staff-lines>
+		Element e = doc.createElement("staff-lines");
+		e.appendChild(doc.createTextNode(String.valueOf(guitarStaffLines)));
+		staffDetailsElement.appendChild(e);
+
+		for (int i = 0; i < guitarStaffLines; i++) {
+			// -<staff-tuning>
+			Element staffTuning = doc.createElement("staff-tuning");
+			staffDetailsElement.appendChild(staffTuning);
+
+			// add "line" attribute to <staff-tuning>
+			Attr attr = doc.createAttribute("line");
+			attr.setValue(String.valueOf(i + 1));
+			staffTuning.setAttributeNode(attr);
+
+			// --<tuning-step>
+			e = doc.createElement("tuning-step");
+			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][0])));
+			staffTuning.appendChild(e);
+
+			// --<tuning-octave>
+			e = doc.createElement("tuning-octave");
+			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][1])));
+			staffTuning.appendChild(e);
+		}
+
 	}
 }
