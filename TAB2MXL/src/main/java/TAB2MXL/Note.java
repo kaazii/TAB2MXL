@@ -20,7 +20,7 @@ public class Note {
 	}
 	
 	public Note() {}
-	
+	//*************************setter**************************
 	public void setOctave(int octave) {
 		this.octave = octave;
 	}
@@ -48,4 +48,33 @@ public class Note {
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
+	//******************getter**********************
+	public int getOctave() {
+		return octave;
+	}
+
+	public String getStep() {
+		return step;
+	}
+
+	public int getVoice() {
+		return voice;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public int getString() {
+		return string;
+	}
+
+	public int getFret() {
+		return fret;
+	}
+	
+	public int getDuration() {
+		return duration;
+	}
+	
 }
