@@ -26,6 +26,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
@@ -38,10 +40,14 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class Controller {
-
-	ObservableList<String> beatOptions = FXCollections.observableArrayList("1/4", "2/4", "3/4", "4/4");
-	@FXML
-	private ChoiceBox beatsChoice;
+	/*
+	 * -----------------------------------------------
+	 * variable for two screen communication
+	 */
+	private static TextArea INPUT;
+	private static Button TRANSLATE;
+	//------------------------------------------------
+	
 	@FXML
 	Button guitarButton;
 	@FXML
@@ -64,6 +70,20 @@ public class Controller {
 
 	@FXML
 	Button optionCancel;
+	
+	@FXML
+	Button optionConfirm;
+	@FXML
+	public MenuButton beatsChoice;
+	@FXML
+	RadioMenuItem beat1;
+	@FXML
+	RadioMenuItem beat2;
+	@FXML
+	RadioMenuItem beat3;
+	@FXML
+	RadioMenuItem beat4;
+	static int beatType = 4;
 
 	public void guitarButtonClicked() {
 		selected = Type.GUITAR;
@@ -229,20 +249,7 @@ public class Controller {
 
 	public void translate() {
 
-		Parent root;
-		try {
-			root = FXMLLoader.load(getClass().getResource("OptionBox.fxml"));
-			final Stage popup = new Stage();
-			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Tranlation Options");
-			popup.setScene(new Scene(root, 322, 414));
-
-			popup.show();
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 
 		// beatsChoice.setItems(beatOptions);
 //			beatsChoice.setItems(beatOptions);
@@ -250,8 +257,23 @@ public class Controller {
 
 		if (!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
 			// textInput.setText(stringParse(textInput.getText()));
-			textInput.setText(XMLGenerate());
-			translateButton.setText("Save");
+			TRANSLATE = translateButton;
+			INPUT = textInput;
+			Parent root;
+			try {
+				root = FXMLLoader.load(getClass().getResource("OptionBox.fxml"));
+				final Stage popup = new Stage();
+				popup.initModality(Modality.APPLICATION_MODAL);
+				popup.setTitle("Tranlation Options");
+				popup.setScene(new Scene(root, 322, 414));
+
+				popup.show();
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		} else if (translateButton.getText().equals("Save")) {
 			try {
 
@@ -338,5 +360,52 @@ public class Controller {
 		System.out.println(xmlString);
 		return xmlString;
 	}
-
+	
+	public void confirmTranslate() {
+		closePopup();
+		INPUT.setText(XMLGenerate());
+		TRANSLATE.setText("Save");
+		
+	}
+	
+	public void chosen1() {
+		beatType = 1;
+		beat2.setSelected(false);
+		beat3.setSelected(false);
+		beat4.setSelected(false);
+		setText();
+	}
+	public void chosen2() {
+		beatType = 2;
+		setText();
+		beat1.setSelected(false);
+		beat3.setSelected(false);
+		beat4.setSelected(false);
+		
+	}
+	public void chosen3() {
+		beatType = 3;
+		setText();
+		beat1.setSelected(false);
+		beat2.setSelected(false);
+		beat4.setSelected(false);
+		
+	}
+	public void chosen4() {
+		beat2.setSelected(false);
+		beat3.setSelected(false);
+		beat1.setSelected(false);
+		beatType = 4;
+		setText();
+		
+	}
+	private void setText() {
+		beatsChoice.setText(beatType+"/4");
+	}
+	
+	
+	public void closePopup() {
+		
+		optionCancel.getScene().getWindow().hide();;
+	}
 }
