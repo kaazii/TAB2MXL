@@ -1,9 +1,11 @@
 package View;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import TAB2MXL.Measure;
 import TAB2MXL.Note;
+import TAB2MXL.NoteUtility;
 
 public final class StringParserUtility {
 
@@ -13,12 +15,6 @@ public final class StringParserUtility {
 		
 		String lines[] = input.split("\\r?\\n");
 
-		for (int i = 0; i < lines.length; i++) {
-			for (int j = 0; j < lines[i].length() - 1; j++) {
-				System.out.println(lines[i].substring(j, j + 1));
-			}
-		}
-
 		return "";
 		// Measure measure = new Measure();
 	}
@@ -26,9 +22,15 @@ public final class StringParserUtility {
 	public static String checkTabType(String input) {
 		// split the input into different lines
 		String lines[] = input.split("\\r?\\n");
+		String splitLines [][] = new String[lines.length][];
+		
+		for (int i = 0; i < lines.length; i++) {
+			String currLine[] = lines[i].split("\\|");
+			splitLines[i] = currLine;
+			System.out.println(splitLines[i][0]);
+		}
 
-		/*
-		 * // for error testing for (int i = 0; i < lines.length; i++) {
+		 /* // for error testing for (int i = 0; i < lines.length; i++) {
 		 * System.out.println(lines[i]); }
 		 * 
 		 * // for error testing System.out.println("numLines: " + lines.length);
@@ -39,7 +41,7 @@ public final class StringParserUtility {
 		 * return "This is a Drum tab."; } else if
 		 * (lines[0].toUpperCase().startsWith("G")) { return "This is a Bass tab."; }
 		 */
-
+		
 		for (int i = 0; i < lines.length; i++) {
 			for (int j = 0; j < lines[i].length(); j++) {
 				//the current character

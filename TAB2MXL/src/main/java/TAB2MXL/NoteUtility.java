@@ -3,9 +3,8 @@ import TAB2MXL.Note;
 public class NoteUtility {
 
 	public static Note [][] guitarNote = new Note [6][25];
-	public static void  initialise() {
+	public static void initialize() {
 		// for the E string on guitar 
-		
 		  guitarNote[0][0]= new Note('E',4,0,1) ;
 		  guitarNote[0][1]= new Note('F',4,1,1) ;
 		  guitarNote[0][2]= new Note('F',4,2,1) ;
@@ -145,7 +144,6 @@ public class NoteUtility {
 		guitarNote[4][24]= new Note('A',4,24,5) ;
 	
 		// for the E string on guitar 
-		
 		guitarNote[5][0]= new Note('E',2,0,6) ;
 		guitarNote[5][1]= new Note('F',2,1,6) ;
 		guitarNote[5][2]= new Note('F',2,2,6) ;
@@ -170,11 +168,7 @@ public class NoteUtility {
 		guitarNote[5][21]= new Note('C',4,21,6) ;
 		guitarNote[5][22]= new Note('D',4,22,6) ;
 		guitarNote[5][23]= new Note('D',4,23,6) ;
-		guitarNote[5][24]= new Note('E',4,24,6) ;
+		guitarNote[5][24]= new Note('E',4,24,6) ;	
 		
-	}
-	
-		
-		
-		
+	}	
 }
