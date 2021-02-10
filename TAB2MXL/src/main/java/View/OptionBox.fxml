@@ -9,7 +9,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="414.0" prefWidth="322.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="414.0" prefWidth="322.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.OptionController">
    <children>
       <VBox prefHeight="414.0" prefWidth="322.0">
          <children>
@@ -32,17 +32,23 @@
                   <Font size="12.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="beatsChoice" prefHeight="20.0" prefWidth="274.0" style="-fx-background-color: transparent; -fx-border-width: 1; -fx-border-color: #F0F4F0; -fx-border-radius: 8;">
+            <MenuButton id="beatsChoice" fx:id="beatsChoice" mnemonicParsing="false" prefHeight="27.0" prefWidth="274.0" style="-fx-background-color: transparent; -fx-border-radius: 10; -fx-border-color: #F0F4F0; -fx-border-width: 2;" text="4/4" textAlignment="RIGHT">
                <VBox.margin>
                   <Insets left="10.0" />
                </VBox.margin>
-            </ChoiceBox>
+               <items>
+                  <RadioMenuItem fx:id="beat1" mnemonicParsing="false" onAction="#chosen1" text="1/4" />
+                  <RadioMenuItem fx:id="beat2" mnemonicParsing="false" onAction="#chosen2" text="2/4" />
+                  <RadioMenuItem fx:id="beat3" mnemonicParsing="false" onAction="#chosen3" text="3/4" />
+                  <RadioMenuItem fx:id="beat4" mnemonicParsing="false" onAction="#chosen4" selected="true" text="4/4" />
+               </items>
+            </MenuButton>
             <HBox prefHeight="82.0" prefWidth="322.0">
                <VBox.margin>
                   <Insets top="220.0" />
                </VBox.margin>
                <children>
-                  <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="133.0" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10;" text="Cancel">
+                  <Button id="optionCancel" fx:id="optionCancel" mnemonicParsing="false" onAction="#closePopup" prefHeight="42.0" prefWidth="133.0" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10;" text="Cancel">
                      <HBox.margin>
                         <Insets left="24.0" top="16.0" />
                      </HBox.margin>
