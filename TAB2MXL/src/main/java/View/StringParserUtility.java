@@ -10,6 +10,7 @@ public final class StringParserUtility {
 	public ArrayList<Measure> measureList = new ArrayList<Measure>();
 
 	public static String stringParse(String input) {
+		
 		String lines[] = input.split("\\r?\\n");
 
 		for (int i = 0; i < lines.length; i++) {
@@ -55,7 +56,7 @@ public final class StringParserUtility {
 
 	public Note getNote(int row, int column) {
 		// todo
-		return new Note('a', 1, 1);
+		return new Note('a', 1, 1, 1);
 	}
 
 	/*
