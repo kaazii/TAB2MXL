@@ -79,7 +79,8 @@ public class XmlGenerator {
 			transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, doctype.getPublicId());
 			transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, doctype.getSystemId());
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("D:\\eclipse-workspace\\EECS2311\\test.xml"));
+			//StreamResult result = new StreamResult(new File("D:\\eclipse-workspace\\EECS2311\\test.xml")); -> Amer's version
+			StreamResult result = new StreamResult(new File("C:\\Users\\uwais\\git\\EECS2311\\test.xml"));
 			transformer.transform(source, result);
 
 			// Output to console for testing

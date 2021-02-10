@@ -186,7 +186,7 @@ public class Controller {
 	public void translate() {
 		if (!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
 			//translated text goes here
-			textInput.setText(parser.stringParse(textInput.getText())); //for Amer
+			textInput.setText(parser.checkTabType(textInput.getText())); //for Amer
 			translateButton.setText("Save");
 		} else if (translateButton.getText().equals("Save")) {
 			try {
