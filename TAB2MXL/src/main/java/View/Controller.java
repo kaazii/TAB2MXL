@@ -37,7 +37,7 @@ public class Controller {
 	
 	ObservableList<String> beatOptions = FXCollections.observableArrayList("1/4", "2/4", "3/4", "4/4");
 	@FXML
-	ChoiceBox beatsChoice ;
+	private ChoiceBox beatsChoice;
 	@FXML
 	Button guitarButton;
 	@FXML
@@ -58,9 +58,11 @@ public class Controller {
 	@FXML
 	CheckBox autoDetect;
 	
+	@FXML
+	Button optionCancel;
 	
 	
-
+	
 	public void guitarButtonClicked() {
 		selected = Type.GUITAR;
 		bassButton.setStyle(
@@ -239,14 +241,18 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Tranlation Options");
 			popup.setScene(new Scene(root, 322, 414));
+			
 			popup.show();
+			
+			
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			
-			
-			System.out.println(beatsChoice);
+		
+			//beatsChoice.setItems(beatOptions);
 //			beatsChoice.setItems(beatOptions);
 //			beatsChoice.setValue("Beats");
 			
@@ -306,4 +312,8 @@ public class Controller {
 			// Bass
 		}
 	}
+	
+	
+	
+	
 }
