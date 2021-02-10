@@ -357,7 +357,7 @@ public class Controller {
 
 		myList.add(myMeasure);
 		String xmlString = XmlGenerator.Generate(myList);
-		System.out.println(xmlString);
+		//System.out.println(xmlString);
 		return xmlString;
 	}
 	
