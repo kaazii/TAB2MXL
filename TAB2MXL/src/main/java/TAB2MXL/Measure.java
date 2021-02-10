@@ -36,5 +36,21 @@ public class Measure {
 	public Measure(ArrayList<Note> notelist) {
 		this.notelist = notelist;
 	}
+	public int getMeasureNumber() {
+		return measureNumber;
+	}
+	public ArrayList<Note> getNotelist() {
+		return notelist;
+	}
+	public int getClefLine() {
+		return clefLine;
+	}
+	public int getTimeBeats() {
+		return measureNumber;
+	}
+	public int gettimeBeatType() {
+		return measureNumber;
+	}
+	
 
 }
