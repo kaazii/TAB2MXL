@@ -62,5 +62,9 @@ public class OptionController {
 		
 		optionCancel.getScene().getWindow().hide();;
 	}
+	
+	public void confirmTranslate() {
+		
+	}
 
 }

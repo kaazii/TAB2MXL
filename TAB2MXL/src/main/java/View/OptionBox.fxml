@@ -9,7 +9,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="414.0" prefWidth="322.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.OptionController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="414.0" prefWidth="322.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
    <children>
       <VBox prefHeight="414.0" prefWidth="322.0">
          <children>
@@ -53,7 +53,7 @@
                         <Insets left="24.0" top="16.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="133.0" style="-fx-background-color: #828F9C;" text="Confirm" textFill="WHITE">
+                  <Button fx:id="optionConfirm" mnemonicParsing="false" onAction="#confirmTranslate" prefHeight="42.0" prefWidth="133.0" style="-fx-background-color: #828F9C;" text="Confirm" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="8.0" top="16.0" />
                      </HBox.margin>
