@@ -20,7 +20,7 @@ To fix this error, follow the following steps:
 
 1. Open a terminal. Check your Java version using this command ```java -version```
 2. If the version is not Java 15, please modify your Java version. If it is set to Java 15, go to step 10.
-3. If you are using Windows 10, here is a helpful tutorial: [How to switch Java versions in Windows (updated 09/2020 for Java 15)](https://www.happycoders.eu/java/how-to-switch-multiple-java-versions-windows/)
+3. If you are using Windows 10, here is a helpful tutorial: [How to switch Java versions in Windows (updated 09/2020 for Java 15)](https://www.happycoders.eu/java/how-to-switch-multiple-java-versions-windows/). After switching your Java version to Java 15, please go to step 10.
 4. If you are using MacOS, use the following command in your terminal: ```/usr/libexec/java_home -V```
 5. You should see something similar to this ![Screenshot](java_version.png)
 6. If Java 15 is not listed under the Java version, download and install from [Oracle](https://www.java.com/download)
