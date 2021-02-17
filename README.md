@@ -2,7 +2,9 @@
 ## Design
 [Figma Design](https://www.figma.com/file/ZYJ9E94dEMUY9RL5d5kadN/Untitled?node-id=0%3A1)
 
-## Prototype Access
+<br />
+
+## Prototype Access through .jar
 Access the prototype .zip file [here](https://drive.google.com/file/d/1iHCvr3aS85cOscXemlKNxHCu11FqEsMh/view?usp=sharing)
 
 ### How to access
@@ -29,3 +31,17 @@ To fix this error, follow the following steps:
 9. Run ```java -version``` again to make sure your Java has successfully been changed to Java 15.
 10. Run ```java -jar --module-path "./javafx-sdk-15.0.1/lib" --add-modules javafx.controls,javafx.fxml TAB2XML.jar```
 11. You should be able to see the user interface of TAB2XML now. 
+
+<br />
+
+## Prototype access through repository
+1. Switch to develop branch from this drop down. ![dropdown](step1.png)
+2. Download the .zip from the green Code button.
+![button](step2.png)
+3. Unzip the downloaded .zip file.
+4. Open eclipse. File -> Import .. -> Existing project into workspace. Select the unzipped directory "EECS2311-develop"
+5. Right clicked on the imported project -> Gradle -> Refresh Gradle Project
+6. After the Gradle project is built, go to src/main/java, open application package, right click on MainLaunch.java -> Run As -> Java Application
+![step6](step6.png)
+7. Ignore the error warning.
+8. You should be able to see our prototype.
