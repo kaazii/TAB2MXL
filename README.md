@@ -25,7 +25,7 @@ To fix this error, follow the following steps:
 5. You should see something similar to this ![Screenshot](java_version.png)
 6. If Java 15 is not listed under the Java version, download and install from [Oracle](https://www.java.com/download)
 7. Open a new terminal. Run the command in step 4 again, you should now see Java 15 listed under your Java home.
-8. Run this command ``` export JAVA_HOME=`/usr/libexec/java_home -v 15.X.X```  Replace X.X with your Java 15 version.
+8. Run this command ``` export JAVA_HOME=`/usr/libexec/java_home -v 15.X.X` ```  Replace X.X with your Java 15 version.
 9. Run ```java -version``` again to make sure your Java has successfully been changed to Java 15.
 10. Run ```java -jar --module-path "./javafx-sdk-15.0.1/lib" --add-modules javafx.controls,javafx.fxml TAB2XML.jar```
 11. You should be able to see the user interface of TAB2XML now. 
