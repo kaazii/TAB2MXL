@@ -14,6 +14,7 @@ Access the prototype .zip file [here](https://drive.google.com/file/d/1iHCvr3aS8
 
 ### Troubleshooting
 Due to version mismatch, you may see this error ```Graphics Device initialization failed for :  es2, sw```
+![Error Message](error.png)
 
 To fix this error, follow the following steps:
 
