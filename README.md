@@ -45,3 +45,14 @@ To fix this error, follow the following steps:
 ![step6](step6.png)
 7. Ignore the error warning.
 8. You should be able to see our prototype.
+
+## Sample Tablature
+### Guitar tablature
+```
+E|-----------0-----|-0---------------|
+B|---------0---0---|-0---------------|
+G|-------1-------1-|-1---------------|
+D|-----2-----------|-2---------------|
+A|---2-------------|-2---------------|
+E|-0---------------|-0---------------|
+```
