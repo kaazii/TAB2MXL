@@ -17,7 +17,6 @@ public class Main2 extends Application{
 		// TODO Auto-generated method stub
 		
 		launch(args);
-
 	}
 
 	@Override
