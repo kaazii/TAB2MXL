@@ -4,9 +4,9 @@ import TAB2MXL.Note;
 
 public class NoteUtility {
 
-	public static Note[][] guitarNote = new Note[6][25];
+	public  Note[][] guitarNote = new Note[6][25];
 
-	public static void initialise() {
+	public  void initialise() {
 
 		// for the E string on guitar
 		guitarNote[0][0] = new Note("E", 4, 0, 1);
