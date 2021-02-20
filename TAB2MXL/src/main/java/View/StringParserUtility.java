@@ -104,7 +104,7 @@ public final class StringParserUtility {
 			}
 		}
 		return noteLength;
-	}
+	} 
 
 	public static boolean isNumeric(String str) {
 		return str.matches("-?\\d+(\\.\\d+)?"); // match a number with optional '-' and decimal.
