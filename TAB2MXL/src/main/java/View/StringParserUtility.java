@@ -107,21 +107,6 @@ public final class StringParserUtility {
         }
         return noteLength;
     }
-	
-	/*
-	public static int getNoteLength(String lines[], int column) {
-		int noteLength = 0;
-		for (int i = column + 1; i < lines[0].length() - 1; i++) { // j are the columns
-			for (int j = 0; j < lines.length; j++) { // i are the rows
-				String curr = lines[j].substring(i, i + 1);
-				if (!(curr.equals("-"))) { // does this work once we get holding/pulling?
-					noteLength = i - column;
-					return noteLength;
-				}
-			}
-		}
-		return noteLength;
-	} */
 
 	public static boolean isNumeric(String str) {
 		return str.matches("-?\\d+(\\.\\d+)?"); // match a number with optional '-' and decimal.
