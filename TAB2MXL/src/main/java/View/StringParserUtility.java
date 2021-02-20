@@ -23,6 +23,8 @@ public final class StringParserUtility {
 		else if (lines[0].toUpperCase().startsWith("G")) {
 			return "This is a Bass tab.";
 		}
+		else if (!(lines[0].toUpperCase().startsWith("E") && lines[0].toUpperCase().startsWith("C") && lines[0].toUpperCase().startsWith("G")))
+			return "Unknown Instrument.";
 		return "Boom! Translated.";
 	}
 }

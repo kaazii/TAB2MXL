@@ -5,14 +5,29 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import TAB2MXL.Measure;
+import TAB2MXL.Note;
+import TAB2MXL.XmlGenerator;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
@@ -20,8 +35,19 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 public class Controller {
+	/*
+	 * -----------------------------------------------
+	 * variable for two screen communication
+	 */
+	private static TextArea INPUT;
+	private static Button TRANSLATE;
+	//------------------------------------------------
+	
 	@FXML
 	Button guitarButton;
 	@FXML
@@ -29,9 +55,9 @@ public class Controller {
 	@FXML
 	Button drumButton;
 	@FXML
-	Button translateButton;
+	public Button translateButton;
 	@FXML
-	TextArea textInput;
+	public TextArea textInput;
 	Type selected;
 	@FXML
 	Button fileButton;
@@ -39,8 +65,27 @@ public class Controller {
 	Button deleteButton;
 	File file;
 	String content;
+	@FXML
+	CheckBox autoDetect;
+	@FXML
+	Button optionCancel;
+	@FXML
+	Button optionConfirm;
+	@FXML
+	public MenuButton beatsChoice;
+	@FXML
+	RadioMenuItem beat1;
+	@FXML
+	RadioMenuItem beat2;
+	@FXML
+	RadioMenuItem beat3;
+	@FXML
+	RadioMenuItem beat4;
+	
 	
 	StringParserUtility parser = new StringParserUtility();
+	static int beatType = 4;
+
 
 	public void guitarButtonClicked() {
 		selected = Type.GUITAR;
@@ -102,95 +147,138 @@ public class Controller {
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
 		fileChooser.getExtensionFilters().add(extFilter);
 		file = fileChooser.showOpenDialog(fileButton.getScene().getWindow());
-		//System.out.println(file);
+		// System.out.println(file);
 		putString();
-		
-		
+
 	}
+
 	private void putString() {
 		try {
-			if(file != null) {
+			if (file != null) {
 				Scanner fileIn = new Scanner(file);
-				while(fileIn.hasNextLine()) {
-					textInput.appendText(fileIn.nextLine()+"\n");
+				if (!textInput.getText().isEmpty()) {
+					textInput.clear();
+				}
+				while (fileIn.hasNextLine()) {
+					textInput.appendText(fileIn.nextLine() + "\n");
 				}
 				fileIn.close();
+				if (translateButton.isDisable()) {
+					translateButton.setDisable(false);
+				}
+				if (autoDetect.isSelected()) {
+					detectInst();
+				}
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 	public void clear() {
 		textInput.clear();
-		if(file != null) file = null;
+		if (file != null)
+			file = null;
 		translateButton.setText("Translate");
 	}
-	
+
 	public void dragDropFile() {
 		textInput.setOnDragOver(e -> {
 			Dragboard db = e.getDragboard();
-			if(db.hasFiles() && db.getFiles().size() == 1 /*&& Files.probeContentType(db.getFiles().get(0).equals("))*/) {
-				
-				
+			if (db.hasFiles()
+					&& db.getFiles().size() == 1 /* && Files.probeContentType(db.getFiles().get(0).equals(")) */) {
+
 				try {
 					Path path = FileSystems.getDefault().getPath(db.getFiles().get(0).getPath());
-					if(Files.probeContentType(path).equals("text/plain")) {
+					if (Files.probeContentType(path).equals("text/plain")) {
 						e.acceptTransferModes(TransferMode.COPY);
 					}
-					
+
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			}
-			else {
+			} else {
 				e.consume();
 			}
 		});
-		textInput.setOnDragDropped(e->{
+		textInput.setOnDragDropped(e -> {
 			Dragboard db = e.getDragboard();
 			boolean success = false;
-			if(db.hasFiles()) {
+			if (db.hasFiles()) {
 				success = true;
-				
-				for(File f : db.getFiles()) {
+
+				for (File f : db.getFiles()) {
 					file = f;
 				}
 			}
 			putString();
+
 			e.setDropCompleted(success);
 			e.consume();
 		});
 	}
-	
-	public void checkForEmpty() {
+
+	public void detectInst() {
 		/*
-		 * check if the text area is empty
-		 * if the button has set to save, this option will 
-		 * change the button to translate
-		 * disable the button for translate
+		 * gets called directly from the ui to detect the type of tablatures
 		 */
-		if(textInput.getText().isEmpty() && translateButton.getText().equals("Save")) {
-			translateButton.setText("Translate");
-		}
-		if(textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
-			translateButton.setDisable(true);
-		}
-		else {
-			translateButton.setDisable(false);
+		if (autoDetect.isSelected()) {
+			detect(textInput.getText());
 		}
 	}
-	
+
+	public void checkForEmpty() {
+		/*
+		 * check if the text area is empty if the button has set to save, this option
+		 * will change the button to translate disable the button for translate
+		 */
+		if (textInput.getText().isEmpty() && translateButton.getText().equals("Save")) {
+			translateButton.setText("Translate");
+		}
+		if (textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
+			translateButton.setDisable(true);
+		} else {
+			translateButton.setDisable(false);
+		}
+		if (autoDetect.isSelected()) {
+			detect(textInput.getText());
+		}
+
+	}
 
 	public void translate() {
+
+		
+
+		// beatsChoice.setItems(beatOptions);
+//			beatsChoice.setItems(beatOptions);
+//			beatsChoice.setValue("Beats");
+
 		if (!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
 			textInput.setText(parser.stringParse(textInput.getText()));
 			translateButton.setText("Save");
+			// textInput.setText(stringParse(textInput.getText()));
+			TRANSLATE = translateButton;
+			INPUT = textInput;
+			Parent root;
+			try {
+				root = FXMLLoader.load(getClass().getResource("OptionBox.fxml"));
+				final Stage popup = new Stage();
+				popup.initModality(Modality.APPLICATION_MODAL);
+				popup.setTitle("Tranlation Options");
+				popup.setScene(new Scene(root, 322, 414));
+
+				popup.show();
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (translateButton.getText().equals("Save")) {
 			try {
-
 				FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Save");
 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)",
@@ -209,5 +297,117 @@ public class Controller {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void detect(String input) {
+		String lines[] = input.split("\\r?\\n");
+
+		// for error testing
+//		for (int i = 0; i < lines.length; i++) {
+//			System.out.println(lines[i]);
+//		}
+//		System.out.println(lines.length);
+
+		// basic checks
+		if (lines[0].toUpperCase().startsWith("E")) {
+			guitarButtonClicked();
+			/*
+			 * Guitar
+			 */
+
+		} else if (lines[0].toUpperCase().startsWith("C")) {
+			drumButtonClicked();
+			// Drum
+		} else if (lines[0].toUpperCase().startsWith("G")) {
+			bassButtonClicked();
+			// Bass
+		}
+	}
+
+	private String XMLGenerate() {
+		// TODO pass in the MEASURE list to XmlGenerator
+		ArrayList<Measure> myList = new ArrayList<Measure>();
+
+		// Create Measure
+		Measure myMeasure = new Measure(5, 4, 4, 1);
+
+		// Create some notes to add to the measure
+		// testing 2 different ways to make a new note
+		Note n = new Note();
+		n.setStep("E");
+		n.setOctave(2);
+		n.setDuration(1);
+		n.setVoice(1);
+		n.setType("eighth");
+		n.setString(6);
+		n.setFret(0);
+
+		Note n2 = new Note() {
+			{
+				step = "B";
+				octave = 2;
+				duration = 1;
+				voice = 1;
+				type = "eighth";
+				string = 5;
+				fret = 2;
+			}
+		};
+
+		myMeasure.notelist.add(n);
+		myMeasure.notelist.add(n2);
+
+		myList.add(myMeasure);
+		String xmlString = XmlGenerator.Generate(myList);
+		//System.out.println(xmlString);
+		return xmlString;
+	}
+	
+	public void confirmTranslate() {
+		closePopup();
+		INPUT.setText(XMLGenerate());
+		TRANSLATE.setText("Save");
+		
+	}
+	
+	public void chosen1() {
+		beatType = 1;
+		beat2.setSelected(false);
+		beat3.setSelected(false);
+		beat4.setSelected(false);
+		setText();
+	}
+	public void chosen2() {
+		beatType = 2;
+		setText();
+		beat1.setSelected(false);
+		beat3.setSelected(false);
+		beat4.setSelected(false);
+		
+	}
+	public void chosen3() {
+		beatType = 3;
+		setText();
+		beat1.setSelected(false);
+		beat2.setSelected(false);
+		beat4.setSelected(false);
+		
+	}
+	public void chosen4() {
+		beat2.setSelected(false);
+		beat3.setSelected(false);
+		beat1.setSelected(false);
+		beatType = 4;
+		setText();
+		
+	}
+	private void setText() {
+		beatsChoice.setText(beatType+"/4");
+	}
+	
+	
+	public void closePopup() {
+		
+		optionCancel.getScene().getWindow().hide();;
 	}
 }

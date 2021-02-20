@@ -14,7 +14,7 @@ public class Measure {
 	public int timeBeats;// user input 	
 	public int timeBeatType;// user input
 	
-	public static final String clefSign = "TAB";
+	public static String clefSign = "TAB";
 	public int clefLine;
 
 	// Create a new measure
@@ -36,5 +36,23 @@ public class Measure {
 	public Measure(ArrayList<Note> notelist) {
 		this.notelist = notelist;
 	}
+	
+	public Measure() {}
+	public int getMeasureNumber() {
+		return measureNumber;
+	}
+	public ArrayList<Note> getNotelist() {
+		return notelist;
+	}
+	public int getClefLine() {
+		return clefLine;
+	}
+	public int getTimeBeats() {
+		return measureNumber;
+	}
+	public int gettimeBeatType() {
+		return measureNumber;
+	}
+	
 
 }
