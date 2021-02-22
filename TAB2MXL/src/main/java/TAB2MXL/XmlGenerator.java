@@ -168,7 +168,7 @@ public class XmlGenerator {
 			measureAttribute.appendChild(staffDetails);
 
 			// Add notes
-			for (Note n : m.notelist) {
+			for (Note n : m.noteList) {
 				// <note>
 				Element note = doc.createElement("note");
 				measureElem.appendChild(note);

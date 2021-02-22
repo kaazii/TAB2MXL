@@ -67,10 +67,8 @@ public class Controller {
 	String content;
 	@FXML
 	CheckBox autoDetect;
-
 	@FXML
 	Button optionCancel;
-	
 	@FXML
 	Button optionConfirm;
 	@FXML
@@ -83,7 +81,11 @@ public class Controller {
 	RadioMenuItem beat3;
 	@FXML
 	RadioMenuItem beat4;
+	
+	
+	StringParserUtility parser = new StringParserUtility();
 	static int beatType = 4;
+
 
 	public void guitarButtonClicked() {
 		selected = Type.GUITAR;
@@ -245,17 +247,19 @@ public class Controller {
 			detect(textInput.getText());
 		}
 
-	}
+	} 
 
 	public void translate() {
 
-		
-
-		// beatsChoice.setItems(beatOptions);
-//			beatsChoice.setItems(beatOptions);
-//			beatsChoice.setValue("Beats");
+		//beatsChoice.setItems(beatOptions);
+		//beatsChoice.setItems(beatOptions);
+		//beatsChoice.setValue("Beats");
 
 		if (!textInput.getText().isEmpty() && translateButton.getText().equals("Translate")) {
+			//translated text goes here
+			//textInput.setText(parser.checkTabType(textInput.getText())); //for Amer
+			//textInput.setText(parser.stringParse(textInput.getText()));
+			translateButton.setText("Save");
 			// textInput.setText(stringParse(textInput.getText()));
 			TRANSLATE = translateButton;
 			INPUT = textInput;
@@ -273,10 +277,8 @@ public class Controller {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 		} else if (translateButton.getText().equals("Save")) {
 			try {
-
 				FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Save");
 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)",
@@ -322,10 +324,11 @@ public class Controller {
 		}
 	}
 
-	private String XMLGenerate() {
+	private String XMLGenerate() { // Pass parsing to here
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
 
+		
 		// Create Measure
 		Measure myMeasure = new Measure(5, 4, 4, 1);
 
@@ -340,7 +343,7 @@ public class Controller {
 		n.setString(6);
 		n.setFret(0);
 
-		Note n2 = new Note() {
+		Note n2 = new Note() { // can use this in stringParse potentially
 			{
 				step = "B";
 				octave = 2;
@@ -352,8 +355,8 @@ public class Controller {
 			}
 		};
 
-		myMeasure.notelist.add(n);
-		myMeasure.notelist.add(n2);
+		myMeasure.noteList.add(n);
+		myMeasure.noteList.add(n2);
 
 		myList.add(myMeasure);
 		String xmlString = XmlGenerator.Generate(myList);
@@ -361,7 +364,7 @@ public class Controller {
 		return xmlString;
 	}
 	
-	public void confirmTranslate() {
+	public void confirmTranslate() { //Beat type box?
 		closePopup();
 		INPUT.setText(XMLGenerate());
 		TRANSLATE.setText("Save");
