@@ -9,6 +9,10 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'java'
+    id 'eclipse'
 }
 
 repositories {
@@ -26,4 +30,22 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    implementation 'junit:junit:4.12'
+    
+    testCompile("junit:junit:4.12")
+    testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
+    
+    testCompile('org.junit.jupiter:junit-jupiter:5.4.2')
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+    
+}
+
+
+javafx {
+    version = "11"
+    modules = [ 'javafx.controls', 'javafx.fxml']
+}
+test {
+    useJUnitPlatform() 
 }
