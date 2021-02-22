@@ -48,42 +48,42 @@ public class TestProject {
 		assertEquals(1,measure.getClefLine());
 		
 	}
-	@SuppressWarnings({ "static-access", "unlikely-arg-type" })
-	@Test
-	public void testStringParserUtilityGuitar(){
-		StringParserUtility stringparserutility=new StringParserUtility();
-		assertTrue(stringparserutility.stringParse("E").equals("This is a Guitar tab."));
-		//assertTrue(stringparserutility.stringParse("C").equals("This is a Drum tab."));
-		//assertTrue(stringparserutility.stringParse("G").equals("This is a Bass tab."));
-		//equals("This is a Guitar tab."==stringparserutility.stringParse("E"));
-		//equals("This is a Drum tab."==stringparserutility.stringParse("C"));
-		//equals("This is a Bass tab."==stringparserutility.stringParse("R"));
-		
-	}
-	@SuppressWarnings("static-access")
-	@Test
-	public void testStringParserUtilityDrum(){
-		StringParserUtility stringparserutility=new StringParserUtility();
-		assertTrue(stringparserutility.stringParse("C").equals("This is a Drum tab."));
-	}
-	@SuppressWarnings("static-access")
-	@Test
-	public void testStringParserUtilityBass(){
-		StringParserUtility stringparserutility=new StringParserUtility();
-		assertTrue(stringparserutility.stringParse("G").equals("This is a Bass tab."));
-	}
-	@SuppressWarnings("static-access")
-	@Test
-	public void testStringParserUtilityUnknown1(){
-		StringParserUtility stringparserutility=new StringParserUtility();
-		assertTrue(stringparserutility.stringParse("A").equals("Unknown Instrument."));
-	}
-	@SuppressWarnings("static-access")
-	@Test
-	public void testStringParserUtilityUnknown2(){
-		StringParserUtility stringparserutility=new StringParserUtility();
-		assertTrue(stringparserutility.stringParse("B").equals("Unknown Instrument."));
-	}
+//	@SuppressWarnings({ "static-access", "unlikely-arg-type" })
+//	@Test
+//	public void testStringParserUtilityGuitar(){
+//		StringParserUtility stringparserutility=new StringParserUtility();
+//		assertTrue(stringparserutility.stringParse("E").equals("This is a Guitar tab."));
+//		//assertTrue(stringparserutility.stringParse("C").equals("This is a Drum tab."));
+//		//assertTrue(stringparserutility.stringParse("G").equals("This is a Bass tab."));
+//		//equals("This is a Guitar tab."==stringparserutility.stringParse("E"));
+//		//equals("This is a Drum tab."==stringparserutility.stringParse("C"));
+//		//equals("This is a Bass tab."==stringparserutility.stringParse("R"));
+//		
+//	}
+//	@SuppressWarnings("static-access")
+//	@Test
+//	public void testStringParserUtilityDrum(){
+//		StringParserUtility stringparserutility=new StringParserUtility();
+//		assertTrue(stringparserutility.stringParse("C").equals("This is a Drum tab."));
+//	}
+//	@SuppressWarnings("static-access")
+//	@Test
+//	public void testStringParserUtilityBass(){
+//		StringParserUtility stringparserutility=new StringParserUtility();
+//		assertTrue(stringparserutility.stringParse("G").equals("This is a Bass tab."));
+//	}
+//	@SuppressWarnings("static-access")
+//	@Test
+//	public void testStringParserUtilityUnknown1(){
+//		StringParserUtility stringparserutility=new StringParserUtility();
+//		assertTrue(stringparserutility.stringParse("A").equals("Unknown Instrument."));
+//	}
+//	@SuppressWarnings("static-access")
+//	@Test
+//	public void testStringParserUtilityUnknown2(){
+//		StringParserUtility stringparserutility=new StringParserUtility();
+//		assertTrue(stringparserutility.stringParse("B").equals("Unknown Instrument."));
+//	}
 	@Test
 	public void testVoice(){
 		Note note=new Note("E",4,0,1);
@@ -121,15 +121,15 @@ public class TestProject {
 		assertSame(noteutility.guitarNote[0][0],note);		
 	}
 	*/
-	@Test
-	public void noteListMeasureTest() {
-		ArrayList<Note> list = new ArrayList<>();
-		list.add(note);
-		measure = new Measure(list);
-		assertSame(note, measure.getNotelist().get(0));
-		
-	}
-	
+//	@Test
+//	public void noteListMeasureTest() {
+//		ArrayList<Note> list = new ArrayList<>();
+//		list.add(note);
+//		measure = new Measure(list);
+//		assertSame(note, measure.getNotelist().get(0));
+//		
+//	}
+//	
 	@Test
 	public void measureDivisionTest() {
 		assertEquals(2, Measure.divisions);

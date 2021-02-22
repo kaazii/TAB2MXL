@@ -21,24 +21,42 @@ repositories {
     jcenter()
 }
 
+run {
+    if (javafx.platform.classifier == 'win') {
+        // Temporal fix for Eclipse with JDK 1.8 and Windows 
+        systemProperty "java.library.path", "C:\tmp"
+    }
+}
+
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-math3:3.6.1'
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:28.0-jre'
-
-    // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
-    implementation 'junit:junit:4.12'
+    
+    testCompile('org.junit.jupiter:junit-jupiter:5.3.1')
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     
     testCompile("junit:junit:4.12")
+    /*
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+    
+    
+    
     testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
     
-    testCompile('org.junit.jupiter:junit-jupiter:5.4.2')
+    
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+    */
     
+    
+    testCompileOnly 'junit:junit:4.12' 
+    implementation 'junit:junit:4.12'
+	testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.3.1'
 }
 
 
@@ -48,4 +66,9 @@ javafx {
 }
 test {
     useJUnitPlatform() 
+    testLogging {
+    events 'passed', 'skipped', 'failed'
+  }
 }
+
+mainClassName = 'src.main.java.application.MainLaunch.java'
