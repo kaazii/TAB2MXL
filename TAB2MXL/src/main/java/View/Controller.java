@@ -343,7 +343,7 @@ public class Controller {
 		n.setString(6);
 		n.setFret(0);
 
-		Note n2 = new Note() {
+		Note n2 = new Note() { // can use this in stringParse potentially
 			{
 				step = "B";
 				octave = 2;
