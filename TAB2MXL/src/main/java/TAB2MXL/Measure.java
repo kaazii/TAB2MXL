@@ -15,7 +15,7 @@ public class Measure {
 	public int timeBeatType; // user input
 	
 	public static final String clefSign = "TAB"; //"TAB" for Guitar
-	public int clefLine = 5; //"5" for Guitar
+	public int clefLine; //"5" for Guitar
 
 
 	// Create a new measure
@@ -27,12 +27,11 @@ public class Measure {
 		this.measureNumber = measureNumber;
 		this.noteList = new ArrayList<Note>();
 		this.clefLine = clefLine;
-		this.clefLine = clefLine;		
 		this.timeBeats = timeBeats;
 		this.timeBeatType = timeBeatType;
 	}
 	
-	public Measure(int division) {
+	public Measure (int division) { //may not need in the future
 		this.divisions = division;
 	}
 	
