@@ -4,9 +4,9 @@ public class Note {
 
 	public int duration;
 	public int octave; 
-	public String step;
 	
-	public int voice=1; 
+	public String step;
+	public int voice = 1; 
 	public String type;
 	
 	public int string;
