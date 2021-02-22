@@ -328,6 +328,7 @@ public class Controller {
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
 
+		
 		// Create Measure
 		Measure myMeasure = new Measure(5, 4, 4, 1);
 
