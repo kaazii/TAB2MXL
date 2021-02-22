@@ -11,7 +11,7 @@ public final class StringParserUtility {
 
 	public ArrayList<Measure> measureList = new ArrayList<Measure>();
 
-	public static String stringParse(String input) {
+	public static void stringParse(String input) { // potentially take timeBeatType here
 		String lines[] = input.split("\\r?\\n");
 		String splitLines[][] = new String[lines.length][]; // splitLines[row][column]
 		
@@ -50,8 +50,6 @@ public final class StringParserUtility {
 		for (int i = 0; i < measureArray.length; i++) {
 			System.out.println(getDivison(measureArray[i]));
 		}
-		
-		return "";
 	}
 
 	public static String checkTabType(String input) {

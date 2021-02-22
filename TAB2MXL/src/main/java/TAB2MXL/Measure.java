@@ -17,6 +17,7 @@ public class Measure {
 	public static final String clefSign = "TAB"; //"TAB" for Guitar
 	public int clefLine = 5; //"5" for Guitar
 
+
 	// Create a new measure
 	public Measure(int clefLine, int timeBeats, int timeBeatType, int measureNumber) {
 		
@@ -35,8 +36,20 @@ public class Measure {
 		this.divisions = division;
 	}
 	
-	// Create measure based on existing note list
-	public Measure(ArrayList<Note> noteList) {
-		this.noteList = noteList;
+	public Measure() {}
+	public int getMeasureNumber() {
+		return measureNumber;
+	}
+	public ArrayList<Note> getNotelist() {
+		return noteList;
+	}
+	public int getClefLine() {
+		return clefLine;
+	}
+	public int getTimeBeats() {
+		return measureNumber;
+	}
+	public int gettimeBeatType() {
+		return measureNumber;
 	}
 }
