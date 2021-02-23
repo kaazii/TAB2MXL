@@ -33,16 +33,17 @@ dependencies {
     api 'org.apache.commons:commons-math3:3.6.1'
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:28.0-jre'
+    //implementation 'com.google.guava:guava:28.0-jre'
     
-    testCompile('org.junit.jupiter:junit-jupiter:5.3.1')
-    implementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    testCompile('org.junit.jupiter:junit-jupiter:5.7.0')
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     
-    testCompile("junit:junit:4.12")
+    //testCompile("junit:junit:4.12")
     /*
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    Use JUnit test framework
     
     
     
@@ -53,6 +54,8 @@ dependencies {
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
     */
     
+    //testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    //testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     
     testCompileOnly 'junit:junit:4.12' 
     implementation 'junit:junit:4.12'
@@ -61,7 +64,7 @@ dependencies {
 
 
 javafx {
-    version = "11"
+    version = "15"
     modules = [ 'javafx.controls', 'javafx.fxml']
 }
 test {
