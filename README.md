@@ -35,7 +35,7 @@ To fix this error, follow the following steps:
 <br />
 
 ## Prototype access through repository
-1. Switch to develop branch from this drop down. ![dropdown](step1.png)
+1. Switch to [doris](https://github.com/kaazii/EECS2311/tree/doris) branch from this drop down. ![dropdown](step1.png)
 2. Download the .zip from the green Code button.
 ![button](step2.png)
 3. Unzip the downloaded .zip file.
