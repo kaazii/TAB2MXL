@@ -11,7 +11,7 @@ Latest version of Eclipse and Java JDK 15 must be installed.
 
 ## Current testable features
 Currently the parsing is not yet implemented. The translation is the same regardless of the input.
-- Instruction detection
+- Instrument detection
 - Drag and drop text files
 - Upload files
 - Input text
