@@ -4,6 +4,11 @@
 
 <br />
 
+## Requirements
+Latest version of Eclipse and Java JDK 15 must be installed.
+
+<br />
+
 ## Prototype Access through .jar
 Access the prototype .zip file [here](https://drive.google.com/file/d/1iHCvr3aS85cOscXemlKNxHCu11FqEsMh/view?usp=sharing)
 
