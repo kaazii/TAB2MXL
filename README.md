@@ -9,6 +9,14 @@ Latest version of Eclipse and Java JDK 15 must be installed.
 
 <br />
 
+## Current testable features
+Currently the parsing is not yet implemented. The translation is the same regardless of the input.
+- Instruction detection
+- Drag and drop text files
+- Upload files
+- Input text
+- Select instrument
+
 ## Prototype Access through .jar
 Access the prototype .zip file [here](https://drive.google.com/file/d/1iHCvr3aS85cOscXemlKNxHCu11FqEsMh/view?usp=sharing)
 
