@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -48,11 +49,11 @@
           </padding>
         </HBox>
         <Button fx:id="fileButton" layoutX="625.0" layoutY="390.0" mnemonicParsing="false" onAction="#uploadFile" onMouseEntered="#fileTooltipHover" onMouseExited="#hoverButtonChange" prefHeight="32.0" prefWidth="32.0" style="-fx-background-image: url(&quot;file-32.png&quot;);&#10;-fx-background-repeat: no-repeat;&#10;-fx-background-position: center;&#10;-fx-background-color: transparent;" text="" />
-        <Button fx:id="deleteButton" layoutX="625.0" layoutY="441.0" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clear" onMouseEntered="#deleteTooltipHover" onMouseExited="#hoverButtonChange" prefHeight="32.0" prefWidth="32.0" style="-fx-background-image: url(&quot;trash-32.png&quot;);&#10;-fx-background-repeat: no-repeat;&#10;-fx-background-position: center;&#10;-fx-background-color: transparent;" text="" />
-            <HBox layoutX="516.0" layoutY="118.0" prefHeight="20.0" prefWidth="100.0">
+        <Button fx:id="deleteButton" layoutX="625.0" layoutY="441.0" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clear" onMouseEntered="#deleteTooltipHover" onMouseExited="#hoverButtonChange" prefHeight="32.0" prefWidth="32.0" style="-fx-background-image: url(&quot;restart-26.png&quot;); -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: transparent;" text="" />
+            <HBox layoutX="500.0" layoutY="118.0" prefHeight="20.0" prefWidth="125.0">
                <children>
                   <CheckBox id="autoDetect" fx:id="autoDetect" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutY="10.0" mnemonicParsing="false" onAction="#detectInst" onMouseClicked="#detectInst" opacity="0.53" selected="true" style="-fx-background-color: transparent; -fx-border-color: transparent;" />
-                  <Label alignment="TOP_RIGHT" style="-fx-font-family: Monsterrat;" text="Auto Detect" textFill="#000000d6">
+                  <Label alignment="TOP_RIGHT" style="-fx-font-family: Monsterrat;" text="Instrument Detect" textFill="#000000d6">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
