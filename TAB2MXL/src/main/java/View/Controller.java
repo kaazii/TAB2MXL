@@ -137,7 +137,7 @@ public class Controller {
 
 	public void deleteTooltipHover() {
 		hoverButtonChange();
-		Tooltip fileTip = new Tooltip("Clear");
+		Tooltip fileTip = new Tooltip("Restart");
 		deleteButton.setTooltip(fileTip);
 	}
 
@@ -163,6 +163,9 @@ public class Controller {
 					textInput.appendText(fileIn.nextLine() + "\n");
 				}
 				fileIn.close();
+				if (translateButton.getText().equals("Save")){
+					translateButton.setText("Translate");
+				}
 				if (translateButton.isDisable()) {
 					translateButton.setDisable(false);
 				}
