@@ -81,9 +81,9 @@ public class Controller {
 	RadioMenuItem beat3;
 	@FXML
 	RadioMenuItem beat4;
-	//------------Magic Variables -------------//
+	//------------Magic Variables-------------//
 	boolean selectAll;
-	//------------Magic Variables ------------//
+	//----------------------------------------//
 	
 	
 	StringParserUtility parser = new StringParserUtility();
@@ -420,6 +420,11 @@ public class Controller {
 		optionCancel.getScene().getWindow().hide();;
 	}
 	
+	public void resetSelect() {
+		selectAll = false;
+		
+	}
+	
 	public void resetTranslation() {
 		if(selectAll) {
 			translateButton.setText("Translate");
@@ -427,10 +432,14 @@ public class Controller {
 			return;
 			
 		}
+		
 		if(translateButton.getText().equals("Save")) {
 			if(textInput.getSelectedText().equals(textInput.getText())) {
 				selectAll = true;
 			}
+		}
+		else {
+			selectAll=false;
 		}
 		
 	}
