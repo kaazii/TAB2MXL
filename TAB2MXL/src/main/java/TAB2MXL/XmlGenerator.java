@@ -21,13 +21,15 @@ public class XmlGenerator {
 	public static final String PART_NAME = "Classical Guitar";
 	private static Document doc;
 
-	private static String divisions = String.valueOf(Measure.divisions);
+	private static String divisions;
 	private static String fifths = String.valueOf(0);
 
 	private static String barlineLocation = "right";
 	private static String barStyle = "light-heavy";
 
 	public static String Generate(ArrayList<Measure> measureList) {
+		
+		divisions = String.valueOf(Measure.divisions);
 
 		String xmlString = "";
 
