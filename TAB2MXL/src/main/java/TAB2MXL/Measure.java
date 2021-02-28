@@ -33,7 +33,7 @@ public class Measure {
 	public int getMeasureNumber() {
 		return measureNumber;
 	}
-	public ArrayList<Note> getNotelist() {
+	public ArrayList<Note> getNoteList() {
 		return noteList;
 	}
 	public int getClefLine() {

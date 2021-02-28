@@ -48,6 +48,7 @@ public final class StringParserUtility {
 		//call measureParser
 		for (int i = 0; i < measureArray.length; i++) {
 			measureList.add(measureParser(measureArray[i]));
+			setChord(measureList.get(i).getNoteList());
 			measureList.get(i).measureNumber = i + 1;
 		}
 		return measureList;
@@ -66,6 +67,20 @@ public final class StringParserUtility {
 		return "";
 	}
 	
+	public static void setChord(ArrayList<Note> noteList) {
+		int currColumn = -1;
+		for (Note note : noteList) {
+			if (currColumn == note.column) {
+				note.isChord = true;
+				System.out.println("fret: " + note.fret + " string: " + note.string + " isChord: " + note.isChord);
+			}
+			else 
+			{
+				currColumn = note.column;
+			}
+		}
+	}
+	
 	public static Measure measureParser(String measureString) {
 		Measure measure = new Measure(getDivison(measureString));
 		Measure.divisions = getDivison(measureString);
@@ -77,6 +92,7 @@ public final class StringParserUtility {
 				String curr = lines[j].substring(i, i + 1); //this is the current character that we are parsing
 				if (!(curr.equals("-"))) { // this must be a note!
 					Note note = getNote(j, Integer.parseInt(curr));
+					note.setColumn(i);
 					note.duration = getDuration(lines, i); //pass the current column index
 					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.getDivision()));
 					System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
