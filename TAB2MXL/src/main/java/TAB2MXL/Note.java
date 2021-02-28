@@ -2,6 +2,9 @@ package TAB2MXL;
 
 public class Note {
 
+	public boolean isChord = false; //true if it's a chord
+	public int column;
+	
 	public int duration;
 	public int octave; 
 	
@@ -23,6 +26,10 @@ public class Note {
 	//*************************setter**************************
 	public void setOctave(int octave) {
 		this.octave = octave;
+	}
+	
+	public void setColumn(int column) {
+		this.column = column;
 	}
 
 	public void setStep(String step) {
