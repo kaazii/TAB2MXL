@@ -16,20 +16,18 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
-public class XmlGenerator {
+public class BassXmlGenerator {
 
-	public static final String PART_NAME = "Classical Guitar";
+	public static final String PART_NAME = "Bass";
 	private static Document doc;
 
-	private static String divisions;
+	private static String divisions = String.valueOf(Measure.divisions);
 	private static String fifths = String.valueOf(0);
 
 	private static String barlineLocation = "right";
 	private static String barStyle = "light-heavy";
 
 	public static String Generate(ArrayList<Measure> measureList) {
-		
-		divisions = String.valueOf(Measure.divisions);
 
 		String xmlString = "";
 
@@ -122,7 +120,7 @@ public class XmlGenerator {
 
 			// -<divisions>
 			Element e = doc.createElement("divisions");
-			e.appendChild(doc.createTextNode(XmlGenerator.divisions));
+			e.appendChild(doc.createTextNode(BassXmlGenerator.divisions));
 			measureAttribute.appendChild(e);
 
 			// -<Key>
@@ -131,7 +129,7 @@ public class XmlGenerator {
 
 			// --<fifths>
 			e = doc.createElement("fifths");
-			e.appendChild(doc.createTextNode(XmlGenerator.fifths));
+			e.appendChild(doc.createTextNode(BassXmlGenerator.fifths));
 			key.appendChild(e);
 
 			// -<time>
@@ -166,7 +164,7 @@ public class XmlGenerator {
 
 			// -<staff-details>
 			Element staffDetails = doc.createElement("staff-details");
-			addGuitarStaffDetails(staffDetails);
+			addBassStaffDetails(staffDetails);
 			measureAttribute.appendChild(staffDetails);
 
 			// Add notes
@@ -241,20 +239,20 @@ public class XmlGenerator {
 
 	// Adds the guitar-specific staff details instructions to the XML file built
 	// Input is the root element of the <staff-details> tag
-	private static void addGuitarStaffDetails(Element staffDetailsElement) {
+	private static void addBassStaffDetails(Element staffDetailsElement) {
 		// ts => tuning-step
 		// to => tuning octave
-		int guitarStaffLines = 6;
+		int bassStaffLines = 4;
 
 		// 2d array for each <tuning-step> and its respective <tuning-octave>
-		String[][] tuning = { { "E", "2" }, { "A", "2" }, { "D", "3" }, { "G", "3" }, { "B", "3" }, { "E", "4" } };
+		String[][] tuning = { { "E", "1" }, { "A", "1" }, { "B", "2" }, { "G", "2" } };
 
 		// -<staff-lines>
 		Element e = doc.createElement("staff-lines");
-		e.appendChild(doc.createTextNode(String.valueOf(guitarStaffLines)));
+		e.appendChild(doc.createTextNode(String.valueOf(bassStaffLines)));
 		staffDetailsElement.appendChild(e);
 
-		for (int i = 0; i < guitarStaffLines; i++) {
+		for (int i = 0; i < bassStaffLines; i++) {
 			// -<staff-tuning>
 			Element staffTuning = doc.createElement("staff-tuning");
 			staffDetailsElement.appendChild(staffTuning);
