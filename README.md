@@ -18,7 +18,7 @@ Latest version of Eclipse and Java JDK 15 must be installed.
 ![open](img/open.gif)
 - Text input
 ![open](img/open-2.gif)
-- Guitar tablature translation
+- Basic guitar tablature translation
 ![open](img/translate.gif)
 - Saving transated .musicxml file on disk
 ![open](img/save.gif)
