@@ -21,7 +21,7 @@ Latest version of Eclipse and Java JDK 15 must be installed.
 - Basic guitar tablature translation
 ![translate](img/translate.gif)
 - Saving transated .musicxml file on disk
-![save](img/save.gif)
+![save](img/save-2.gif)
 
 ## Access
 
