@@ -333,8 +333,8 @@ public class Controller {
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
 		
-		Measure.timeBeats = 4;
-		Measure.timeBeatType = 4;
+		Measure.timeBeats = beatType; //Numerator
+		Measure.timeBeatType = 4; //Denominator 
 		
 		myList = StringParserUtility.stringParse(INPUT.getText());
 
