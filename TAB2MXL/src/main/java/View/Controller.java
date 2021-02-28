@@ -198,7 +198,7 @@ public class Controller {
 
 				try {
 					Path path = FileSystems.getDefault().getPath(db.getFiles().get(0).getPath());
-					if (Files.probeContentType(path).equals("text/plain")) {
+					if (!Files.probeContentType(path).isEmpty()&&Files.probeContentType(path).equals("text/plain")) {
 						e.acceptTransferModes(TransferMode.COPY);
 					}
 
@@ -425,7 +425,12 @@ public class Controller {
 		
 	}
 	
+	public void seeInput() {
+		checkForEmpty();
+	}
+	
 	public void resetTranslation() {
+		
 		if(selectAll) {
 			translateButton.setText("Translate");
 			selectAll = false;
