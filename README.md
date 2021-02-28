@@ -8,13 +8,20 @@ Latest version of Eclipse and Java JDK 15 must be installed.
 
 
 ## Current testable features
-- Guitar tablature translation
-- Instrument detection
+- Instrument detection 
+![auto](img/auto.gif)
 - Instrument selection
+![auto](img/select.gif)
 - Drag and drop text files
+![drag](img/drag.gif)
 - Upload files
+![open](img/open.gif)
 - Text input
+![open](img/open-2.gif)
+- Guitar tablature translation
+![open](img/translate.gif)
 - Saving transated .musicxml file on disk
+![open](img/save.gif)
 
 ## Access
 
