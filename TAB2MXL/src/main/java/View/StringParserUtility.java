@@ -9,15 +9,14 @@ import TAB2MXL.NoteUtility;
 
 public final class StringParserUtility {
 
-	public ArrayList<Measure> measureList = new ArrayList<Measure>();
+	public static ArrayList<Measure> measureList = new ArrayList<Measure>();
 
-	public static void stringParse(String input) { // potentially take timeBeatType here
+	public static ArrayList<Measure> stringParse(String input) { // potentially take timeBeatType here
 		String lines[] = input.split("\\r?\\n");
 		String splitLines[][] = new String[lines.length][]; // splitLines[row][column]
 		
 		System.out.println("lines: " + lines[0].length());
 
-		int guitarLines = 6;
 		// Split up each line by "|", and put those arrays into the splitLines array.
 		for (int i = 0; i < lines.length; i++) {
 			String currLine[] = lines[i].split("\\|");
@@ -48,8 +47,10 @@ public final class StringParserUtility {
 		
 		//call measureParser
 		for (int i = 0; i < measureArray.length; i++) {
-			System.out.println(getDivison(measureArray[i]));
+			measureList.add(measureParser(measureArray[i]));
+			measureList.get(i).measureNumber = i + 1;
 		}
+		return measureList;
 	}
 
 	public static String checkTabType(String input) {
@@ -67,22 +68,35 @@ public final class StringParserUtility {
 	
 	public static Measure measureParser(String measureString) {
 		Measure measure = new Measure(getDivison(measureString));
+		Measure.divisions = getDivison(measureString);
+		
 		String lines[] = measureString.split("\\r?\\n");
 		
+		for (int i = 0; i < lines[0].length() - 1; i++) { // i are the columns
+			for (int j = 0; j < lines.length; j++) { // j are the rows
+				String curr = lines[j].substring(i, i + 1); //this is the current character that we are parsing
+				if (!(curr.equals("-"))) { // this must be a note!
+					Note note = getNote(j, Integer.parseInt(curr));
+					note.duration = getDuration(lines, i); //pass the current column index
+					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.getDivision()));
+					System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
+					measure.noteList.add(note);
+				}
+			}
+		}
 		return measure;
 	}
 	
-	public static int getDivison(String measure) {
+	public static int getDivison(String measure) { //returns the division of a measure
 		int division = 0;
 		String lines[] = measure.split("\\r?\\n");
 		
-		for (int i = 0; i < lines[0].length() - 1; i++) { // j are the columns
-			for (int j = 0; j < lines.length; j++) { // i are the rows
-
+		for (int i = 0; i < lines[0].length() - 1; i++) { // i are the columns
+			for (int j = 0; j < lines.length; j++) { // j are the rows
 				String curr = lines[j].substring(i, i + 1);
 				if (!(curr.equals("-"))) { // does this work once we get holding/pulling?
-					division = lines[i].length() - i;
-					System.out.println("note length: " + getNoteLength(lines, i));
+					division = lines[j].length() - i;
+					System.out.println("division: " + division);
 					return division;
 				}
 			}
@@ -90,16 +104,14 @@ public final class StringParserUtility {
 		return division;
 	}
 	
-    public static int getNoteLength(String lines[], int column) {
+    public static int getDuration(String lines[], int column) { //note duration/division = type?
         int noteLength = 1;
-        for (int i = column + 1; i < lines[0].length() - 1; i++) { // j are the columns
-            for (int j = 0; j < lines.length; j++) { // i are the rows
+        for (int i = column + 1; i <= lines[0].length() - 1; i++) { // i are the columns
+            for (int j = 0; j < lines.length; j++) { // j are the rows
                 String curr = lines[j].substring(i, i + 1);
                 if (!(curr.equals("-"))) { // does this work once we get holding/pulling?
                     return noteLength;
                 }
-                if (i == lines[0].length() - 2 && j == lines.length - 1)
-                	noteLength++;
             }
             noteLength++;
         }
@@ -110,14 +122,14 @@ public final class StringParserUtility {
 		return str.matches("-?\\d+(\\.\\d+)?"); // match a number with optional '-' and decimal.
 	}
 
-	public Note getNote(int row, int column) {
+	public static Note getNote(int string, int fret) {
 		NoteUtility noteGetter = new NoteUtility();
 		noteGetter.initialise();
-		return noteGetter.guitarNote[row][column];
+		return noteGetter.guitarNote[string][fret];
 	}
 
 	public ArrayList<Measure> getMeasureList() {
-		return this.measureList;
+		return StringParserUtility.measureList;
 	}
 }
 
