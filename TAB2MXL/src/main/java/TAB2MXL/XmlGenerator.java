@@ -174,7 +174,13 @@ public class XmlGenerator {
 				// <note>
 				Element note = doc.createElement("note");
 				measureElem.appendChild(note);
-
+				
+				if (n.isChord) {
+					// -<chord>
+					Element chord = doc.createElement("chord");
+					note.appendChild(chord);
+				}
+				
 				// -<pitch>
 				Element pitch = doc.createElement("pitch");
 				note.appendChild(pitch);
