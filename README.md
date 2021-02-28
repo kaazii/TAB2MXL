@@ -17,14 +17,17 @@ Latest version of Eclipse and Java JDK 15 must be installed.
 - Upload files
 ![open](img/open.gif)
 - Text input
-![open](img/open-2.gif)
+![text](img/open-2.gif)
 - Basic guitar tablature translation
-![open](img/translate.gif)
+![translate](img/translate.gif)
 - Saving transated .musicxml file on disk
-![open](img/save.gif)
+![save](img/save.gif)
 
 ## Access
 
+Access instructions are entailed in this video:
+
+[![video](https://img.youtube.com/vi/Bkg7sOAqV18/maxresdefault.jpg)](https://youtu.be/Bkg7sOAqV18)
 ## Sample Tablature
 ### Guitar tablature
 ```
