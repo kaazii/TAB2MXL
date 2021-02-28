@@ -81,6 +81,9 @@ public class Controller {
 	RadioMenuItem beat3;
 	@FXML
 	RadioMenuItem beat4;
+	//------------Magic Variables-------------//
+	boolean selectAll;
+	//----------------------------------------//
 	
 	
 	StringParserUtility parser = new StringParserUtility();
@@ -137,7 +140,7 @@ public class Controller {
 
 	public void deleteTooltipHover() {
 		hoverButtonChange();
-		Tooltip fileTip = new Tooltip("Clear");
+		Tooltip fileTip = new Tooltip("Restart");
 		deleteButton.setTooltip(fileTip);
 	}
 
@@ -163,6 +166,9 @@ public class Controller {
 					textInput.appendText(fileIn.nextLine() + "\n");
 				}
 				fileIn.close();
+				if (translateButton.getText().equals("Save")){
+					translateButton.setText("Translate");
+				}
 				if (translateButton.isDisable()) {
 					translateButton.setDisable(false);
 				}
@@ -192,7 +198,7 @@ public class Controller {
 
 				try {
 					Path path = FileSystems.getDefault().getPath(db.getFiles().get(0).getPath());
-					if (Files.probeContentType(path).equals("text/plain")) {
+					if (!Files.probeContentType(path).isEmpty()&&Files.probeContentType(path).equals("text/plain")) {
 						e.acceptTransferModes(TransferMode.COPY);
 					}
 
@@ -220,6 +226,8 @@ public class Controller {
 			e.consume();
 		});
 	}
+	
+
 
 	public void detectInst() {
 		/*
@@ -411,5 +419,34 @@ public class Controller {
 		
 		optionCancel.getScene().getWindow().hide();;
 
+	}
+	
+	public void resetSelect() {
+		selectAll = false;
+		
+	}
+	
+	public void seeInput() {
+		checkForEmpty();
+	}
+	
+	public void resetTranslation() {
+		
+		if(selectAll) {
+			translateButton.setText("Translate");
+			selectAll = false;
+			return;
+			
+		}
+		
+		if(translateButton.getText().equals("Save")) {
+			if(textInput.getSelectedText().equals(textInput.getText())) {
+				selectAll = true;
+			}
+		}
+		else {
+			selectAll=false;
+		}
+		
 	}
 }
