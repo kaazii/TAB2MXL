@@ -121,17 +121,17 @@ public final class StringParserUtility {
 	}
 	
     public static int getDuration(String lines[], int column) { //note duration/division = type?
-        int noteLength = 1;
+        int duration = 1;
         for (int i = column + 1; i <= lines[0].length() - 1; i++) { // i are the columns
             for (int j = 0; j < lines.length; j++) { // j are the rows
                 String curr = lines[j].substring(i, i + 1);
                 if (!(curr.equals("-"))) { // does this work once we get holding/pulling?
-                    return noteLength;
+                    return duration;
                 }
             }
-            noteLength++;
+            duration++;
         }
-        return noteLength;
+        return duration;
     } 
 
 	public static boolean isNumeric(String str) {
