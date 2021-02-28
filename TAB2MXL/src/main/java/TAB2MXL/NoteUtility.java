@@ -6,7 +6,7 @@ public class NoteUtility {
 
 	public  Note[][] guitarNote = new Note[6][25];
 
-	public  void initialise() {
+	public void initialise() {
 
 		// for the E string on guitar
 		guitarNote[0][0] = new Note("E", 4, 0, 1);
@@ -171,5 +171,34 @@ public class NoteUtility {
 		guitarNote[5][22] = new Note("D", 4, 22, 6);
 		guitarNote[5][23] = new Note("D", 4, 23, 6);
 		guitarNote[5][24] = new Note("E", 4, 24, 6);
+	}
+	
+	public static String getNoteType(float typeAsNum) {
+		String type = "";
+		if (Float.compare(typeAsNum, 1f) == 0) {
+			type = "whole";
+		}
+		else if (Float.compare(typeAsNum, 0.5f) == 0) {
+			type = "half";
+		}
+		else if (Float.compare(typeAsNum, 0.25f) == 0)
+		{
+			type = "quarter";
+		}
+		else if (Float.compare(typeAsNum, 0.125f) == 0) {
+			type = "eighth";
+		}
+		else if (Float.compare(typeAsNum, 0.0625f) == 0) {
+			type = "16th";
+		}
+		else if (Float.compare(typeAsNum, 0.03125f) == 0)
+		{
+			type = "32nd";
+		}
+		else if (Float.compare(typeAsNum, 0.015625f) == 0)
+		{
+			type = "64th";
+		}
+		return type;
 	}
 }

@@ -15,8 +15,8 @@ public class Note {
 	public Note(String step, int octave, int fret, int string) {
 		this.step = step;
 		this.octave = octave; 
-		this.fret=fret;
-		this.string=string;
+		this.fret = fret;
+		this.string = string;
 	}
 	
 	public Note() {}
