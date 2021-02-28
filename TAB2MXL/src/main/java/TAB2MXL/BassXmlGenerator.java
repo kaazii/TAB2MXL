@@ -72,7 +72,7 @@ public class BassXmlGenerator {
 
 			addMeasures(part1, measureList);
 
-			// write the content into a string writer then save to a variable
+			// write the content into a string writer then save to a variabl
 			// Source:
 			// https://stackoverflow.com/questions/23520208/how-to-create-xml-file-with-specific-structure-in-java
 			// Answer by Tamil veera Cholan
