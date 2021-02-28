@@ -6,6 +6,10 @@
 ## Requirements
 Latest version of Eclipse and Java JDK 15 must be installed.
 
+## Documentation
+[Requirements and Use Cases](documentation/RequirementsDocument.pdf)
+
+[User Manual](documentation/UserManual.pdf)
 
 ## Current testable features
 - Instrument detection 
