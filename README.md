@@ -11,6 +11,8 @@ Latest version of Eclipse and Java JDK 15 must be installed.
 
 [User Manual](documentation/UserManual.pdf)
 
+[Test Document with a testing checklist](documentation/TestDocument.pdf)
+
 ## Current testable features
 - Instrument detection 
 ![auto](img/auto.gif)
@@ -27,6 +29,10 @@ Latest version of Eclipse and Java JDK 15 must be installed.
 - Saving transated .musicxml file on disk
 ![save](img/save-2.gif)
 
+## Developing features
+- Bass XML generation is close to completion.
+- Drum parsing and XML generation will start soon.
+
 ## Access
 
 Access instructions are entailed in this video:
@@ -42,3 +48,5 @@ D|-----2-----------|-2---------------|
 A|---2-------------|-2---------------|
 E|-0---------------|-0---------------|
 ```
+## Helpful Links
+[MusicXML Checker](https://www.soundslice.com/musicxml-viewer/)
