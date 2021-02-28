@@ -85,10 +85,7 @@ public class Controller {
 	boolean selectAll;
 	//----------------------------------------//
 	
-	
-	StringParserUtility parser = new StringParserUtility();
 	static int beatType = 4;
-
 
 	public void guitarButtonClicked() {
 		selected = Type.GUITAR;
@@ -335,38 +332,12 @@ public class Controller {
 	private String XMLGenerate() { // Pass parsing to here
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
-
 		
-		// Create Measure
-		Measure myMeasure = new Measure(5, 4, 4, 1);
+		Measure.timeBeats = beatType; //Numerator
+		Measure.timeBeatType = 4; //Denominator 
+		
+		myList = StringParserUtility.stringParse(INPUT.getText());
 
-		// Create some notes to add to the measure
-		// testing 2 different ways to make a new note
-		Note n = new Note();
-		n.setStep("E");
-		n.setOctave(2);
-		n.setDuration(1);
-		n.setVoice(1);
-		n.setType("eighth");
-		n.setString(6);
-		n.setFret(0);
-
-		Note n2 = new Note() { // can use this in stringParse potentially
-			{
-				step = "B";
-				octave = 2;
-				duration = 1;
-				voice = 1;
-				type = "eighth";
-				string = 5;
-				fret = 2;
-			}
-		};
-
-		myMeasure.noteList.add(n);
-		myMeasure.noteList.add(n2);
-
-		myList.add(myMeasure);
 		String xmlString = XmlGenerator.Generate(myList);
 		//System.out.println(xmlString);
 		return xmlString;
