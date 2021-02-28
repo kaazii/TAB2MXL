@@ -27,7 +27,7 @@ Latest version of Eclipse and Java JDK 15 must be installed.
 
 Access instructions are entailed in this video:
 
-[![video](https://img.youtube.com/vi/Bkg7sOAqV18/maxresdefault.jpg)](https://youtu.be/Bkg7sOAqV18)
+[![video](img/youtube.png)](https://youtu.be/Bkg7sOAqV18)
 ## Sample Tablature
 ### Guitar tablature
 ```
