@@ -410,5 +410,6 @@ public class Controller {
 	public void closePopup() {
 		
 		optionCancel.getScene().getWindow().hide();;
+
 	}
 }
