@@ -86,7 +86,7 @@ public class Main2 extends Application{
 		launch(args);
 	}
 
-	@Override
+	
 	public void start(Stage primaryStage) throws Exception {
 		
 		System.out.println(getClass().getResource("PrimaryStage.fxml"));
