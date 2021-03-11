@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="322.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
+   <children>
+      <VBox prefHeight="140.0" prefWidth="322.0">
+         <children>
+            <Label prefHeight="32.0" prefWidth="322.0" text="Are you sure you would like to restart the translation?" textFill="#828f9c">
+               <VBox.margin>
+                  <Insets left="15.0" top="20.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="82.0" prefWidth="322.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <children>
+                  <Button id="optionCancel" fx:id="resetCancel" mnemonicParsing="false" onAction="#resetCancel" prefHeight="42.0" prefWidth="133.0" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10;" text="Cancel">
+                     <HBox.margin>
+                        <Insets left="24.0" top="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="resetConfirm" mnemonicParsing="false" onAction="#resetConfirm" prefHeight="42.0" prefWidth="133.0" style="-fx-background-color: #828F9C;" text="Confirm" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="8.0" top="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="SansSerif Regular" size="13.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</Pane>
