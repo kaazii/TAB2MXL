@@ -11,6 +11,10 @@ public final class StringParserUtilityDrum {
 
 	public static ArrayList<Measure> measureList = new ArrayList<Measure>();
 
+	
+	/*
+	 * measureParser needs to be implemented
+	 */
 	public static ArrayList<Measure> stringParse(String input) { // potentially take timeBeatType here
 		String lines[] = input.split("\\r?\\n");
 		String splitLines[][] = new String[lines.length][]; // splitLines[row][column]
@@ -47,7 +51,9 @@ public final class StringParserUtilityDrum {
 		
 		//call measureParser
 		for (int i = 0; i < measureArray.length; i++) {
+			// Pass on measure array for it to be parsed returns a measure object/
 			measureList.add(measureParser(measureArray[i]));
+			
 			setChord(measureList.get(i).getNoteList());
 			measureList.get(i).measureNumber = i + 1;
 		}
@@ -91,7 +97,7 @@ public final class StringParserUtilityDrum {
 			for (int j = 0; j < lines.length; j++) { // j are the rows
 				String curr = lines[j].substring(i, i + 1); //this is the current character that we are parsing
 				if (!(curr.equals("-"))) { // this must be a note!
-					Note note = getNote(j, Integer.parseInt(curr));
+					Note note = getNote(j, 1);
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); //pass the current column index
 					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.getDivision()));
