@@ -51,8 +51,8 @@ public final class StringParserUtilityDrum {
 		
 		//call measureParser
 		for (int i = 0; i < measureArray.length; i++) {
-			// Pass on measure array for it to be parsed returns a measure object/
-			measureList.add(measureParser(measureArray[i]));
+			// Pass on measure array and also the instrument to be parsed returns a measure object/
+			measureList.add(measureParser(measureArray[i], splitLines[i][0]));
 			
 			setChord(measureList.get(i).getNoteList());
 			measureList.get(i).measureNumber = i + 1;
@@ -87,7 +87,7 @@ public final class StringParserUtilityDrum {
 		}
 	}
 	
-	public static Measure measureParser(String measureString) {
+	public static Measure measureParser(String measureString, String instrument) {
 		Measure measure = new Measure(getDivison(measureString));
 		Measure.divisions = getDivison(measureString);
 		
@@ -95,19 +95,21 @@ public final class StringParserUtilityDrum {
 		
 		for (int i = 0; i < lines[0].length() - 1; i++) { // i are the columns
 			for (int j = 0; j < lines.length; j++) { // j are the rows
+				//String instrument = getInstrument(lines, i);
 				String curr = lines[j].substring(i, i + 1); //this is the current character that we are parsing
 				if (!(curr.equals("-"))) { // this must be a note!
-					Note note = getNote(j, 1);
+					Note note = getNote(instrument);
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); //pass the current column index
 					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.getDivision()));
-					System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
+					System.out.println("instrument " + instrument + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
 					measure.noteList.add(note);
 				}
 			}
 		}
 		return measure;
 	}
+	
 	
 	public static int getDivison(String measure) { //returns the division of a measure
 		int division = 0;
@@ -144,10 +146,10 @@ public final class StringParserUtilityDrum {
 		return str.matches("-?\\d+(\\.\\d+)?"); // match a number with optional '-' and decimal.
 	}
 
-	public static Note getNote(int string, int fret) {
+	public static Note getNote(String instrument) {
 		NoteUtility noteGetter = new NoteUtility();
-		noteGetter.initialise();
-		return noteGetter.guitarNote[string][fret];
+		noteGetter.initializeDrum();
+		return noteGetter.drumNotes.get(instrument);
 	}
 
 	public ArrayList<Measure> getMeasureList() {
