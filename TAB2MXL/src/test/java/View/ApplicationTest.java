@@ -11,6 +11,7 @@ import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.matcher.base.NodeMatchers;
 import org.testfx.matcher.control.LabeledMatchers;
 
 import javafx.fxml.FXMLLoader;
@@ -34,9 +35,50 @@ class ApplicationTest {
 		}
 	}
 	
+	/*
+	 * Test if translate button is present
+	 */
 	@Test
 	void should_contain_translate_button(FxRobot robot) {
 		FxAssert.verifyThat("#translateButton", LabeledMatchers.hasText("Translate"));
 	}
+	/*
+	 * Test if save button is present
+	 */
+	@Test
+	void should_contain_save_button(FxRobot robot) {
+		FxAssert.verifyThat("#saveButton", LabeledMatchers.hasText("Save"));
+	}
+	/*
+	 * Test if both buttons are disabled by default
+	 */
+	@Test
+	void bothButtonDisabled(FxRobot robot) {
+		FxAssert.verifyThat("#saveButton",NodeMatchers.isDisabled());
+		FxAssert.verifyThat("#translateButton",NodeMatchers.isDisabled());
+	}
+	/*
+	 * Test if both Button are enabled after typing
+	 */
+	@Test
+	void bothButtonEnabled(FxRobot robot) {
+		robot.clickOn("#textInput");
+		robot.write("hi");
+		FxAssert.verifyThat("#saveButton",NodeMatchers.isEnabled());
+		FxAssert.verifyThat("#translateButton",NodeMatchers.isEnabled());
+	}
+	@Test
+	void restartButtonDisabled(FxRobot robot) {
+		FxAssert.verifyThat("#deleteButton",NodeMatchers.isDisabled());
+	}
+//	@Test
+//	void deleteButton(FxRobot robot) {
+//		robot.clickOn("#textInput");
+//		robot.write("hi");
+//		robot.clickOn("#deleteButton");
+//		FxAssert.verifyThat("#saveButton",NodeMatchers.isDisabled());
+//		FxAssert.verifyThat("#translateButton",NodeMatchers.isDisabled());
+//	}
+
 
 }
