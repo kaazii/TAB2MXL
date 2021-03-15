@@ -14,7 +14,7 @@ public class Measure {
 	public static int timeBeats; // user input 	
 	public static int timeBeatType; // user input
 	
-	public static final String clefSign = "TAB"; //"TAB" for Guitar
+	public static String clefSign = "TAB"; //"TAB" for Guitar
 	public int clefLine = 5; //"5" for Guitar
 
 	// Create a new measure
