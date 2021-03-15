@@ -5,14 +5,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import TAB2MXL.DrumNote;
 import TAB2MXL.Note;
 
-class NoteTest {
+class DrumNoteTest {
 
-	Note note;
+	DrumNote note;
 	@BeforeEach
 	public void setUp() throws Exception {
-		note = new Note("E",4,0,1);
+		note = new DrumNote("E",4,0,1);
 	}
 
 	
@@ -76,6 +77,22 @@ class NoteTest {
 		note.setType("half");
 		assertEquals("half", note.getType());
 	}
-
-
+	
+	@Test
+	public void testSecondConstructor() {
+		note = new DrumNote("F", 4, "P1-I43");
+		assertEquals("P1-I43", note.instrumentId);
+	}
+	
+	@Test
+	public void testSetInstrument() {
+		note.setInstrument("P1-I43");
+		assertEquals("P1-I43", note.instrumentId);
+	}
+	
+	@Test
+	public void testSetNotehead() {
+		note.setNotehead("o");
+		assertEquals("o", note.getNotehead());
+	}
 }

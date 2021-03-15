@@ -31,4 +31,12 @@ public class DrumNote extends Note {
 		this.beamList.add(b);
 	}
 
+	public String getNotehead() {
+		return notehead;
+	}
+
+	public String getInstrumentId() {
+		return instrumentId;
+	}
+
 }
