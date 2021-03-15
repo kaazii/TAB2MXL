@@ -23,4 +23,12 @@ public class DrumNote extends Note {
 		this.instrumentId = id;
 	}
 
+	public String getNotehead() {
+		return notehead;
+	}
+
+	public String getInstrumentId() {
+		return instrumentId;
+	}
+
 }
