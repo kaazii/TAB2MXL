@@ -1,6 +1,7 @@
 plugins {
   id 'application'
   id 'org.openjfx.javafxplugin' version '0.0.8'
+  id 'jacoco'
 }
 
 repositories {
@@ -9,15 +10,18 @@ repositories {
 
 dependencies {
     // Use JUnit test framework
-    //testCompile('org.junit.jupiter:junit-jupiter:5.7.0')
-    //implementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testCompile('org.junit.jupiter:junit-jupiter:5.7.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     //testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     
    // api 'org.apache.commons:commons-math3:3.6.1'
     
    // implementation 'com.google.guava:guava:28.0-jre'
     
-    testImplementation 'junit:junit:4.12'
+   	testImplementation 'junit:junit:4.12'
+    testCompile "org.testfx:testfx-core:4.0.16-alpha"
+    testCompile "org.testfx:testfx-junit5:4.0.16-alpha"
+    testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
     //testCompileOnly 'junit:junit:4.12' 
     //implementation 'junit:junit:4.12'
 	//testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.3.1'
@@ -26,10 +30,20 @@ dependencies {
 
 
 test {
-  useJUnitPlatform()
-  testLogging {
-    events 'passed', 'skipped', 'failed'
-  }
+	finalizedBy jacocoTestReport
+	useJUnitPlatform()
+	testLogging{
+		events 'passed', 'skipped', 'failed'
+	}
+}
+
+jacoco {
+	toolVersion="0.8.6"
+	reportsDirectory=file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+	dependsOn test
 }
 
 javafx {
