@@ -474,6 +474,8 @@ public class Controller {
 	public void delete() {
 		// show an alert
 		INPUT = textInput;
+		TRANSLATE = translateButton;
+		DELETEBUTTON = deleteButton;
 		Parent root;
 		try {
 			root = FXMLLoader.load(getClass().getResource("Alert.fxml"));
@@ -534,6 +536,7 @@ public class Controller {
 
 		TRANSLATE.setDisable(false);
 		state = 0;
+		
 		DELETEBUTTON.setDisable(true);
 		clearCancel.getScene().getWindow().hide();
 	}
