@@ -30,7 +30,15 @@
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font></TextArea>
-        <Button fx:id="translateButton" cancelButton="false" defaultButton="false" disable="true" layoutX="278.0" layoutY="500.0" mnemonicParsing="false" onAction="#translate" onMouseEntered="#hoverButtonChange" onMouseExited="#hoverButtonBack" prefHeight="41.0" prefWidth="139.0" style="-fx-background-color: #F0F4F7; -fx-background-radius: 20,20,20; -fx-font-family: Monsterrat; -fx-font-size: 18;" text="Translate" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false">
+            <Button fx:id="saveButton" cancelButton="false" defaultButton="false" disable="true" layoutX="406.0" layoutY="497.0" mnemonicParsing="false" onAction="#save" onMouseEntered="#hoverButtonChange" onMouseExited="#hoverButtonBack" prefHeight="41.0" prefWidth="139.0" style="-fx-background-color: #F0F4F7; -fx-background-radius: 20,20,20; -fx-font-family: Monsterrat; -fx-font-size: 18;" text="Save" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false">
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" color="GREY" />
+               </effect>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+        <Button fx:id="translateButton" cancelButton="false" defaultButton="false" disable="true" layoutX="120.0" layoutY="497.0" mnemonicParsing="false" onAction="#translate" onMouseEntered="#hoverButtonChange" onMouseExited="#hoverButtonBack" prefHeight="41.0" prefWidth="139.0" style="-fx-background-color: #F0F4F7; -fx-background-radius: 20,20,20; -fx-font-family: Monsterrat; -fx-font-size: 18;" text="Translate" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false">
           <effect>
             <DropShadow blurType="GAUSSIAN" color="GREY" />
           </effect>
