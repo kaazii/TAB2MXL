@@ -30,7 +30,15 @@
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font></TextArea>
-        <Button fx:id="translateButton" cancelButton="false" defaultButton="false" disable="true" layoutX="278.0" layoutY="500.0" mnemonicParsing="false" onAction="#translate" onMouseEntered="#hoverButtonChange" onMouseExited="#hoverButtonBack" prefHeight="41.0" prefWidth="139.0" style="-fx-background-color: #F0F4F7; -fx-background-radius: 20,20,20; -fx-font-family: Monsterrat; -fx-font-size: 18;" text="Translate" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false">
+            <Button fx:id="saveButton" cancelButton="false" defaultButton="false" disable="true" layoutX="406.0" layoutY="497.0" mnemonicParsing="false" onAction="#save" onMouseEntered="#hoverButtonChange" onMouseExited="#hoverButtonBack" prefHeight="41.0" prefWidth="139.0" style="-fx-background-color: #F0F4F7; -fx-background-radius: 20,20,20; -fx-font-family: Monsterrat; -fx-font-size: 18;" text="Save" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false">
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" color="GREY" />
+               </effect>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+        <Button fx:id="translateButton" cancelButton="false" defaultButton="false" disable="true" layoutX="120.0" layoutY="497.0" mnemonicParsing="false" onAction="#translate" onMouseEntered="#hoverButtonChange" onMouseExited="#hoverButtonBack" prefHeight="41.0" prefWidth="139.0" style="-fx-background-color: #F0F4F7; -fx-background-radius: 20,20,20; -fx-font-family: Monsterrat; -fx-font-size: 18;" text="Translate" textAlignment="LEFT" textOverrun="ELLIPSIS" underline="false">
           <effect>
             <DropShadow blurType="GAUSSIAN" color="GREY" />
           </effect>
@@ -48,8 +56,9 @@
             <Insets top="10.0" />
           </padding>
         </HBox>
-        <Button fx:id="fileButton" layoutX="625.0" layoutY="390.0" mnemonicParsing="false" onAction="#uploadFile" onMouseEntered="#fileTooltipHover" onMouseExited="#hoverButtonChange" prefHeight="32.0" prefWidth="32.0" style="-fx-background-image: url(&quot;file-32.png&quot;);&#10;-fx-background-repeat: no-repeat;&#10;-fx-background-position: center;&#10;-fx-background-color: transparent;" text="" />
-        <Button fx:id="deleteButton" layoutX="625.0" layoutY="441.0" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clear" onMouseEntered="#deleteTooltipHover" onMouseExited="#hoverButtonChange" prefHeight="32.0" prefWidth="32.0" style="-fx-background-image: url(&quot;restart-26.png&quot;); -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: transparent;" text="" />
+        <Button fx:id="fileButton" layoutX="625.0" layoutY="320.0" mnemonicParsing="false" onAction="#uploadFile" onMouseEntered="#fileTooltipHover" onMouseExited="#hoverButtonChange" prefHeight="32.0" prefWidth="32.0" style="-fx-background-image: url(&quot;file-32.png&quot;);&#10;-fx-background-repeat: no-repeat;&#10;-fx-background-position: center;&#10;-fx-background-color: transparent;" text="" />
+        <Button fx:id="deleteButton" disable="true" layoutX="625.0" layoutY="383.0" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clear" onMouseEntered="#deleteTooltipHover" onMouseExited="#hoverButtonChange" prefHeight="32.0" prefWidth="32.0" scaleX="0.95" scaleY="0.95" scaleZ="0.95" style="-fx-background-image: url(&quot;restart-26.png&quot;); -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: transparent;" text="" />
+            <Button fx:id="deleteButton1" layoutX="623.0" layoutY="442.0" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#delete" onMouseEntered="#clearTooltipHover" onMouseExited="#hoverButtonChange" prefHeight="32.0" prefWidth="32.0" style="-fx-background-image: url(&quot;trash-32.png&quot;); -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-color: transparent;" text="" />
             <HBox layoutX="500.0" layoutY="118.0" prefHeight="20.0" prefWidth="125.0">
                <children>
                   <CheckBox id="autoDetect" fx:id="autoDetect" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutY="10.0" mnemonicParsing="false" onAction="#detectInst" onMouseClicked="#detectInst" opacity="0.53" selected="true" style="-fx-background-color: transparent; -fx-border-color: transparent;" />

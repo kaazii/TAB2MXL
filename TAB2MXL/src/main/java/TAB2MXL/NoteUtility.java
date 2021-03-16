@@ -1,11 +1,29 @@
 package TAB2MXL;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import TAB2MXL.Note;
 
 public class NoteUtility {
 
 	public  Note[][] guitarNote = new Note[6][25];
+	public Map<String, Note> drumNotes = new HashMap<>();
 
+	
+	public void initializeDrum() {
+		//Bass Drum
+		drumNotes.put("BD", new DrumNote("F", 4, "P1-I36"));
+		//Snare Drum
+		drumNotes.put("SD", new DrumNote("C", 5, "P1-I39"));
+		// Hi-Hat
+		drumNotes.put("HH", new DrumNote("G", 5, "P1-I43"));
+		//Low Tom
+		//drumNotes.put("MT", new DrumNote("D", 5, "P1-I46"));
+		//
+	}
+	
+	
 	public void initialise() {
 
 		// for the E string on guitar
