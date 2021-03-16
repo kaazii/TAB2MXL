@@ -8,12 +8,12 @@ public class Main {
 
 	public static void main(String[] args) {
 		//new MyFrame();
-		String tab = "CC|x---------------|--------x-------|\n"
+		String tab = "BD|x---------------|--------x-------|\n"
 				+ "HH|--x-x-x-x-x-x-x-|----------------|\n"
 				+ "SD|----o-------o---|oooo------------|\n"
-				+ "HT|----------------|----oo----------|\n"
-				+ "MT|----------------|------oo--------|\n"
-				+ "BD|o-------o-------|o-------o-------|";
+				+ "HH|----------------|----oo----------|\n"
+				+ "SD|----------------|------oo--------|\n"
+				+ "BD|o-------o-------|o-------o-------|\n";
 		List<Measure> measures = StringParserUtilityDrum.stringParse(tab);
 	}
 }
