@@ -15,6 +15,7 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class XmlGenerator {
 
@@ -26,7 +27,10 @@ public class XmlGenerator {
 
 	private static String barlineLocation = "right";
 	private static String barStyle = "light-heavy";
-
+	private static Boolean isDrums = false;
+	
+	private static XMLUtility xutil = new XMLUtility("GUITAR"); //Guitar by default
+	
 	public static String Generate(ArrayList<Measure> measureList) {
 		
 		divisions = String.valueOf(Measure.divisions);
@@ -53,8 +57,8 @@ public class XmlGenerator {
 
 			// score-part element
 			Element scorePart = doc.createElement("score-part");
-			partList.appendChild(scorePart);
-
+			partList.appendChild(scorePart);		
+			
 			// Add ID attribute
 			attr = doc.createAttribute("id");
 			attr.setValue("P1");
@@ -65,6 +69,35 @@ public class XmlGenerator {
 			scorePart.appendChild(partName);
 			partName.appendChild(doc.createTextNode(PART_NAME));
 
+			// Check for drum instruments
+			// get a sample note and check if it's a DrumNote
+			isDrums = isDrums(measureList);
+			Measure m = measureList.get(0);
+			Note n = m.getNoteList().get(0);
+			
+			if (n instanceof DrumNote) {
+				// Update XML Util to match instrument
+				XmlGenerator.xutil = new XMLUtility("DRUMS");
+				
+				// Add drum instrument list
+				Hashtable<String, String> instrumentList = generateDrumInstruments(measureList);
+				for (String id : instrumentList.keySet()) {
+					// <score-instrument> 
+					Element scoreInstrument = doc.createElement("score-instrument");
+					scorePart.appendChild(scoreInstrument);		
+					
+					// Add ID attribute
+					attr = doc.createAttribute("id");
+					attr.setValue(id);
+					scoreInstrument.setAttributeNode(attr);
+					
+					// <instrument-name>
+					Element instrumentName = doc.createElement("instrument-name");
+					scoreInstrument.appendChild(instrumentName);
+					instrumentName.appendChild(doc.createTextNode(instrumentList.get(id)));
+				}
+			}
+			
 			// Create part 1
 			Element part1 = doc.createElement("part");
 			attr = doc.createAttribute("id");
@@ -101,6 +134,32 @@ public class XmlGenerator {
 		}
 		
 		return xmlString;
+	}
+
+	private static Hashtable<String, String> generateDrumInstruments(ArrayList<Measure> measureList) {
+		Measure m = measureList.get(0);
+		ArrayList<Note> nl = m.getNoteList();
+		
+		Hashtable<String, String> ht = new Hashtable<>();
+		for (Note note : nl) {
+			DrumNote dn = (DrumNote) note;
+			
+			if (!ht.containsKey(dn.instrumentId)) {
+				// TODO get actual instrument name
+				ht.put(dn.instrumentId, "Mayonnaise");
+			}
+		}
+		return ht;
+	}
+
+	private static Boolean isDrums(ArrayList<Measure> measureList) {
+		Measure m = measureList.get(0);
+		Note n = m.getNoteList().get(0);
+		
+		if (n instanceof DrumNote) {
+			return true;
+		}
+		return false;
 	}
 
 	private static void addMeasures(Element partElement, ArrayList<Measure> measureList) {
@@ -140,12 +199,12 @@ public class XmlGenerator {
 
 			// --<beats>
 			e = doc.createElement("beats");
-			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeats)));
+			e.appendChild(doc.createTextNode(String.valueOf(Measure.timeBeats)));
 			time.appendChild(e);
 
 			// --<beat-type>
 			e = doc.createElement("beat-type");
-			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeatType)));
+			e.appendChild(doc.createTextNode(String.valueOf(Measure.timeBeatType)));
 			time.appendChild(e);
 
 			// -<clef>
@@ -165,10 +224,12 @@ public class XmlGenerator {
 			measureNum++;
 
 			// -<staff-details>
-			Element staffDetails = doc.createElement("staff-details");
-			addGuitarStaffDetails(staffDetails);
-			measureAttribute.appendChild(staffDetails);
-
+			if (xutil.includeStaffDetails) {
+				Element staffDetails = doc.createElement("staff-details");
+				addGuitarStaffDetails(staffDetails);
+				measureAttribute.appendChild(staffDetails);
+			}
+			
 			// Add notes
 			for (Note n : m.noteList) {
 				// <note>
@@ -182,16 +243,16 @@ public class XmlGenerator {
 				}
 				
 				// -<pitch>
-				Element pitch = doc.createElement("pitch");
+				Element pitch = doc.createElement(xutil.pitchTagString);
 				note.appendChild(pitch);
 
 				// --<step>
-				e = doc.createElement("step");
+				e = doc.createElement(xutil.stepTagString);
 				e.appendChild(doc.createTextNode(n.step));
 				pitch.appendChild(e);
 
 				// --<octave>
-				e = doc.createElement("octave");
+				e = doc.createElement(xutil.octaveTagString);
 				e.appendChild(doc.createTextNode(String.valueOf(n.octave)));
 				pitch.appendChild(e);
 
@@ -199,6 +260,16 @@ public class XmlGenerator {
 				e = doc.createElement("duration");
 				e.appendChild(doc.createTextNode(String.valueOf(n.duration)));
 				note.appendChild(e);
+				
+				// -<instrument> if it's drums
+				if (xutil.includeInstrumentInNote) {
+					DrumNote dn = (DrumNote) n;
+					e = doc.createElement("instrument");
+					attr = doc.createAttribute("id");
+					attr.setValue(dn.instrumentId);
+					e.setAttributeNode(attr);
+					note.appendChild(e);
+				}
 
 				// -<voice>
 				e = doc.createElement("voice");
@@ -209,24 +280,63 @@ public class XmlGenerator {
 				e = doc.createElement("type");
 				e.appendChild(doc.createTextNode(n.type));
 				note.appendChild(e);
-
+				
+				//stem if it's drums
+				if (xutil.includeNoteHead) {
+					DrumNote dn = (DrumNote) n;
+					if (dn.stem != null) {
+						e = doc.createElement("stem");
+						e.appendChild(doc.createTextNode(dn.stem));
+						note.appendChild(e);
+					}
+					
+				}
+				
+				// -<notehead> if it's drums
+				if (xutil.includeNoteHead) {
+					DrumNote dn = (DrumNote) n;
+					if (dn.notehead != null) {
+						e = doc.createElement("notehead");
+						e.appendChild(doc.createTextNode(dn.notehead));
+						note.appendChild(e);
+					}
+					
+				}
+				
+				if (xutil.includeBeams) {
+					DrumNote dn = (DrumNote) n;
+					if (dn.beamList != null) {
+						for (Beam b : dn.beamList) {
+							e = doc.createElement("beam");
+							attr = doc.createAttribute("number");
+							attr.setValue(String.valueOf(b.number));
+							e.setAttributeNode(attr);
+							e.appendChild(doc.createTextNode(b.state));
+							note.appendChild(e);
+						}
+					}
+				}
+				
 				// -<notations>
-				Element notations = doc.createElement("notations");
-				note.appendChild(notations);
+				if (xutil.includeNotations) {
+					Element notations = doc.createElement("notations");
+					note.appendChild(notations);
+					
+					// -<technical>
+					Element technical = doc.createElement("technical");
+					notations.appendChild(technical);
+					
+					// --<string>
+					e = doc.createElement("string");
+					e.appendChild(doc.createTextNode(String.valueOf(n.string)));
+					technical.appendChild(e);
+					
+					// --<fret>
+					e = doc.createElement("fret");
+					e.appendChild(doc.createTextNode(String.valueOf(n.fret)));
+					technical.appendChild(e);
+				}
 
-				// -<technical>
-				Element technical = doc.createElement("technical");
-				notations.appendChild(technical);
-
-				// --<string>
-				e = doc.createElement("string");
-				e.appendChild(doc.createTextNode(String.valueOf(n.string)));
-				technical.appendChild(e);
-
-				// --<fret>
-				e = doc.createElement("fret");
-				e.appendChild(doc.createTextNode(String.valueOf(n.fret)));
-				technical.appendChild(e);
 			}
 
 			// Add barline info
