@@ -13,7 +13,7 @@ class DrumNoteTest {
 	DrumNote note;
 	@BeforeEach
 	public void setUp() throws Exception {
-		note = new DrumNote("E",4,0,1);
+		note = new DrumNote("E",4,"P1-I43");
 	}
 
 	
