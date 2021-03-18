@@ -69,7 +69,7 @@ public class Controller {
 	public Button translateButton;
 	@FXML
 	public TextArea textInput;
-	Type selected;
+	public static Type selected;
 	@FXML
 	Button fileButton;
 	@FXML
@@ -380,8 +380,12 @@ public class Controller {
 
 		Measure.timeBeats = beatType; // Numerator
 		Measure.timeBeatType = 4; // Denominator
-
-		myList = StringParserUtility.stringParse(INPUT.getText());
+		if(selected == Type.GUITAR) {
+			myList = StringParserUtility.stringParse(INPUT.getText());
+		}
+		else {
+			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
+		}
 
 		String xmlString = XmlGenerator.Generate(myList);
 		// System.out.println(xmlString);
