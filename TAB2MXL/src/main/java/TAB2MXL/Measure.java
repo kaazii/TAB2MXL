@@ -1,6 +1,7 @@
 package TAB2MXL;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Measure {
 	
@@ -11,8 +12,8 @@ public class Measure {
 		
 	public int keyFifths = 0; //always 0
 	
-	public static int timeBeats; // user input 	
-	public static int timeBeatType; // user input
+	public int timeBeats; // user input 	
+	public int timeBeatType = 4; // user input
 	
 	public static String clefSign = "TAB"; //"TAB" for Guitar
 	public int clefLine = 5; //"5" for Guitar
@@ -48,5 +49,10 @@ public class Measure {
 	
 	public int getDivision() {
 		return divisions;
+	}
+	
+	//set time signature
+	public void setTimeSignature(int timeSig) {
+		this.timeBeats = timeSig;
 	}
 }
