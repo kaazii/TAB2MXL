@@ -21,6 +21,11 @@ public class NoteUtility {
 		//Low Tom
 		//drumNotes.put("MT", new DrumNote("D", 5, "P1-I46"));
 		//
+		drumNotes.put("RC", new DrumNote("F", 5, "P1-I52"));
+		drumNotes.put("CC", new DrumNote("A", 5, "P1-I50"));
+		drumNotes.put("HT", new DrumNote("E", 5, "P1-I48"));
+		drumNotes.put("MT", new DrumNote("D", 5, "P1-I46"));
+		drumNotes.put("FT", new DrumNote("A", 4, "P1-I42"));
 	}
 	
 	
