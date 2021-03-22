@@ -15,6 +15,7 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class BassXmlGenerator {
 
@@ -72,7 +73,7 @@ public class BassXmlGenerator {
 
 			addMeasures(part1, measureList);
 
-			// write the content into a string writer then save to a variabl
+			// write the content into a string writer then save to a variable
 			// Source:
 			// https://stackoverflow.com/questions/23520208/how-to-create-xml-file-with-specific-structure-in-java
 			// Answer by Tamil veera Cholan
@@ -138,12 +139,12 @@ public class BassXmlGenerator {
 
 			// --<beats>
 			e = doc.createElement("beats");
-			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeats)));
+			e.appendChild(doc.createTextNode(String.valueOf(Measure.timeBeats)));
 			time.appendChild(e);
 
 			// --<beat-type>
 			e = doc.createElement("beat-type");
-			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeatType)));
+			e.appendChild(doc.createTextNode(String.valueOf(Measure.timeBeatType)));
 			time.appendChild(e);
 
 			// -<clef>
@@ -172,7 +173,12 @@ public class BassXmlGenerator {
 				// <note>
 				Element note = doc.createElement("note");
 				measureElem.appendChild(note);
-
+				
+				if (n.isChord) {
+					// -<chord>
+					Element chord = doc.createElement("chord");
+					note.appendChild(chord);
+				}
 				// -<pitch>
 				Element pitch = doc.createElement("pitch");
 				note.appendChild(pitch);
@@ -237,7 +243,7 @@ public class BassXmlGenerator {
 		}
 	}
 
-	// Adds the guitar-specific staff details instructions to the XML file built
+	// Adds the bass-specific staff details instructions to the XML file built
 	// Input is the root element of the <staff-details> tag
 	private static void addBassStaffDetails(Element staffDetailsElement) {
 		// ts => tuning-step
