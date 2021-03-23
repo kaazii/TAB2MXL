@@ -10,6 +10,9 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -38,12 +41,14 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.util.Pair;
 
 public class Controller {
 	/*
@@ -69,7 +74,7 @@ public class Controller {
 	public Button translateButton;
 	@FXML
 	public TextArea textInput;
-	Type selected;
+	public static Type selected;
 	@FXML
 	Button fileButton;
 	@FXML
@@ -121,6 +126,15 @@ public class Controller {
 	boolean selectAll;
 	public static int state = 0;// 0 untraslated, 1 translated
 	// ----------------------------------------//
+	
+	//---------------Time Signature List --------//
+	@FXML
+	VBox timeList;
+	public static Map<Integer, Integer> beatList = new HashMap<>();
+	@FXML
+	Button plus;
+	List<TimeHBOX> hboxList = new ArrayList<>();
+	//------------------------------------------//
 
 	static int beatType = 4;
 	public static String previousText;
@@ -322,8 +336,8 @@ public class Controller {
 		// beatsChoice.setItems(beatOptions);
 		// beatsChoice.setItems(beatOptions);
 		// beatsChoice.setValue("Beats");
-		state = 1;
-		translateButton.setDisable(true);
+		
+		
 		// translated text goes here
 		// textInput.setText(parser.checkTabType(textInput.getText())); //for Amer
 		// textInput.setText(parser.stringParse(textInput.getText()));
@@ -338,8 +352,8 @@ public class Controller {
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Tranlation Options");
-			popup.setScene(new Scene(root, 322, 414));
-
+			popup.setScene(new Scene(root, 322, 240));
+			
 			popup.show();
 
 		} catch (IOException e) {
@@ -378,10 +392,15 @@ public class Controller {
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
 
-		Measure.timeBeats = beatType; // Numerator
-		Measure.timeBeatType = 4; // Denominator
-
-		myList = StringParserUtility.stringParse(INPUT.getText());
+//		Measure.timeBeats = beatType; // Numerator
+//		Measure.timeBeatType = 4; // Denominator
+//		Measure.beatList = beatList;
+		if(selected == Type.GUITAR) {
+			myList = StringParserUtility.stringParse(INPUT.getText());
+		}
+		else {
+			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
+		}
 
 		String xmlString = XmlGenerator.Generate(myList);
 		// System.out.println(xmlString);
@@ -389,11 +408,20 @@ public class Controller {
 	}
 
 	public void confirmTranslate() { // Beat type box?
+		state = 1;
 		previousText = INPUT.getText();
 		closePopup();
 		INPUT.setText(XMLGenerate());
 		//TRANSLATE.setText("Save");
 		DELETEBUTTON.setDisable(false);
+		TRANSLATE.setDisable(true);
+		//set the list
+		for (TimeHBOX hbox : hboxList) {
+			Pair<Integer, Integer> range = hbox.getRange();
+			for(int i = range.getKey(); i <= range.getValue(); i ++) {
+				beatList.put(i, hbox.getTimeSignature());
+			}
+		}
 
 	}
 
@@ -631,5 +659,28 @@ public class Controller {
 	 */
 	enum Save {
 		FILE, MUSICXML;
+	}
+	
+	
+	//-------------time list-------------------
+	public void add() {
+		
+		TimeHBOX hbox = new TimeHBOX(timeList,hboxList);
+		timeList.getChildren().add(hbox.get());
+		timeList.getScene().getWindow().setHeight(timeList.getScene().getWindow().getHeight() + 32);
+	}
+	
+	public void hoverChange() {
+		
+		plus.getScene().setCursor(Cursor.HAND);
+		Tooltip timeTip = new Tooltip("Add a signature");
+		plus.setTooltip(timeTip);
+
+		timeTip.setShowDelay(new Duration(0));
+		
+	}
+
+	public void hoverBack() {
+		plus.getScene().setCursor(Cursor.DEFAULT);
 	}
 }

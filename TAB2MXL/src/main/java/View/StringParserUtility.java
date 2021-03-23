@@ -2,6 +2,7 @@ package View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 import TAB2MXL.Measure;
 import TAB2MXL.Note;
@@ -50,6 +51,12 @@ public final class StringParserUtility {
 			measureList.add(measureParser(measureArray[i]));
 			setChord(measureList.get(i).getNoteList());
 			measureList.get(i).measureNumber = i + 1;
+			measureList.get(i).setTimeSignature(Controller.beatType);
+			
+			Map<Integer, Integer> timeList = Controller.beatList;
+			if(timeList.containsKey(i+1)) {
+				measureList.get(i).setTimeSignature(timeList.get(i+1));
+			}
 		}
 		return measureList;
 	}

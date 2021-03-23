@@ -199,12 +199,12 @@ public class XmlGenerator {
 
 			// --<beats>
 			e = doc.createElement("beats");
-			e.appendChild(doc.createTextNode(String.valueOf(Measure.timeBeats)));
+			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeats)));
 			time.appendChild(e);
 
 			// --<beat-type>
 			e = doc.createElement("beat-type");
-			e.appendChild(doc.createTextNode(String.valueOf(Measure.timeBeatType)));
+			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeatType)));
 			time.appendChild(e);
 
 			// -<clef>
