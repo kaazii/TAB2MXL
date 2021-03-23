@@ -396,9 +396,16 @@ public class Controller {
 //		Measure.timeBeatType = 4; // Denominator
 //		Measure.beatList = beatList;
 		if(selected == Type.GUITAR) {
-			myList = StringParserUtility.stringParse(INPUT.getText());
+			System.out.println("Guitar");
+			try {
+				myList = StringParserUtility.stringParse(INPUT.getText());
+			} catch (Exception e) {
+				// TODO error handle here
+				e.printStackTrace();
+			}
 		}
 		else {
+			System.out.println("Drums");
 			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
 		}
 
