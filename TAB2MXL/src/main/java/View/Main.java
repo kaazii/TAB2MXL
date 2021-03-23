@@ -14,6 +14,11 @@ public class Main {
 				+ "HT|----------------|----oo----------|\n"
 				+ "MT|----------------|------oo--------|\n"
 				+ "BD|o-------o-------|o-------o-------|";
-		List<Measure> measures = StringParserUtilityDrum.stringParse(tab);
+		String tab1 = "|-------1-------1-|-1---------------|-1---------------|\r\n"
+				+ "|-----2-----------|-2---------------|-1---------------|\r\n"
+				+ "|---2-------------|-2---------------|-1---------------|\r\n"
+				+ "|-0---------------|-0---------------|-1---------------|";
+		//List<Measure> measures = StringParserUtilityDrum.stringParse(tab);
+		List<Measure> measures1 = StringParserUtilityBass.stringParse(tab1);
 	}
 }
