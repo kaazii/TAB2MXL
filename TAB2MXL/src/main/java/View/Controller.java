@@ -24,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -34,6 +35,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
@@ -74,7 +76,7 @@ public class Controller {
 	public Button translateButton;
 	@FXML
 	public TextArea textInput;
-	public static Type selected;
+	public static Type selected = Type.GUITAR;
 	@FXML
 	Button fileButton;
 	@FXML
@@ -138,6 +140,12 @@ public class Controller {
 
 	static int beatType = 4;
 	public static String previousText;
+	
+	//---------------invalid model--------------//
+	@FXML
+	Label warning;
+	@FXML
+	Button modalConfirm;
 
 //	public void intialize() {
 //		translateButton.disableProperty().bind(textInput.textProperty().isEmpty());
@@ -252,7 +260,9 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Confirm Restart");
 			popup.setScene(new Scene(root, 322, 140));
-
+			popup.setOnHidden(e->{
+				popup.close();
+			});
 			popup.show();
 
 		} catch (IOException e) {
@@ -332,7 +342,8 @@ public class Controller {
 	}
 
 	public void translate() {
-
+		
+		
 		// beatsChoice.setItems(beatOptions);
 		// beatsChoice.setItems(beatOptions);
 		// beatsChoice.setValue("Beats");
@@ -353,7 +364,9 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Tranlation Options");
 			popup.setScene(new Scene(root, 322, 240));
-			
+			popup.setOnHidden(e->{
+				popup.close();
+			});
 			popup.show();
 
 		} catch (IOException e) {
@@ -386,6 +399,7 @@ public class Controller {
 			bassButtonClicked();
 			// Bass
 		}
+		
 	}
 
 	private String XMLGenerate() { // Pass parsing to here
@@ -408,6 +422,14 @@ public class Controller {
 	}
 
 	public void confirmTranslate() { // Beat type box?
+		if(isInvalid()) {
+			
+			showInvalid();
+			
+			optionConfirm.getScene().getWindow().hide();
+			
+			return;
+		}
 		state = 1;
 		previousText = INPUT.getText();
 		closePopup();
@@ -511,7 +533,9 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Confirm Clear");
 			popup.setScene(new Scene(root, 322, 140));
-
+			popup.setOnHidden(e->{
+				popup.close();
+			});
 			popup.show();
 
 		} catch (IOException e) {
@@ -543,7 +567,9 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Save Options");
 			popup.setScene(new Scene(root, 322, 280));
-
+			popup.setOnHidden(e->{
+				popup.close();
+			});
 			popup.show();
 
 		} catch (IOException e) {
@@ -683,4 +709,63 @@ public class Controller {
 	public void hoverBack() {
 		plus.getScene().setCursor(Cursor.DEFAULT);
 	}
+	
+	//-----------invalid-------------------------
+	public void showInvalid() {
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("invalid.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.WINDOW_MODAL);
+			popup.setTitle("Invalid Input");
+			popup.setScene(new Scene(root, 322, 120));
+			popup.setOnHidden(e->{
+				popup.close();
+			});
+			popup.show();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void hoverModalChange() {
+		
+		cursorToHand(modalConfirm, null);
+		
+	}
+
+	
+
+	public void hoverModalBack() {
+		cursorToDefault(modalConfirm);
+	}
+	
+	public void closeWarning() {
+		warning.getScene().getWindow().hide();
+		
+		
+	}
+	
+	public boolean isInvalid() {
+		if(INPUT.getText().startsWith("s")) return true;
+		return false;
+	}
+	//------------hover helper---------------
+	private void cursorToHand(Button node, String tooltip) {
+		node.getScene().setCursor(Cursor.HAND);
+		if(tooltip != null) {
+			Tooltip tip = new Tooltip(tooltip);
+			node.setTooltip(tip);
+			tip.setShowDelay(new Duration(0));
+		}
+		
+	}
+	private void cursorToDefault(Button node) {
+		node.getScene().setCursor(Cursor.DEFAULT);
+		
+		
+	}
+	
+
 }
