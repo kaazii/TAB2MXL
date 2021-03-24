@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -608,6 +609,7 @@ public class Controller {
 		state = 0;
 		DELETEBUTTON.setDisable(true);
 		resetCancel.getScene().getWindow().hide();
+		
 	}
 
 	/**
@@ -623,6 +625,10 @@ public class Controller {
 				fileChooser.getExtensionFilters().add(extFilter);
 				File savefile = fileChooser.showSaveDialog(confirmSave.getScene().getWindow());
 				if (savefile != null) {
+					if(savefile.length()!= 0) {
+						PrintWriter pw = new PrintWriter(savefile);
+						pw.close();
+					}
 					FileWriter myWriter = new FileWriter(savefile);
 					myWriter.write(INPUT.getText());
 					myWriter.close();
@@ -766,6 +772,9 @@ public class Controller {
 		
 		
 	}
+	
+	//--------------Clear measureList------------
+	
 	
 
 }
