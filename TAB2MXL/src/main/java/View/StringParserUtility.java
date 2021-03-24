@@ -24,7 +24,7 @@ public class StringParserUtility {
 		String[] lines;
 		// Change all instances of || into |; will parse repeats separately
 		boolean has_repeats = false;
-		if (rawLines[0].matches(".*||.*")) {
+		if (rawLines[0].matches(".*\\|\\|.*")) {
 			lines = convertRepeatsToNormal(rawLines);
 			has_repeats = true;
 		} else {
