@@ -15,6 +15,10 @@ public class StringParserUtility {
 	public static ArrayList<Measure> measureList = new ArrayList<Measure>();
 	public static Hashtable<Integer, Integer> measureRepeats = new Hashtable<Integer, Integer>();
 	
+	public static void clearMeasureList() {
+        StringParserUtility.measureList = new ArrayList<Measure>();
+    }
+	
 	public static ArrayList<Measure> stringParse(String input) throws Exception { // potentially take timeBeatType here
 		String rawLines[] = input.split("\\r?\\n");
 		String[] lines;
