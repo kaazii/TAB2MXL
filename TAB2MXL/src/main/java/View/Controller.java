@@ -413,6 +413,7 @@ public class Controller {
 		if(selected == Type.GUITAR) {
 			System.out.println("Guitar");
 			try {
+				StringParserUtility.clearMeasureList();
 				myList = StringParserUtility.stringParse(INPUT.getText());
 			} catch (Exception e) {
 				// TODO error handle here
@@ -421,6 +422,7 @@ public class Controller {
 		}
 		else {
 			System.out.println("Drums");
+			StringParserUtilityDrum.clearMeasureList();
 			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
 		}
 
