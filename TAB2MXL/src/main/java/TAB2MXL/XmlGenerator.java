@@ -12,7 +12,6 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
-import java.io.File;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -27,7 +26,6 @@ public class XmlGenerator {
 
 	private static String barlineLocation = "right";
 	private static String barStyle = "light-heavy";
-	private static Boolean isDrums = false;
 	
 	private static XMLUtility xutil = new XMLUtility("GUITAR"); //Guitar by default
 	
@@ -71,7 +69,7 @@ public class XmlGenerator {
 
 			// Check for drum instruments
 			// get a sample note and check if it's a DrumNote
-			isDrums = isDrums(measureList);
+			// isDrums = isDrums(measureList);
 			Measure m = measureList.get(0);
 			Note n = m.getNoteList().get(0);
 			
@@ -152,16 +150,6 @@ public class XmlGenerator {
 		return ht;
 	}
 
-	private static Boolean isDrums(ArrayList<Measure> measureList) {
-		Measure m = measureList.get(0);
-		Note n = m.getNoteList().get(0);
-		
-		if (n instanceof DrumNote) {
-			return true;
-		}
-		return false;
-	}
-
 	private static void addMeasures(Element partElement, ArrayList<Measure> measureList) {
 		// Initial, unchanging values
 		int measureNum = 1;
@@ -169,67 +157,76 @@ public class XmlGenerator {
 		// Iterate through Measures list
 		for (Measure m : measureList) {
 			// Create measure tag and add number attribute as well as it's value
+			// <measure number="...">
 			Element measureElem = doc.createElement("measure");
 			Attr attr = doc.createAttribute("number");
 			attr.setValue(String.valueOf(measureNum));
 			measureElem.setAttributeNode(attr);
 			partElement.appendChild(measureElem);
 
-			// <attributes>
-			Element measureAttribute = doc.createElement("attributes");
-			measureElem.appendChild(measureAttribute);
-
-			// -<divisions>
-			Element e = doc.createElement("divisions");
-			e.appendChild(doc.createTextNode(XmlGenerator.divisions));
-			measureAttribute.appendChild(e);
-
-			// -<Key>
-			Element key = doc.createElement("key");
-			measureAttribute.appendChild(key);
-
-			// --<fifths>
-			e = doc.createElement("fifths");
-			e.appendChild(doc.createTextNode(XmlGenerator.fifths));
-			key.appendChild(e);
-
-			// -<time>
-			Element time = doc.createElement("time");
-			measureAttribute.appendChild(time);
-
-			// --<beats>
-			e = doc.createElement("beats");
-			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeats)));
-			time.appendChild(e);
-
-			// --<beat-type>
-			e = doc.createElement("beat-type");
-			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeatType)));
-			time.appendChild(e);
-
-			// -<clef>
-			Element clef = doc.createElement("clef");
-			measureAttribute.appendChild(clef);
-
-			// --<sign>
-			e = doc.createElement("sign");
-			e.appendChild(doc.createTextNode(Measure.clefSign));
-			clef.appendChild(e);
-
-			// --<line>
-			e = doc.createElement("line");
-			e.appendChild(doc.createTextNode(String.valueOf(m.clefLine)));
-			clef.appendChild(e);
-
-			measureNum++;
-
-			// -<staff-details>
-			if (xutil.includeStaffDetails) {
-				Element staffDetails = doc.createElement("staff-details");
-				addGuitarStaffDetails(staffDetails);
-				measureAttribute.appendChild(staffDetails);
+			// fill in attributes for first measure
+			// TODO check if this is correct logic, not sure if only the first measure needs <attributes>
+			if (m.measureNumber == 1) {
+				// <attributes>
+				Element measureAttribute = doc.createElement("attributes");
+				measureElem.appendChild(measureAttribute);
+	
+				// -<divisions>
+				Element e = doc.createElement("divisions");
+				e.appendChild(doc.createTextNode(XmlGenerator.divisions));
+				measureAttribute.appendChild(e);
+	
+				// -<Key>
+				Element key = doc.createElement("key");
+				measureAttribute.appendChild(key);
+	
+				// --<fifths>
+				e = doc.createElement("fifths");
+				e.appendChild(doc.createTextNode(XmlGenerator.fifths));
+				key.appendChild(e);
+	
+				// -<time>
+				Element time = doc.createElement("time");
+				measureAttribute.appendChild(time);
+	
+				// --<beats>
+				e = doc.createElement("beats");
+				e.appendChild(doc.createTextNode(String.valueOf(m.timeBeats)));
+				time.appendChild(e);
+	
+				// --<beat-type>
+				e = doc.createElement("beat-type");
+				e.appendChild(doc.createTextNode(String.valueOf(m.timeBeatType)));
+				time.appendChild(e);
+	
+				// -<clef>
+				Element clef = doc.createElement("clef");
+				measureAttribute.appendChild(clef);
+	
+				// --<sign>
+				e = doc.createElement("sign");
+				e.appendChild(doc.createTextNode(Measure.clefSign));
+				clef.appendChild(e);
+	
+				// --<line>
+				e = doc.createElement("line");
+				e.appendChild(doc.createTextNode(String.valueOf(m.clefLine)));
+				clef.appendChild(e);
+				
+				// -<staff-details>
+				if (xutil.includeStaffDetails) {
+					Element staffDetails = doc.createElement("staff-details");
+					addGuitarStaffDetails(staffDetails);
+					measureAttribute.appendChild(staffDetails);
+				}
 			}
 			
+			// Barline logic for repeats - LEFT BARLINE
+			if (m.repeatStart && m.repeats > 0) {
+				addBarline(measureElem, "left", m.repeats);
+			}
+			
+			measureNum++;
 			// Add notes
 			for (Note n : m.noteList) {
 				// <note>
@@ -247,7 +244,7 @@ public class XmlGenerator {
 				note.appendChild(pitch);
 
 				// --<step>
-				e = doc.createElement(xutil.stepTagString);
+				Element e = doc.createElement(xutil.stepTagString);
 				e.appendChild(doc.createTextNode(n.step));
 				pitch.appendChild(e);
 
@@ -339,22 +336,70 @@ public class XmlGenerator {
 
 			}
 
-			// Add barline info
-			// <barline location="right">
-			Element barline = doc.createElement("barline");
-			measureElem.appendChild(barline);
-
-			attr = doc.createAttribute("location");
-			attr.setValue(barlineLocation);
-			barline.setAttributeNode(attr);
-
-			// -<bar-style>
-			e = doc.createElement("bar-style");
-			e.appendChild(doc.createTextNode(barStyle));
-			barline.appendChild(e);
+			// right Barline
+			if (m.repeatEnd && m.repeats > 0) {
+				addBarline(measureElem, "right", m.repeats);
+			}
 		}
 	}
 
+	// addBarline(measure element, "left" / "right", # of repeats from measure)
+	private static void addBarline(Element measureElem, String LeftRight, int numRepeats) {
+		
+		String direction_value = "";
+		if (LeftRight.equals("left")) {
+			direction_value = "forward";
+		} else {
+			direction_value = "backward";
+		}
+		
+		// <barline>
+		Element barline = doc.createElement("barline");
+		Attr attr = doc.createAttribute("location");
+		attr.setValue(LeftRight);
+		barline.setAttributeNode(attr);
+		measureElem.appendChild(barline);
+		
+		// <bar-style>
+		Element e = doc.createElement("bar-style");
+		e.appendChild(doc.createTextNode("heavy-light"));
+		barline.appendChild(e);
+		
+		e = doc.createElement("repeat");
+		attr = doc.createAttribute("direction");
+		attr.setValue(direction_value);
+		e.setAttributeNode(attr);
+		barline.appendChild(e);
+		
+		if (direction_value.equals("forward")) {
+			// <direction> only for the first barline
+			// displays the text that says how many times to repeat
+			Element directionElem = doc.createElement("direction");
+			attr = doc.createAttribute("placement");
+			attr.setValue("above");
+			directionElem.setAttributeNode(attr);
+			measureElem.appendChild(directionElem);
+			
+			//<direction-type>
+			Element directionType = doc.createElement("direction-type");
+			directionElem.appendChild(directionType);
+			
+			// <words>
+			e = doc.createElement("words");
+			attr = doc.createAttribute("relative-x"); //relative-x
+			attr.setValue(String.valueOf(256.17));
+			e.setAttributeNode(attr);
+			directionType.appendChild(e);
+			
+			attr = doc.createAttribute("relative-y"); //relative-y
+			attr.setValue(String.valueOf(16.01));
+			e.setAttributeNode(attr);
+			// repeat x times
+			e.appendChild(doc.createTextNode("Repeat " + String.valueOf(numRepeats) + " times" ));
+			directionType.appendChild(e);
+		}
+
+	}
 	// Adds the guitar-specific staff details instructions to the XML file built
 	// Input is the root element of the <staff-details> tag
 	private static void addGuitarStaffDetails(Element staffDetailsElement) {

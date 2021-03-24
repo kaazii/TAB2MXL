@@ -17,7 +17,11 @@ public class Measure {
 	
 	public static String clefSign = "TAB"; //"TAB" for Guitar
 	public int clefLine = 5; //"5" for Guitar
-
+	
+	public boolean repeatStart = false;
+	public boolean repeatEnd = false;
+	public int repeats = 0;
+	
 	// Create a new measure
 	public Measure(int clefLine, int measureNumber) {
 		
