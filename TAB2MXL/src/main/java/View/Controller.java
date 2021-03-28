@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import TAB2MXL.BassXmlGenerator;
 import TAB2MXL.Measure;
 import TAB2MXL.Note;
 import TAB2MXL.XmlGenerator;
@@ -387,18 +388,25 @@ public class Controller {
 //		System.out.println(lines.length);
 
 		// basic checks
-		if (lines[0].toUpperCase().startsWith("E")) {
+		if (lines[0].toUpperCase().startsWith("E") && (lines.length % 6==0)) {
+			//System.out.println("This is a guitar"); // testing
 			guitarButtonClicked();
 			/*
 			 * Guitar
 			 */
 
-		} else if (lines[0].toUpperCase().startsWith("C")) {
+		} else if (lines[0].toUpperCase().startsWith("C") && (lines.length % 5==0)) {
+			//System.out.println("This is a bass"); // testing
 			drumButtonClicked();
 			// Drum
-		} else if (lines[0].toUpperCase().startsWith("G")) {
+		} else if (lines[0].toUpperCase().startsWith("G") && (lines.length % 4==0)) {
+			//System.out.println("This is a bass"); // testing
 			bassButtonClicked();
 			// Bass
+		}
+		else
+		{
+			//System.out.println("Error in Instrument Detection"); //testing
 		}
 		
 	}
@@ -415,6 +423,16 @@ public class Controller {
 			try {
 				StringParserUtility.clearMeasureList();
 				myList = StringParserUtility.stringParse(INPUT.getText());
+			} catch (Exception e) {
+				// TODO error handle here
+				e.printStackTrace();
+			}
+		}
+		else if(selected == Type.BASS) {
+			System.out.println("Bass");
+			try {
+				StringParserUtilityBass.clearMeasureList();
+				myList = StringParserUtilityBass.stringParse(INPUT.getText());
 			} catch (Exception e) {
 				// TODO error handle here
 				e.printStackTrace();
