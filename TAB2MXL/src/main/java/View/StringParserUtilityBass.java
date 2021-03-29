@@ -2,6 +2,7 @@ package View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 import TAB2MXL.BassNoteUtility;
 import TAB2MXL.Measure;
@@ -52,8 +53,15 @@ public final class StringParserUtilityBass {
 		//call measureParser
 		for (int i = 0; i < measureArray.length; i++) {
 			measureList.add(measureParser(measureArray[i]));
+			
 			setChord(measureList.get(i).getNoteList());
 			measureList.get(i).measureNumber = i + 1;
+			measureList.get(i).setTimeSignature(Controller.beatType);
+			
+			Map<Integer, Integer> timeList = Controller.beatList;
+			if(timeList.containsKey(i+1)) {
+				measureList.get(i).setTimeSignature(timeList.get(i+1));
+			}
 		}
 		return measureList;
 	}
