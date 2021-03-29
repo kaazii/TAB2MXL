@@ -19,6 +19,6 @@ public class Main {
 				+ "|---2-------------|-2---------------|-1---------------|\r\n"
 				+ "|-0---------------|-0---------------|-1---------------|";
 		//List<Measure> measures = StringParserUtilityDrum.stringParse(tab);
-		List<Measure> measures1 = StringParserUtilityBass.stringParse(tab1);
+		//List<Measure> measures1 = StringParserUtilityBass.stringParse(tab1);
 	}
 }
