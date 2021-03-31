@@ -486,13 +486,13 @@ public class Controller {
 		state = 1;
 		previousText = INPUT.getText();
 		closePopup();
-		INPUT.setText(XMLGenerate());
 		//TRANSLATE.setText("Save");
 		DELETEBUTTON.setDisable(false);
 		TRANSLATE.setDisable(true);
 		//set the list
 		COMPOSER = composerField.getText();
 		TITLE = titleField.getText();
+		INPUT.setText(XMLGenerate());
 
 	}
 
