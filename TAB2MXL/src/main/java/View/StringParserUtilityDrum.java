@@ -75,7 +75,9 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				String instrument = splitLines[j][0];
 				String curr = lines[j].substring(i, i + 1); //this is the current character that we are parsing
 				if (!(curr.equals("-"))) { // this must be a note!
+					
 					Note note = getNote(instrument);
+					if(instrument.equals("HH")) note = getNote("HHx");
 					if(curr.equals("x")) ((DrumNote) note).setNotehead("x");
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); //pass the current column index
