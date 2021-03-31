@@ -7,12 +7,15 @@ public class DrumNote extends Note {
 	public String instrumentId;
 	public String stem;
 	public ArrayList<Beam> beamList;
+	public String instrumentName;
 	
+
 	
-	public DrumNote(String step, int octave, String id) {
+	public DrumNote(String step, int octave, String id, String instrumentName) {
 		this.step = step;
 		this.octave = octave;
 		this.instrumentId = id;
+		this.instrumentName = instrumentName;
 	}
 	
 	public void setNotehead(String notehead) {
@@ -37,6 +40,10 @@ public class DrumNote extends Note {
 
 	public String getInstrumentId() {
 		return instrumentId;
+	}
+	
+	public void setInstrumentName(String name) {
+		this.instrumentName = name;
 	}
 
 }
