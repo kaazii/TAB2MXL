@@ -77,7 +77,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 	
 	public static Measure measureParser(String measureString, String[][] splitLines) {
 		Measure measure = new Measure(getDivison(measureString));
-		Measure.divisions = getDivison(measureString);
+		measure.divisions = getDivison(measureString);
 		
 		String lines[] = measureString.split("\\r?\\n");
 		
@@ -93,7 +93,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 					if(curr.equals("x")) ((DrumNote) note).setNotehead("x");
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); //pass the current column index
-					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) Measure.divisions));
+					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.divisions));
 					System.out.println("instrument " + instrument + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
 					measure.noteList.add(note);
 				}
