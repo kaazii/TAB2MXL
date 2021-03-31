@@ -421,7 +421,7 @@ public class Controller {
 		
 	}
 
-	private String XMLGenerate() { // Pass parsing to here
+	private String XMLGenerate() throws Exception { // Pass parsing to here
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
 		String xmlString = "";
@@ -460,7 +460,7 @@ public class Controller {
 		return xmlString;
 	}
 
-	public void confirmTranslate() { // Beat type box?
+	public void confirmTranslate() throws Exception { // Beat type box?
 		if(isInvalid()) {
 			
 			showInvalid();
