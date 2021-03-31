@@ -8,7 +8,7 @@ public class Measure {
 	public int measureNumber;
 	
 	public ArrayList<Note> noteList = new ArrayList<Note>();
-	public static int divisions;
+	public int divisions;
 	
 	public int keyFifths = 0; //always 0
 	
@@ -29,7 +29,7 @@ public class Measure {
 	}
 	
 	public Measure (int division) { //may not need in the future
-		Measure.divisions = division;
+		this.divisions = division;
 	}
 	
 	public Measure() {}
