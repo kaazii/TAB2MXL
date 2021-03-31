@@ -23,9 +23,6 @@ public class XmlGenerator {
 
 	private static String divisions;
 	private static String fifths = String.valueOf(0);
-
-	private static String barlineLocation = "right";
-	private static String barStyle = "light-heavy";
 	
 	private static XMLUtility xutil = new XMLUtility("GUITAR"); //Guitar by default
 	
