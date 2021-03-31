@@ -94,4 +94,3 @@ public class StringParserUtilityDrum extends StringParserUtility {
 		return noteGetter.drumNotes.get(instrument);
 	}
 }
-

@@ -718,7 +718,6 @@ public class Controller {
 		plus.setTooltip(timeTip);
 
 		timeTip.setShowDelay(new Duration(0));
-		
 	}
 
 	public void hoverBack() {

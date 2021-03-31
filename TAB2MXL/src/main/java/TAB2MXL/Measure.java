@@ -24,7 +24,6 @@ public class Measure {
 	
 	// Create a new measure
 	public Measure(int clefLine, int measureNumber) {
-		
 		this.measureNumber = measureNumber;
 		this.clefLine = clefLine;
 	}
