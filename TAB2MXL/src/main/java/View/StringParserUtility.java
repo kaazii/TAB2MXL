@@ -20,13 +20,7 @@ public class StringParserUtility {
     }
 	
 	public static ArrayList<Measure> stringParse(String input) throws Exception { // potentially take timeBeatType here
-		System.out.println(input); //original tab
 		String rawLines[] = input.split("\\r?\\n");
-		/*if (rawLines.length!=6)
-		{
-		throw new Exception("Error- Not a Guitar");
-		}
-		*/
 		String[] lines;
 		// Change all instances of || into |; will parse repeats separately
 		boolean has_repeats = false;
@@ -36,7 +30,9 @@ public class StringParserUtility {
 		} else {
 			lines = rawLines;
 		}
+		
 		String splitLines[][] = new String[lines.length][]; // splitLines[row][column]
+		
 		// Split up each line by "|", and put those arrays into the splitLines array.
 		for (int i = 0; i < lines.length; i++) {
 			String currLine[] = lines[i].split("\\|");
@@ -47,7 +43,7 @@ public class StringParserUtility {
 		//System.out.println(Arrays.deepToString(splitLines)); // prints the second line which is now split into multiple arrays... testing
 
 		int numMeasures = splitLines[0].length - 1;
-		System.out.println("numMeasures: " + numMeasures); //testing
+		//System.out.println("numMeasures: " + numMeasures); //testing
 		int measureCount = 0;
 		String[] measureArray = new String[numMeasures];
 
@@ -300,3 +296,4 @@ public class StringParserUtility {
 		return StringParserUtility.measureList;
 	}
 }
+
