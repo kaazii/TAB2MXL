@@ -12,6 +12,9 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
+
+import View.Controller;
+
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -21,7 +24,6 @@ public class XmlGenerator {
 	public static final String PART_NAME = " ";
 	private static Document doc;
 
-	private static String divisions;
 	private static String fifths = String.valueOf(0);
 	
 	private static XMLUtility xutil = new XMLUtility("GUITAR"); //Guitar by default
@@ -30,11 +32,9 @@ public class XmlGenerator {
 		
 		// Check if measure list is empty
 		if (measureList.isEmpty()) {
-			throw new Exception("No measures passed in");
+			throw new Exception("Measure List passed into XML generator is empty");
 		}
 		
-		divisions = String.valueOf(Measure.divisions);
-
 		String xmlString = "";
 		
 		try {
@@ -50,7 +50,35 @@ public class XmlGenerator {
 			Attr attr = doc.createAttribute("version");
 			attr.setValue("3.1");
 			rootElement.setAttributeNode(attr);
-
+			
+			if (Controller.TITLE != "") {
+				// <work>
+				Element work = doc.createElement("work");
+				rootElement.appendChild(work);
+				
+				// <work-title>
+				Element e = doc.createElement("work-title");
+				e.appendChild(doc.createTextNode(Controller.TITLE));
+				work.appendChild(e);
+			}
+			
+			if (Controller.COMPOSER != "") {
+				// <identification>
+				Element identification = doc.createElement("identification");
+				rootElement.appendChild(identification);
+				
+				// <creator>
+				Element e = doc.createElement("creator");
+				
+				attr = doc.createAttribute("type");
+				attr.setValue("composer");
+				e.setAttributeNode(attr);
+				
+				e.appendChild(doc.createTextNode(Controller.COMPOSER));
+				
+				identification.appendChild(e);				
+			}
+			
 			// part-list element. Create only one part for now
 			Element partList = doc.createElement("part-list");
 			rootElement.appendChild(partList);
@@ -178,7 +206,7 @@ public class XmlGenerator {
 	
 				// -<divisions>
 				Element e = doc.createElement("divisions");
-				e.appendChild(doc.createTextNode(XmlGenerator.divisions));
+				e.appendChild(doc.createTextNode(String.valueOf(m.divisions)));
 				measureAttribute.appendChild(e);
 	
 				// -<Key>
