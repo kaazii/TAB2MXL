@@ -7,6 +7,8 @@ public class XMLUtility {
 	String pitchTagString = "pitch";
 	String stepTagString = "step";
 	String octaveTagString = "octave";
+	String clefSign = "TAB";
+	String clefLine = "5";
 	
 	boolean includeStaffDetails = true;
 	boolean includeInstrumentInNote = false;
@@ -27,6 +29,8 @@ public class XMLUtility {
 			this.includeNoteHead = true;
 			this.includeNotations = false;
 			this.includeBeams = true;
+			this.clefSign = "percussion";
+			this.clefLine = "2";
 		}
 	}
 

@@ -11,21 +11,29 @@ import TAB2MXL.NoteUtility;
 
 public class StringParserUtilityDrum extends StringParserUtility {
 	
-	public static ArrayList<Measure> stringParse(String input) { // potentially take timeBeatType here
-		String lines[] = input.split("\\r?\\n");
+	public static ArrayList<Measure> stringParse(String input) throws Exception{ // potentially take timeBeatType here
+		String rawLines[] = input.split("\\r?\\n");
+		/*if (rawLines.length!=6)
+		{
+		throw new Exception("Error- Not a Guitar");
+		}
+		*/
+		String[] lines;
+		// Change all instances of || into |; will parse repeats separately
+		boolean has_repeats = false;
+		if (rawLines[0].matches(".*\\|\\|.*")) {
+			lines = convertRepeatsToNormal(rawLines);
+			has_repeats = true;
+		} else {
+			lines = rawLines;
+		}
 		String splitLines[][] = new String[lines.length][]; // splitLines[row][column]
-		
-		System.out.println("lines: " + lines[0].length());
-
 		// Split up each line by "|", and put those arrays into the splitLines array.
 		for (int i = 0; i < lines.length; i++) {
 			String currLine[] = lines[i].split("\\|");
 			splitLines[i] = currLine;
-			System.out.println(splitLines[i][0]); // Prints the first entry of each line/array.. testing
+			//System.out.println(splitLines[i][0]); // Prints the first entry of each line/array.. testing
 		}
-
-		System.out.println(Arrays.deepToString(splitLines)); // prints the second line which is now split into multiple arrays... testing
-
 		int numMeasures = splitLines[0].length - 1;
 		System.out.println("numMeasures: " + numMeasures); //testing
 		int measureCount = 0;
@@ -59,6 +67,10 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				measureList.get(i).setTimeSignature(timeList.get(i+1));
 			}
 			
+		}
+		
+		if (has_repeats) {
+			fillMeasureRepeats(rawLines);
 		}
 		return measureList;
 	}

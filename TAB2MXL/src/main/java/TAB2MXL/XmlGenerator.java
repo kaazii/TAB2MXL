@@ -26,12 +26,17 @@ public class XmlGenerator {
 	
 	private static XMLUtility xutil = new XMLUtility("GUITAR"); //Guitar by default
 	
-	public static String Generate(ArrayList<Measure> measureList) {
+	public static String Generate(ArrayList<Measure> measureList) throws Exception {
+		
+		// Check if measure list is empty
+		if (measureList.isEmpty()) {
+			throw new Exception("No measures passed in");
+		}
 		
 		divisions = String.valueOf(Measure.divisions);
 
 		String xmlString = "";
-
+		
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -142,7 +147,7 @@ public class XmlGenerator {
 			
 			if (!ht.containsKey(dn.instrumentId)) {
 				// TODO get actual instrument name
-				ht.put(dn.instrumentId, "Mayonnaise");
+				ht.put(dn.instrumentId, dn.instrumentName);
 			}
 		}
 		return ht;
@@ -201,14 +206,24 @@ public class XmlGenerator {
 				Element clef = doc.createElement("clef");
 				measureAttribute.appendChild(clef);
 	
+//				// --<sign>
+//				e = doc.createElement("sign");
+//				e.appendChild(doc.createTextNode(Measure.clefSign));
+//				clef.appendChild(e);
+				
+//				// --<line>
+//				e = doc.createElement("line");
+//				e.appendChild(doc.createTextNode(String.valueOf(m.clefLine)));
+//				clef.appendChild(e);
+				
 				// --<sign>
 				e = doc.createElement("sign");
-				e.appendChild(doc.createTextNode(Measure.clefSign));
+				e.appendChild(doc.createTextNode(xutil.clefSign));
 				clef.appendChild(e);
 	
 				// --<line>
 				e = doc.createElement("line");
-				e.appendChild(doc.createTextNode(String.valueOf(m.clefLine)));
+				e.appendChild(doc.createTextNode(xutil.clefLine));
 				clef.appendChild(e);
 				
 				// -<staff-details>
