@@ -377,6 +377,7 @@ public class Controller {
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -432,7 +433,7 @@ public class Controller {
 				myList = StringParserUtility.stringParse(INPUT.getText());
 			} catch (Exception e) {
 				// TODO error handle here
-				e.printStackTrace();
+				error();
 			}
 		}
 		else if(selected == Type.BASS) {
@@ -452,7 +453,13 @@ public class Controller {
 			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
 		}
 
-		xmlString = XmlGenerator.Generate(myList, instrumentName);
+		try {
+			xmlString = XmlGenerator.Generate(myList,instrumentName);
+		}
+		catch (Exception e) {
+			error();
+		}
+
 		
 		// System.out.println(xmlString);
 		return xmlString;
@@ -578,6 +585,7 @@ public class Controller {
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -612,6 +620,7 @@ public class Controller {
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -770,6 +779,7 @@ public class Controller {
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -840,7 +850,37 @@ public class Controller {
 	
 	//--------------error catch---------------
 	private void error() {
-		INPUT.setText("NO!!!!");
+		showInvalid();
+	}
+	
+	
+	
+	//-----input clean up-----------------
+	public static String cleanup(String input) {
+		StringBuilder sb = new StringBuilder();
+		
+		String[] lines = input.split("\\r?\\n");
+		boolean consecutive = false; // if there is consecutive lines to be ignored
+		for(int i = 0; i < lines.length; i ++) {
+			//System.out.println(lines[i]);
+			if(!lines[i].contains("-") || !lines[i].contains("|")) {
+				if(consecutive) continue;
+				else {
+					consecutive = true;
+					sb.append("\n");
+				}
+				
+			}
+			else {
+				sb.append(lines[i]);
+				sb.append("\n");
+				consecutive = false;
+			}
+		}
+		
+		
+		
+		return sb.toString();
 	}
 
 }
