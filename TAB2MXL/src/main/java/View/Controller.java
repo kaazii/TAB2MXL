@@ -1,4 +1,3 @@
-
 package View;
 
 import java.io.File;
@@ -40,6 +39,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -147,6 +147,15 @@ public class Controller {
 	Label warning;
 	@FXML
 	Button modalConfirm;
+	
+	//---------------composer and title---------//
+	public static String COMPOSER = "";
+	public static String TITLE = "";
+	@FXML
+	TextField composerField;
+	
+	@FXML
+	TextField titleField;
 
 //	public void intialize() {
 //		translateButton.disableProperty().bind(textInput.textProperty().isEmpty());
@@ -364,10 +373,11 @@ public class Controller {
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Tranlation Options");
-			popup.setScene(new Scene(root, 322, 240));
+			popup.setScene(new Scene(root, 322, 356));
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -378,6 +388,8 @@ public class Controller {
 	}
 
 	public void detect(String input) {
+
+		
 		String lines[] = input.split("\\r?\\n");
 
 		// for error testing
@@ -387,34 +399,49 @@ public class Controller {
 //		System.out.println(lines.length);
 
 		// basic checks
-		if (lines[0].toUpperCase().startsWith("E")) {
+		if (lines[0].toUpperCase().startsWith("E") && (lines.length % 6==0)) {
+			//System.out.println("This is a guitar"); // testing
 			guitarButtonClicked();
 			/*
 			 * Guitar
 			 */
 
-		} else if (lines[0].toUpperCase().startsWith("C")) {
+		} else if (lines[0].toUpperCase().startsWith("C") && (lines.length % 6==0)) {
+			//System.out.println("This is a drum"); // testing
 			drumButtonClicked();
 			// Drum
-		} else if (lines[0].toUpperCase().startsWith("G")) {
+		} else if (lines[0].toUpperCase().startsWith("G") && (lines.length % 4==0)) {
+			//System.out.println("This is a bass"); // testing
 			bassButtonClicked();
 			// Bass
 		}
-		
 	}
 
-	private String XMLGenerate() { // Pass parsing to here
+	private String XMLGenerate() throws Exception { // Pass parsing to here
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
-
+		String xmlString = "";
+		String instrumentName = "DRUMS";
 //		Measure.timeBeats = beatType; // Numerator
 //		Measure.timeBeatType = 4; // Denominator
 //		Measure.beatList = beatList;
 		if(selected == Type.GUITAR) {
 			System.out.println("Guitar");
+			instrumentName = "GUITAR";
 			try {
 				StringParserUtility.clearMeasureList();
 				myList = StringParserUtility.stringParse(INPUT.getText());
+			} catch (Exception e) {
+				// TODO error handle here
+				error();
+			}
+		}
+		else if(selected == Type.BASS) {
+			System.out.println("Bass");
+			instrumentName = "BASS";
+			try {
+				StringParserUtilityBass.clearMeasureList();
+				myList = StringParserUtilityBass.stringParse(INPUT.getText());
 			} catch (Exception e) {
 				// TODO error handle here
 				e.printStackTrace();
@@ -426,12 +453,19 @@ public class Controller {
 			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
 		}
 
-		String xmlString = XmlGenerator.Generate(myList);
+		try {
+			xmlString = XmlGenerator.Generate(myList,instrumentName);
+		}
+		catch (Exception e) {
+			error();
+		}
+
+		
 		// System.out.println(xmlString);
 		return xmlString;
 	}
 
-	public void confirmTranslate() { // Beat type box?
+	public void confirmTranslate() throws Exception { // Beat type box?
 		if(isInvalid()) {
 			
 			showInvalid();
@@ -440,6 +474,15 @@ public class Controller {
 			
 			return;
 		}
+		
+		
+		for (TimeHBOX hbox : hboxList) {
+			Pair<Integer, Integer> range = hbox.getRange();
+			for(int i = range.getKey(); i <= range.getValue(); i ++) {
+				beatList.put(i, hbox.getTimeSignature());
+			}
+		}
+		
 		state = 1;
 		previousText = INPUT.getText();
 		closePopup();
@@ -448,12 +491,8 @@ public class Controller {
 		DELETEBUTTON.setDisable(false);
 		TRANSLATE.setDisable(true);
 		//set the list
-		for (TimeHBOX hbox : hboxList) {
-			Pair<Integer, Integer> range = hbox.getRange();
-			for(int i = range.getKey(); i <= range.getValue(); i ++) {
-				beatList.put(i, hbox.getTimeSignature());
-			}
-		}
+		COMPOSER = composerField.getText();
+		TITLE = titleField.getText();
 
 	}
 
@@ -546,6 +585,7 @@ public class Controller {
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -580,6 +620,7 @@ public class Controller {
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -711,6 +752,7 @@ public class Controller {
 		timeList.getScene().getWindow().setHeight(timeList.getScene().getWindow().getHeight() + 32);
 	}
 	
+	
 	public void hoverChange() {
 		
 		plus.getScene().setCursor(Cursor.HAND);
@@ -736,6 +778,7 @@ public class Controller {
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -761,9 +804,29 @@ public class Controller {
 		
 	}
 	
+	//Checks for illegal characters in the input
+	
 	public boolean isInvalid() {
-		if(INPUT.getText().startsWith("s")) return true;
-		return false;
+		//final String NEW_LINE = System.getProperty("line.separator");
+		boolean illegalChar=false;
+		//store the text tab
+		String tempInput=INPUT.getText();
+		//string containing all possible characters for the text tab for all 3 instruments
+		String validChars = "0123456789-|EADGBECHSTMxo";
+		//remove new line from the string(the contains method wasn't working properly otherwise)
+		tempInput = tempInput.replace("\n", "").replace("\r", "");
+		//compare each character in the tempInput string with validChars
+		for(int i = 0; i < tempInput.length(); i++) {
+		    if(!(validChars.contains(Character.toString(tempInput.charAt(i)))))
+		    {
+		        System.out.println(tempInput.charAt(i)+" did not match");
+		        //set to true if illegal character found
+		        illegalChar=true;
+		    }
+		}
+		return illegalChar;
+		//if(INPUT.getText().startsWith("s")) return true;
+		//return false;
 	}
 	//------------hover helper---------------
 	private void cursorToHand(Button node, String tooltip) {
@@ -784,5 +847,39 @@ public class Controller {
 	//--------------Clear measureList------------
 	
 	
+	//--------------error catch---------------
+	private void error() {
+		showInvalid();
+	}
+	
+	
+	
+	//-----input clean up-----------------
+	public static String cleanup(String input) {
+		StringBuilder sb = new StringBuilder();
+		
+		String[] lines = input.split("\\r?\\n");
+		boolean consecutive = false; // if there is consecutive lines to be ignored
+		for(int i = 0; i < lines.length; i ++) {
+			//System.out.println(lines[i]);
+			if(!lines[i].contains("-") || !lines[i].contains("|")) {
+				if(consecutive) continue;
+				else {
+					consecutive = true;
+					sb.append("\n");
+				}
+				
+			}
+			else {
+				sb.append(lines[i]);
+				sb.append("\n");
+				consecutive = false;
+			}
+		}
+		
+		
+		
+		return sb.toString();
+	}
 
 }
