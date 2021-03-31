@@ -13,7 +13,7 @@ class DrumNoteTest {
 	DrumNote note;
 	@BeforeEach
 	public void setUp() throws Exception {
-		note = new DrumNote("E",4,"P1-I43");
+		note = new DrumNote("E",4,"P1-I43", "Low-Mid Tom");
 	}
 
 	
@@ -80,7 +80,7 @@ class DrumNoteTest {
 	
 	@Test
 	public void testSecondConstructor() {
-		note = new DrumNote("F", 4, "P1-I43");
+		note = new DrumNote("F", 4, "P1-I43", "Bass Drum 1");
 		assertEquals("P1-I43", note.instrumentId);
 	}
 	
