@@ -18,7 +18,7 @@ import java.util.Hashtable;
 
 public class XmlGenerator {
 
-	public static final String PART_NAME = "Classical Guitar";
+	public static final String PART_NAME = " ";
 	private static Document doc;
 
 	private static String divisions;
@@ -62,7 +62,6 @@ public class XmlGenerator {
 			// Add part name
 			Element partName = doc.createElement("part-name");
 			scorePart.appendChild(partName);
-			partName.appendChild(doc.createTextNode(PART_NAME));
 
 			// Check for drum instruments
 			// get a sample note and check if it's a DrumNote
@@ -92,6 +91,8 @@ public class XmlGenerator {
 					instrumentName.appendChild(doc.createTextNode(instrumentList.get(id)));
 				}
 			}
+			// Set part name as the instrument name
+			partName.appendChild(doc.createTextNode(xutil.instrument));
 			
 			// Create part 1
 			Element part1 = doc.createElement("part");
