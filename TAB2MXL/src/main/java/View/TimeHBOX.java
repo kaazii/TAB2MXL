@@ -17,8 +17,10 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import javafx.util.Pair;
 
 public class TimeHBOX{
@@ -154,6 +156,9 @@ public class TimeHBOX{
 		hbox.getChildren().add(minus);
 		minus.setOnMouseEntered(e ->{
 			minus.getScene().setCursor(Cursor.HAND);
+			Tooltip tooltip = new Tooltip("Delete");
+			tooltip.setShowDelay(new Duration(0));
+			minus.setTooltip(tooltip);
 		});
 		minus.setOnMouseExited(e -> {
 			minus.getScene().setCursor(Cursor.DEFAULT);
@@ -161,6 +166,9 @@ public class TimeHBOX{
 		minus.setOnAction(e->{
 			parent.getChildren().remove(hbox);
 			list.remove(this);
+			//hbox.getParent().getScene().getWindow().setHeight(hbox.getParent().getScene().getWindow().getHeight() - 32);
+			parent.getScene().getWindow().setHeight(parent.getScene().getWindow().getHeight() - 32);
+			
 		});
 		
 		//when minus this node gets removed
