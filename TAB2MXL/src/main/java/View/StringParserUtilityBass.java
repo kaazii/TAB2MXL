@@ -11,7 +11,7 @@ import TAB2MXL.Measure;
 import TAB2MXL.Note;
 import TAB2MXL.NoteUtility;
 
-public class StringParserUtilityBass {
+public class StringParserUtilityBass extends StringParserUtility{
 
 	public static ArrayList<Measure> measureList = new ArrayList<Measure>();
 	public static Hashtable<Integer, Integer> measureRepeats = new Hashtable<Integer, Integer>();
