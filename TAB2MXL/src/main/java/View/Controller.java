@@ -433,7 +433,7 @@ public class Controller {
 				myList = StringParserUtility.stringParse(INPUT.getText());
 			} catch (Exception e) {
 				// TODO error handle here
-				error();
+				error(e);
 			}
 		}
 		else if(selected == Type.BASS) {
@@ -444,7 +444,7 @@ public class Controller {
 				myList = StringParserUtilityBass.stringParse(INPUT.getText());
 			} catch (Exception e) {
 				// TODO error handle here
-				e.printStackTrace();
+				error(e);
 			}
 		}
 		else {
@@ -457,7 +457,7 @@ public class Controller {
 			xmlString = XmlGenerator.Generate(myList,instrumentName);
 		}
 		catch (Exception e) {
-			error();
+			error(e);
 		}
 
 		
@@ -468,6 +468,7 @@ public class Controller {
 	public void confirmTranslate() throws Exception { // Beat type box?
 		if(isInvalid()) {
 			
+			System.out.println("reached\n");
 			showInvalid();
 			
 			optionConfirm.getScene().getWindow().hide();
@@ -810,9 +811,10 @@ public class Controller {
 		//final String NEW_LINE = System.getProperty("line.separator");
 		boolean illegalChar=false;
 		//store the text tab
-		String tempInput=INPUT.getText();
+		System.out.println(cleanup(INPUT.getText()));
+		String tempInput = cleanup(INPUT.getText());
 		//string containing all possible characters for the text tab for all 3 instruments
-		String validChars = "0123456789-|EADGBECHSTMxo";
+		String validChars = "0123456789-|EADGBECHSTMxoshp[]";
 		//remove new line from the string(the contains method wasn't working properly otherwise)
 		tempInput = tempInput.replace("\n", "").replace("\r", "");
 		//compare each character in the tempInput string with validChars
@@ -848,7 +850,8 @@ public class Controller {
 	
 	
 	//--------------error catch---------------
-	private void error() {
+	private void error(Exception e) {
+		e.printStackTrace();
 		showInvalid();
 	}
 	
