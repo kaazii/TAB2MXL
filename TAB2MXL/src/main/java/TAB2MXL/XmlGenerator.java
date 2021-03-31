@@ -26,7 +26,7 @@ public class XmlGenerator {
 	
 	private static XMLUtility xutil = new XMLUtility("GUITAR"); //Guitar by default
 	
-	public static String Generate(ArrayList<Measure> measureList) throws Exception {
+	public static String Generate(ArrayList<Measure> measureList, String instrumentString) throws Exception {
 		
 		// Check if measure list is empty
 		if (measureList.isEmpty()) {
@@ -95,6 +95,8 @@ public class XmlGenerator {
 					scoreInstrument.appendChild(instrumentName);
 					instrumentName.appendChild(doc.createTextNode(instrumentList.get(id)));
 				}
+			} else if (instrumentString == "BASS") {
+				
 			}
 			// Set part name as the instrument name
 			partName.appendChild(doc.createTextNode(xutil.instrument));

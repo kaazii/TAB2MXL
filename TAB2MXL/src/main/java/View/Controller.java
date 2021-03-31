@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
-import TAB2MXL.BassXmlGenerator;
 import TAB2MXL.Measure;
 import TAB2MXL.Note;
 import TAB2MXL.XmlGenerator;
@@ -425,11 +424,13 @@ public class Controller {
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
 		String xmlString = "";
+		String instrumentName = "DRUMS";
 //		Measure.timeBeats = beatType; // Numerator
 //		Measure.timeBeatType = 4; // Denominator
 //		Measure.beatList = beatList;
 		if(selected == Type.GUITAR) {
 			System.out.println("Guitar");
+			instrumentName = "GUITAR";
 			try {
 				StringParserUtility.clearMeasureList();
 				myList = StringParserUtility.stringParse(INPUT.getText());
@@ -440,6 +441,7 @@ public class Controller {
 		}
 		else if(selected == Type.BASS) {
 			System.out.println("Bass");
+			instrumentName = "BASS";
 			try {
 				StringParserUtilityBass.clearMeasureList();
 				myList = StringParserUtilityBass.stringParse(INPUT.getText());
@@ -454,7 +456,7 @@ public class Controller {
 			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
 		}
 
-		xmlString = XmlGenerator.Generate(myList);
+		xmlString = XmlGenerator.Generate(myList, instrumentName);
 		
 		// System.out.println(xmlString);
 		return xmlString;
