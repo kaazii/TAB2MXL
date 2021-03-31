@@ -2,6 +2,7 @@ package View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
@@ -68,6 +69,7 @@ public class StringParserUtilityBass {
 		//call measureParser
 		for (int i = 0; i < measureArray.length; i++) {
 			measureList.add(measureParser(measureArray[i]));
+			
 			setChord(measureList.get(i).getNoteList());
 			measureList.get(i).measureNumber = i + 1;
 			measureList.get(i).setTimeSignature(Controller.beatType);
@@ -76,8 +78,8 @@ public class StringParserUtilityBass {
 			if(timeList.containsKey(i+1)) {
 				measureList.get(i).setTimeSignature(timeList.get(i+1));
 			}
+
 		}
-		
 		// Set measure repeats, if any
 		if (has_repeats) {
 			fillMeasureRepeats(rawLines);
