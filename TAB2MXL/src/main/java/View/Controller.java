@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
-import TAB2MXL.BassXmlGenerator;
 import TAB2MXL.Measure;
 import TAB2MXL.Note;
 import TAB2MXL.XmlGenerator;
@@ -40,6 +39,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -147,6 +147,15 @@ public class Controller {
 	Label warning;
 	@FXML
 	Button modalConfirm;
+	
+	//---------------composer and title---------//
+	public static String COMPOSER = "";
+	public static String TITLE = "";
+	@FXML
+	TextField composerField;
+	
+	@FXML
+	TextField titleField;
 
 //	public void intialize() {
 //		translateButton.disableProperty().bind(textInput.textProperty().isEmpty());
@@ -364,7 +373,7 @@ public class Controller {
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Tranlation Options");
-			popup.setScene(new Scene(root, 322, 240));
+			popup.setScene(new Scene(root, 322, 356));
 			popup.setOnHidden(e->{
 				popup.close();
 			});
@@ -407,15 +416,17 @@ public class Controller {
 		}
 	}
 
-	private String XMLGenerate() { // Pass parsing to here
+	private String XMLGenerate() throws Exception { // Pass parsing to here
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
-
+		String xmlString = "";
+		String instrumentName = "DRUMS";
 //		Measure.timeBeats = beatType; // Numerator
 //		Measure.timeBeatType = 4; // Denominator
 //		Measure.beatList = beatList;
 		if(selected == Type.GUITAR) {
 			System.out.println("Guitar");
+			instrumentName = "GUITAR";
 			try {
 				StringParserUtility.clearMeasureList();
 				myList = StringParserUtility.stringParse(INPUT.getText());
@@ -426,6 +437,7 @@ public class Controller {
 		}
 		else if(selected == Type.BASS) {
 			System.out.println("Bass");
+			instrumentName = "BASS";
 			try {
 				StringParserUtilityBass.clearMeasureList();
 				myList = StringParserUtilityBass.stringParse(INPUT.getText());
@@ -440,12 +452,13 @@ public class Controller {
 			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
 		}
 
-		String xmlString = XmlGenerator.Generate(myList);
+		xmlString = XmlGenerator.Generate(myList, instrumentName);
+		
 		// System.out.println(xmlString);
 		return xmlString;
 	}
 
-	public void confirmTranslate() { // Beat type box?
+	public void confirmTranslate() throws Exception { // Beat type box?
 		if(isInvalid()) {
 			
 			showInvalid();
@@ -454,6 +467,15 @@ public class Controller {
 			
 			return;
 		}
+		
+		
+		for (TimeHBOX hbox : hboxList) {
+			Pair<Integer, Integer> range = hbox.getRange();
+			for(int i = range.getKey(); i <= range.getValue(); i ++) {
+				beatList.put(i, hbox.getTimeSignature());
+			}
+		}
+		
 		state = 1;
 		previousText = INPUT.getText();
 		closePopup();
@@ -462,12 +484,8 @@ public class Controller {
 		DELETEBUTTON.setDisable(false);
 		TRANSLATE.setDisable(true);
 		//set the list
-		for (TimeHBOX hbox : hboxList) {
-			Pair<Integer, Integer> range = hbox.getRange();
-			for(int i = range.getKey(); i <= range.getValue(); i ++) {
-				beatList.put(i, hbox.getTimeSignature());
-			}
-		}
+		COMPOSER = composerField.getText();
+		TITLE = titleField.getText();
 
 	}
 
@@ -725,6 +743,7 @@ public class Controller {
 		timeList.getScene().getWindow().setHeight(timeList.getScene().getWindow().getHeight() + 32);
 	}
 	
+	
 	public void hoverChange() {
 		
 		plus.getScene().setCursor(Cursor.HAND);
@@ -819,5 +838,9 @@ public class Controller {
 	//--------------Clear measureList------------
 	
 	
+	//--------------error catch---------------
+	private void error() {
+		INPUT.setText("NO!!!!");
+	}
 
 }

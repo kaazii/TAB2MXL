@@ -26,6 +26,32 @@
                         <Insets left="15.0" />
                      </VBox.margin>
                   </Label>
+                  <Label prefHeight="32.0" prefWidth="322.0" text="COMPOSER" textFill="#828f9c">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="composerField" minWidth="200.0" prefWidth="200.0" promptText="Composer Name" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-width: 2;">
+                     <VBox.margin>
+                        <Insets left="15.0" right="100.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Label prefHeight="32.0" prefWidth="322.0" text="TITLE" textFill="#828f9c">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="titleField" minWidth="200.0" prefWidth="200.0" promptText="Score Title" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-width: 2;">
+                     <VBox.margin>
+                        <Insets left="15.0" right="100.0" />
+                     </VBox.margin>
+                  </TextField>
                   <Label prefHeight="32.0" prefWidth="322.0" text="TIME SIGNATURE" textFill="#828f9c">
                      <VBox.margin>
                         <Insets left="15.0" />
