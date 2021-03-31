@@ -295,4 +295,3 @@ public class StringParserUtility {
 		return StringParserUtility.measureList;
 	}
 }
-

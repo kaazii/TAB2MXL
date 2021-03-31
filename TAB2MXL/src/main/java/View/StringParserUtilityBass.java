@@ -152,4 +152,3 @@ public final class StringParserUtilityBass {
 		return StringParserUtilityBass.measureList;
 	}
 }
-
