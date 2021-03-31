@@ -60,6 +60,8 @@ public class XmlGenerator {
 				Element e = doc.createElement("work-title");
 				e.appendChild(doc.createTextNode(Controller.TITLE));
 				work.appendChild(e);
+			} else {
+				System.out.println("No title detected");
 			}
 			
 			if (Controller.COMPOSER != "") {
@@ -77,6 +79,8 @@ public class XmlGenerator {
 				e.appendChild(doc.createTextNode(Controller.COMPOSER));
 				
 				identification.appendChild(e);				
+			} else {
+				System.out.println("No composer detected");
 			}
 			
 			// part-list element. Create only one part for now
