@@ -1,4 +1,3 @@
-
 package View;
 
 import java.io.File;
@@ -378,6 +377,7 @@ public class Controller {
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -388,6 +388,8 @@ public class Controller {
 	}
 
 	public void detect(String input) {
+
+		
 		String lines[] = input.split("\\r?\\n");
 
 		// for error testing
@@ -404,8 +406,8 @@ public class Controller {
 			 * Guitar
 			 */
 
-		} else if (lines[0].toUpperCase().startsWith("C") && (lines.length % 5==0)) {
-			//System.out.println("This is a bass"); // testing
+		} else if (lines[0].toUpperCase().startsWith("C") && (lines.length % 6==0)) {
+			//System.out.println("This is a drum"); // testing
 			drumButtonClicked();
 			// Drum
 		} else if (lines[0].toUpperCase().startsWith("G") && (lines.length % 4==0)) {
@@ -413,11 +415,6 @@ public class Controller {
 			bassButtonClicked();
 			// Bass
 		}
-		else
-		{
-			//System.out.println("Error in Instrument Detection"); //testing
-		}
-		
 	}
 
 	private String XMLGenerate() throws Exception { // Pass parsing to here
@@ -436,7 +433,7 @@ public class Controller {
 				myList = StringParserUtility.stringParse(INPUT.getText());
 			} catch (Exception e) {
 				// TODO error handle here
-				e.printStackTrace();
+				error();
 			}
 		}
 		else if(selected == Type.BASS) {
@@ -456,7 +453,13 @@ public class Controller {
 			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
 		}
 
-		xmlString = XmlGenerator.Generate(myList, instrumentName);
+		try {
+			xmlString = XmlGenerator.Generate(myList,instrumentName);
+		}
+		catch (Exception e) {
+			error();
+		}
+
 		
 		// System.out.println(xmlString);
 		return xmlString;
@@ -582,6 +585,7 @@ public class Controller {
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -616,6 +620,7 @@ public class Controller {
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -755,7 +760,6 @@ public class Controller {
 		plus.setTooltip(timeTip);
 
 		timeTip.setShowDelay(new Duration(0));
-		
 	}
 
 	public void hoverBack() {
@@ -774,6 +778,7 @@ public class Controller {
 			popup.setOnHidden(e->{
 				popup.close();
 			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -799,9 +804,29 @@ public class Controller {
 		
 	}
 	
+	//Checks for illegal characters in the input
+	
 	public boolean isInvalid() {
-		if(INPUT.getText().startsWith("s")) return true;
-		return false;
+		//final String NEW_LINE = System.getProperty("line.separator");
+		boolean illegalChar=false;
+		//store the text tab
+		String tempInput=INPUT.getText();
+		//string containing all possible characters for the text tab for all 3 instruments
+		String validChars = "0123456789-|EADGBECHSTMxo";
+		//remove new line from the string(the contains method wasn't working properly otherwise)
+		tempInput = tempInput.replace("\n", "").replace("\r", "");
+		//compare each character in the tempInput string with validChars
+		for(int i = 0; i < tempInput.length(); i++) {
+		    if(!(validChars.contains(Character.toString(tempInput.charAt(i)))))
+		    {
+		        System.out.println(tempInput.charAt(i)+" did not match");
+		        //set to true if illegal character found
+		        illegalChar=true;
+		    }
+		}
+		return illegalChar;
+		//if(INPUT.getText().startsWith("s")) return true;
+		//return false;
 	}
 	//------------hover helper---------------
 	private void cursorToHand(Button node, String tooltip) {
@@ -824,7 +849,37 @@ public class Controller {
 	
 	//--------------error catch---------------
 	private void error() {
-		INPUT.setText("NO!!!!");
+		showInvalid();
+	}
+	
+	
+	
+	//-----input clean up-----------------
+	public static String cleanup(String input) {
+		StringBuilder sb = new StringBuilder();
+		
+		String[] lines = input.split("\\r?\\n");
+		boolean consecutive = false; // if there is consecutive lines to be ignored
+		for(int i = 0; i < lines.length; i ++) {
+			//System.out.println(lines[i]);
+			if(!lines[i].contains("-") || !lines[i].contains("|")) {
+				if(consecutive) continue;
+				else {
+					consecutive = true;
+					sb.append("\n");
+				}
+				
+			}
+			else {
+				sb.append(lines[i]);
+				sb.append("\n");
+				consecutive = false;
+			}
+		}
+		
+		
+		
+		return sb.toString();
 	}
 
 }

@@ -480,4 +480,39 @@ public class XmlGenerator {
 		}
 
 	}
+	private static void addBassStaffDetails(Element staffDetailsElement) {
+		// ts => tuning-step
+		// to => tuning octave
+		int bassStaffLines = 4;
+
+		// 2d array for each <tuning-step> and its respective <tuning-octave>
+		String[][] tuning = { { "E", "1" }, { "A", "1" }, { "B", "2" }, { "G", "2" } };
+
+		// -<staff-lines>
+		Element e = doc.createElement("staff-lines");
+		e.appendChild(doc.createTextNode(String.valueOf(bassStaffLines)));
+		staffDetailsElement.appendChild(e);
+
+		for (int i = 0; i < bassStaffLines; i++) {
+			// -<staff-tuning>
+			Element staffTuning = doc.createElement("staff-tuning");
+			staffDetailsElement.appendChild(staffTuning);
+
+			// add "line" attribute to <staff-tuning>
+			Attr attr = doc.createAttribute("line");
+			attr.setValue(String.valueOf(i + 1));
+			staffTuning.setAttributeNode(attr);
+
+			// --<tuning-step>
+			e = doc.createElement("tuning-step");
+			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][0])));
+			staffTuning.appendChild(e);
+
+			// --<tuning-octave>
+			e = doc.createElement("tuning-octave");
+			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][1])));
+			staffTuning.appendChild(e);
+		}
+
+	}
 }
