@@ -27,4 +27,3 @@ public class StringParserUtilityBass extends StringParserUtility {
 		return StringParserUtilityBass.measureList;
 	}
 }
-

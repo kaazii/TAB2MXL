@@ -96,6 +96,7 @@ public class Main2 extends Application{
 		
 		primaryStage.setTitle("TAB2XML");
 		primaryStage.setScene(new Scene(root, 700,600));
+		primaryStage.setResizable(false);
 		primaryStage.show();
 	}
 
