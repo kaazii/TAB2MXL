@@ -225,7 +225,7 @@ public class StringParserUtility {
 	
 	public static Measure measureParser(String measureString) {
 		Measure measure = new Measure(getDivison(measureString));
-		Measure.divisions = getDivison(measureString);
+		measure.divisions = getDivison(measureString);
 		
 		String lines[] = measureString.split("\\r?\\n");
 		
