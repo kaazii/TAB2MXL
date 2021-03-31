@@ -435,7 +435,7 @@ public class Controller {
 				myList = StringParserUtility.stringParse(INPUT.getText());
 			} catch (Exception e) {
 				// TODO error handle here
-				e.printStackTrace();
+				error();
 			}
 		}
 		else if(selected == Type.BASS) {
@@ -453,8 +453,12 @@ public class Controller {
 			StringParserUtilityDrum.clearMeasureList();
 			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
 		}
-
-		xmlString = XmlGenerator.Generate(myList);
+		try {
+			xmlString = XmlGenerator.Generate(myList);
+		}
+		catch (Exception e) {
+			error();
+		}
 		
 		// System.out.println(xmlString);
 		return xmlString;
@@ -822,7 +826,7 @@ public class Controller {
 	
 	//--------------error catch---------------
 	private void error() {
-		INPUT.setText("NO!!!!");
+		showInvalid();
 	}
 
 }
