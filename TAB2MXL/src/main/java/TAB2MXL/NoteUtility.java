@@ -13,19 +13,20 @@ public class NoteUtility {
 	
 	public void initializeDrum() {
 		//Bass Drum
-		drumNotes.put("BD", new DrumNote("F", 4, "P1-I36"));
+		drumNotes.put("BD", new DrumNote("F", 4, "P1-I36", "Bass Drum 1"));
 		//Snare Drum
-		drumNotes.put("SD", new DrumNote("C", 5, "P1-I39"));
+		drumNotes.put("SD", new DrumNote("C", 5, "P1-I39", "Snare"));
 		// Hi-Hat
-		drumNotes.put("HH", new DrumNote("G", 5, "P1-I43"));
+		drumNotes.put("HH", new DrumNote("G", 5, "P1-I47", "Open Hi Hat"));
+		drumNotes.put("HHx", new DrumNote("G", 5, "P1-I43", "Closed Hi Hat"));
 		//Low Tom
 		//drumNotes.put("MT", new DrumNote("D", 5, "P1-I46"));
 		//
-		drumNotes.put("RC", new DrumNote("F", 5, "P1-I52"));
-		drumNotes.put("CC", new DrumNote("A", 5, "P1-I50"));
-		drumNotes.put("HT", new DrumNote("E", 5, "P1-I48"));
-		drumNotes.put("MT", new DrumNote("D", 5, "P1-I46"));
-		drumNotes.put("FT", new DrumNote("A", 4, "P1-I42"));
+		drumNotes.put("RC", new DrumNote("F", 5, "P1-I52", "Ride Cymbal 1"));
+		drumNotes.put("CC", new DrumNote("A", 5, "P1-I50", "Crash Cymbal 1"));
+		drumNotes.put("HT", new DrumNote("E", 5, "P1-I48", "Low-Mid Tom"));
+		drumNotes.put("MT", new DrumNote("D", 5, "P1-I46", "Low Tom"));
+		drumNotes.put("FT", new DrumNote("A", 4, "P1-I42", "Low Floor Tom"));
 	}
 	
 	
@@ -221,6 +222,8 @@ public class NoteUtility {
 		else if (Float.compare(typeAsNum, 0.015625f) == 0)
 		{
 			type = "64th";
+		} else {
+			type = "whole";
 		}
 		return type;
 	}

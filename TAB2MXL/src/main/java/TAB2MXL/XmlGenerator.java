@@ -18,23 +18,25 @@ import java.util.Hashtable;
 
 public class XmlGenerator {
 
-	public static final String PART_NAME = "Classical Guitar";
+	public static final String PART_NAME = " ";
 	private static Document doc;
 
 	private static String divisions;
 	private static String fifths = String.valueOf(0);
-
-	private static String barlineLocation = "right";
-	private static String barStyle = "light-heavy";
 	
 	private static XMLUtility xutil = new XMLUtility("GUITAR"); //Guitar by default
 	
-	public static String Generate(ArrayList<Measure> measureList) {
+	public static String Generate(ArrayList<Measure> measureList, String instrumentString) throws Exception {
+		
+		// Check if measure list is empty
+		if (measureList.isEmpty()) {
+			throw new Exception("No measures passed in");
+		}
 		
 		divisions = String.valueOf(Measure.divisions);
 
 		String xmlString = "";
-
+		
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -65,7 +67,6 @@ public class XmlGenerator {
 			// Add part name
 			Element partName = doc.createElement("part-name");
 			scorePart.appendChild(partName);
-			partName.appendChild(doc.createTextNode(PART_NAME));
 
 			// Check for drum instruments
 			// get a sample note and check if it's a DrumNote
@@ -94,7 +95,11 @@ public class XmlGenerator {
 					scoreInstrument.appendChild(instrumentName);
 					instrumentName.appendChild(doc.createTextNode(instrumentList.get(id)));
 				}
+			} else if (instrumentString == "BASS") {
+				
 			}
+			// Set part name as the instrument name
+			partName.appendChild(doc.createTextNode(xutil.instrument));
 			
 			// Create part 1
 			Element part1 = doc.createElement("part");
@@ -144,7 +149,7 @@ public class XmlGenerator {
 			
 			if (!ht.containsKey(dn.instrumentId)) {
 				// TODO get actual instrument name
-				ht.put(dn.instrumentId, "Mayonnaise");
+				ht.put(dn.instrumentId, dn.instrumentName);
 			}
 		}
 		return ht;
@@ -203,14 +208,24 @@ public class XmlGenerator {
 				Element clef = doc.createElement("clef");
 				measureAttribute.appendChild(clef);
 	
+//				// --<sign>
+//				e = doc.createElement("sign");
+//				e.appendChild(doc.createTextNode(Measure.clefSign));
+//				clef.appendChild(e);
+				
+//				// --<line>
+//				e = doc.createElement("line");
+//				e.appendChild(doc.createTextNode(String.valueOf(m.clefLine)));
+//				clef.appendChild(e);
+				
 				// --<sign>
 				e = doc.createElement("sign");
-				e.appendChild(doc.createTextNode(Measure.clefSign));
+				e.appendChild(doc.createTextNode(xutil.clefSign));
 				clef.appendChild(e);
 	
 				// --<line>
 				e = doc.createElement("line");
-				e.appendChild(doc.createTextNode(String.valueOf(m.clefLine)));
+				e.appendChild(doc.createTextNode(xutil.clefLine));
 				clef.appendChild(e);
 				
 				// -<staff-details>
