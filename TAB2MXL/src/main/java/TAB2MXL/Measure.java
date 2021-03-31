@@ -9,7 +9,7 @@ public class Measure {
 	
 	public ArrayList<Note> noteList = new ArrayList<Note>();
 	public static int divisions;
-		
+	
 	public int keyFifths = 0; //always 0
 	
 	public int timeBeats; // user input 	

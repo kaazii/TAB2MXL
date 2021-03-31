@@ -22,7 +22,6 @@ public class StringParserUtility {
 	public static ArrayList<Measure> stringParse(String input) throws Exception { // potentially take timeBeatType here
 		System.out.println(input); //original tab
 		String rawLines[] = input.split("\\r?\\n");
-		System.out.println("Raw Lines: "+rawLines.length);
 		/*if (rawLines.length!=6)
 		{
 		throw new Exception("Error- Not a Guitar");

@@ -1,4 +1,3 @@
-
 package View;
 
 import java.io.File;
@@ -17,7 +16,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
-import TAB2MXL.BassXmlGenerator;
 import TAB2MXL.Measure;
 import TAB2MXL.Note;
 import TAB2MXL.XmlGenerator;
@@ -390,6 +388,8 @@ public class Controller {
 	}
 
 	public void detect(String input) {
+
+		
 		String lines[] = input.split("\\r?\\n");
 
 		// for error testing
@@ -406,8 +406,8 @@ public class Controller {
 			 * Guitar
 			 */
 
-		} else if (lines[0].toUpperCase().startsWith("C") && (lines.length % 5==0)) {
-			//System.out.println("This is a bass"); // testing
+		} else if (lines[0].toUpperCase().startsWith("C") && (lines.length % 6==0)) {
+			//System.out.println("This is a drum"); // testing
 			drumButtonClicked();
 			// Drum
 		} else if (lines[0].toUpperCase().startsWith("G") && (lines.length % 4==0)) {
@@ -415,22 +415,19 @@ public class Controller {
 			bassButtonClicked();
 			// Bass
 		}
-		else
-		{
-			//System.out.println("Error in Instrument Detection"); //testing
-		}
-		
 	}
 
-	private String XMLGenerate() { // Pass parsing to here
+	private String XMLGenerate() throws Exception { // Pass parsing to here
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
 		String xmlString = "";
+		String instrumentName = "DRUMS";
 //		Measure.timeBeats = beatType; // Numerator
 //		Measure.timeBeatType = 4; // Denominator
 //		Measure.beatList = beatList;
 		if(selected == Type.GUITAR) {
 			System.out.println("Guitar");
+			instrumentName = "GUITAR";
 			try {
 				StringParserUtility.clearMeasureList();
 				myList = StringParserUtility.stringParse(INPUT.getText());
@@ -441,6 +438,7 @@ public class Controller {
 		}
 		else if(selected == Type.BASS) {
 			System.out.println("Bass");
+			instrumentName = "BASS";
 			try {
 				StringParserUtilityBass.clearMeasureList();
 				myList = StringParserUtilityBass.stringParse(INPUT.getText());
@@ -454,18 +452,20 @@ public class Controller {
 			StringParserUtilityDrum.clearMeasureList();
 			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
 		}
+
 		try {
-			xmlString = XmlGenerator.Generate(myList);
+			xmlString = XmlGenerator.Generate(myList,instrumentName);
 		}
 		catch (Exception e) {
 			error();
 		}
+
 		
 		// System.out.println(xmlString);
 		return xmlString;
 	}
 
-	public void confirmTranslate() { // Beat type box?
+	public void confirmTranslate() throws Exception { // Beat type box?
 		if(isInvalid()) {
 			
 			showInvalid();
@@ -805,9 +805,29 @@ public class Controller {
 		
 	}
 	
+	//Checks for illegal characters in the input
+	
 	public boolean isInvalid() {
-		if(INPUT.getText().startsWith("s")) return true;
-		return false;
+		//final String NEW_LINE = System.getProperty("line.separator");
+		boolean illegalChar=false;
+		//store the text tab
+		String tempInput=INPUT.getText();
+		//string containing all possible characters for the text tab for all 3 instruments
+		String validChars = "0123456789-|EADGBECHSTMxo";
+		//remove new line from the string(the contains method wasn't working properly otherwise)
+		tempInput = tempInput.replace("\n", "").replace("\r", "");
+		//compare each character in the tempInput string with validChars
+		for(int i = 0; i < tempInput.length(); i++) {
+		    if(!(validChars.contains(Character.toString(tempInput.charAt(i)))))
+		    {
+		        System.out.println(tempInput.charAt(i)+" did not match");
+		        //set to true if illegal character found
+		        illegalChar=true;
+		    }
+		}
+		return illegalChar;
+		//if(INPUT.getText().startsWith("s")) return true;
+		//return false;
 	}
 	//------------hover helper---------------
 	private void cursorToHand(Button node, String tooltip) {
