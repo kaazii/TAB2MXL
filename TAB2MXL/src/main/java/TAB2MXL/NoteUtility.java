@@ -221,6 +221,8 @@ public class NoteUtility {
 		else if (Float.compare(typeAsNum, 0.015625f) == 0)
 		{
 			type = "64th";
+		} else {
+			type = "whole";
 		}
 		return type;
 	}
