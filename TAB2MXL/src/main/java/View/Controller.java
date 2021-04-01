@@ -812,7 +812,7 @@ public class Controller {
 		//store the text tab
 		String tempInput=INPUT.getText();
 		//string containing all possible characters for the text tab for all 3 instruments
-		String validChars = "0123456789-|EADGBECHSTMxo";
+		String validChars = "0123456789-|EADGBECHSTMxo*";
 		//remove new line from the string(the contains method wasn't working properly otherwise)
 		tempInput = tempInput.replace("\n", "").replace("\r", "");
 		//compare each character in the tempInput string with validChars
@@ -851,8 +851,6 @@ public class Controller {
 	private void error() {
 		showInvalid();
 	}
-	
-	
 	
 	//-----input clean up-----------------
 	public static String cleanup(String input) {

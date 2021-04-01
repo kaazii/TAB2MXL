@@ -203,7 +203,7 @@ public class XmlGenerator {
 
 			// fill in attributes for first measure
 			// TODO check if this is correct logic, not sure if only the first measure needs <attributes>
-			if (m.measureNumber == 1) {
+			if (measureNum == 1) {
 				// <attributes>
 				Element measureAttribute = doc.createElement("attributes");
 				measureElem.appendChild(measureAttribute);
