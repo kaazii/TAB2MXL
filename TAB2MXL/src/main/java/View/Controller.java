@@ -241,7 +241,6 @@ public class Controller {
 		state = 0;
 		
 		try {
-			
 			if (file != null) {
 				Scanner fileIn = new Scanner(file);
 				if (!textInput.getText().isEmpty()) {
@@ -287,8 +286,6 @@ public class Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
 	}
 
 	public void dragDropFile() {
@@ -375,9 +372,9 @@ public class Controller {
 		TRANSLATE = translateButton;
 		INPUT = textInput;
 		DELETEBUTTON = deleteButton;
-		if(!cleanup(INPUT.getText()).equals(INPUT.getText())) {
+		if(!cleanup(INPUT.getText()).replace("\n", "").replace("\r", "").equals(INPUT.getText().replace("\n", "").replace("\r", ""))) {
 			checker();
-			
+			System.out.println(cleanup(INPUT.getText()));
 		}
 		else {
 			
@@ -447,15 +444,16 @@ public class Controller {
 //		Measure.timeBeats = beatType; // Numerator
 //		Measure.timeBeatType = 4; // Denominator
 //		Measure.beatList = beatList;
+		
 		if(selected == Type.GUITAR) {
 			System.out.println("Guitar");
 			instrumentName = "GUITAR";
 			try {
 				StringParserUtility.clearMeasureList();
-				myList = StringParserUtility.stringParse(INPUT.getText());
+				myList = StringParserUtility.stringParse(cleanup(INPUT.getText()));
 			} catch (Exception e) {
 				// TODO error handle here
-				error();
+				error(e);
 			}
 		}
 		else if(selected == Type.BASS) {
@@ -463,23 +461,23 @@ public class Controller {
 			instrumentName = "BASS";
 			try {
 				StringParserUtilityBass.clearMeasureList();
-				myList = StringParserUtilityBass.stringParse(INPUT.getText());
+				myList = StringParserUtilityBass.stringParse(cleanup(INPUT.getText()));
 			} catch (Exception e) {
 				// TODO error handle here
-				e.printStackTrace();
+				error(e);
 			}
 		}
 		else {
 			System.out.println("Drums");
 			StringParserUtilityDrum.clearMeasureList();
-			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
+			myList = StringParserUtilityDrum.stringParse(cleanup(INPUT.getText()));
 		}
 
 		try {
 			xmlString = XmlGenerator.Generate(myList,instrumentName);
 		}
 		catch (Exception e) {
-			error();
+			error(e);
 		}
 
 		
@@ -490,6 +488,7 @@ public class Controller {
 	public void confirmTranslate() throws Exception { // Beat type box?
 		if(isInvalid()) {
 			
+			System.out.println("reached\n");
 			showInvalid();
 			
 			optionConfirm.getScene().getWindow().hide();
@@ -508,13 +507,13 @@ public class Controller {
 		state = 1;
 		previousText = INPUT.getText();
 		closePopup();
-		INPUT.setText(XMLGenerate());
 		//TRANSLATE.setText("Save");
 		DELETEBUTTON.setDisable(false);
 		TRANSLATE.setDisable(true);
 		//set the list
 		COMPOSER = composerField.getText();
 		TITLE = titleField.getText();
+		INPUT.setText(XMLGenerate());
 
 	}
 
@@ -782,7 +781,6 @@ public class Controller {
 		plus.setTooltip(timeTip);
 
 		timeTip.setShowDelay(new Duration(0));
-		
 	}
 
 	public void hoverBack() {
@@ -833,9 +831,12 @@ public class Controller {
 		//final String NEW_LINE = System.getProperty("line.separator");
 		boolean illegalChar=false;
 		//store the text tab
-		String tempInput=cleanup(INPUT.getText());
+
+		String tempInput = cleanup(INPUT.getText());
 		//string containing all possible characters for the text tab for all 3 instruments
-		String validChars = "0123456789-|EADGBECHSTMxopsh[]";
+
+		String validChars = "0123456789-|EADGBECHSTMxoshp[]*";
+
 		//remove new line from the string(the contains method wasn't working properly otherwise)
 		tempInput = tempInput.replace("\n", "").replace("\r", "");
 		//compare each character in the tempInput string with validChars
@@ -871,13 +872,12 @@ public class Controller {
 	
 	
 	//--------------error catch---------------
-	private void error() {
+	private void error(Exception e) {
+		e.printStackTrace();
 		showInvalid();
 	}
 	
-	
-	
-	
+
 	//-----input clean up-----------------
 	public static String cleanup(String input) {
 		StringBuilder sb = new StringBuilder();
@@ -890,7 +890,8 @@ public class Controller {
 				if(consecutive) continue;
 				else {
 					consecutive = true;
-					sb.append("\n");
+					if(!sb.isEmpty())
+						sb.append("\n");
 				}
 				
 			}

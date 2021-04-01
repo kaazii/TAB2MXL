@@ -6,7 +6,6 @@ public class DrumNote extends Note {
 	public String notehead;
 	public String instrumentId;
 	public String stem;
-	public ArrayList<Beam> beamList;
 	public String instrumentName;
 	
 
@@ -26,13 +25,6 @@ public class DrumNote extends Note {
 		this.instrumentId = id;
 	}
 	
-	public void setBeamList(ArrayList<Beam> beamList) {
-		this.beamList = beamList;
-	}
-	
-	public void addBeam(Beam b) {
-		this.beamList.add(b);
-	}
 
 	public String getNotehead() {
 		return notehead;
