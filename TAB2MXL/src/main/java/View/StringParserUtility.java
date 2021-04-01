@@ -27,6 +27,11 @@ public class StringParserUtility {
 		if (rawLines[0].matches(".*\\|\\|.*")) {
 			lines = convertRepeatsToNormal(rawLines);
 			has_repeats = true;
+			System.out.println("Detected repeats");
+			System.out.println("Attempted to remove repeat-related symbols. Result:");
+			for (String l : lines) {
+				System.out.println(l);
+			}
 		} else {
 			lines = rawLines;
 		}
@@ -165,7 +170,7 @@ public class StringParserUtility {
 				} else {
 					sb = new StringBuilder(newLines[lineIndex]);
 				}
-				sb = sb.deleteCharAt(doubleBarIndex + 1);
+				sb = sb.deleteCharAt(doubleBarIndex);
 				newLines[lineIndex] = sb.toString();
 				newLines[lineIndex] = newLines[lineIndex].replace('*', '-');
 			}
