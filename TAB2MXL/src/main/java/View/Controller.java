@@ -46,6 +46,10 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
@@ -156,6 +160,10 @@ public class Controller {
 	
 	@FXML
 	TextField titleField;
+	
+	//-----------------validation Display--------
+	@FXML
+	TextFlow displayText;
 
 //	public void intialize() {
 //		translateButton.disableProperty().bind(textInput.textProperty().isEmpty());
@@ -367,6 +375,20 @@ public class Controller {
 		TRANSLATE = translateButton;
 		INPUT = textInput;
 		DELETEBUTTON = deleteButton;
+		if(!cleanup(INPUT.getText()).equals(INPUT.getText())) {
+			checker();
+			
+		}
+		else {
+			
+			openOption();
+
+		}
+		
+
+	}
+	
+	private void openOption() {
 		Parent root;
 		try {
 			root = FXMLLoader.load(getClass().getResource("OptionBox.fxml"));
@@ -384,7 +406,7 @@ public class Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 	}
 
 	public void detect(String input) {
@@ -811,9 +833,9 @@ public class Controller {
 		//final String NEW_LINE = System.getProperty("line.separator");
 		boolean illegalChar=false;
 		//store the text tab
-		String tempInput=INPUT.getText();
+		String tempInput=cleanup(INPUT.getText());
 		//string containing all possible characters for the text tab for all 3 instruments
-		String validChars = "0123456789-|EADGBECHSTMxo";
+		String validChars = "0123456789-|EADGBECHSTMxopsh[]";
 		//remove new line from the string(the contains method wasn't working properly otherwise)
 		tempInput = tempInput.replace("\n", "").replace("\r", "");
 		//compare each character in the tempInput string with validChars
@@ -855,6 +877,7 @@ public class Controller {
 	
 	
 	
+	
 	//-----input clean up-----------------
 	public static String cleanup(String input) {
 		StringBuilder sb = new StringBuilder();
@@ -881,6 +904,61 @@ public class Controller {
 		
 		
 		return sb.toString();
+	}
+	
+	
+	//----------------------ignore text--------------
+	
+	public void checker() {
+		Parent root;
+		try {
+			INPUT = textInput;
+			root = FXMLLoader.load(getClass().getResource("display.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.WINDOW_MODAL);
+			popup.setTitle("Input Ignored");
+			popup.setScene(new Scene(root, 600, 500));
+			popup.setOnHidden(e->{
+				popup.close();
+			});
+			popup.setResizable(false);
+			popup.show();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public void displayValid() {
+		displayText.getChildren().clear();
+		displayText.setVisible(true);
+		String[] lines = INPUT.getText().split("\\r?\\n");
+		for(int i = 0; i < lines.length; i ++) {
+			Text t = new Text();
+			t.setText(lines[i]+"\n");
+			t.setFont(Font.font("Monospaced", FontWeight.NORMAL, 12));
+			//System.out.println(lines[i]);
+			if((!lines[i].contains("-") || !lines[i].contains("|")) && !lines[i].equals("\\r?\\n")) {
+				
+				t.setStrikethrough(true);
+				t.setFill(Color.RED);
+				
+			}
+			displayText.getChildren().add(t);
+		}
+	
+	}
+	
+	public void cancelIgnore() {
+		displayText.setVisible(false);
+		displayText.getScene().getWindow().hide();
+	}
+	public void confirmIgnore() {
+		cancelIgnore();
+		openOption();
 	}
 
 }
