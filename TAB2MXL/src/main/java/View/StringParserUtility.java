@@ -20,6 +20,10 @@ public class StringParserUtility {
     }
 	
 	public static ArrayList<Measure> stringParse(String input) throws Exception { // potentially take timeBeatType here
+		String testLines[] = input.split("\\r?\\n\\r?\\n");
+		System.out.println(Arrays.deepToString(testLines));
+		
+		
 		String rawLines[] = input.split("\\r?\\n");
 		String[] lines;
 		// Change all instances of || into |; will parse repeats separately
@@ -42,16 +46,16 @@ public class StringParserUtility {
 		for (int i = 0; i < lines.length; i++) {
 			String currLine[] = lines[i].split("\\|");
 			splitLines[i] = currLine;
-			//System.out.println(splitLines[i][0]); // Prints the first entry of each line/array.. testing
 		}
+		
 
-		//System.out.println(Arrays.deepToString(splitLines)); // prints the second line which is now split into multiple arrays... testing
-
-		int numMeasures = splitLines[0].length - 1;
-		//System.out.println("numMeasures: " + numMeasures); //testing
 		int measureCount = 0;
+		int numMeasures = splitLines[0].length - 1;
 		String[] measureArray = new String[numMeasures];
+		
+		System.out.println(numMeasures);
 
+		
 		for (int j = 1; j <= numMeasures; j++) {
 			String measure = "";
 			for (int i = 0; i < splitLines.length; i++) { // splitlines.length = how many lines there are
@@ -62,6 +66,8 @@ public class StringParserUtility {
 			measureArray[measureCount] = measure;
 			measureCount++;
 		}
+		
+		
 		//System.out.println(Arrays.deepToString(measureArray));
 		
 		//call measureParser
@@ -239,7 +245,7 @@ public class StringParserUtility {
 					note.duration = getDuration(lines, i); //pass the current column index
 					System.out.println((float) note.getDuration() / (float) measure.getDivision());
 					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.getDivision()));
-					//System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
+					System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType() + " division :" + measure.getDivision()); // for testing
 					measure.noteList.add(note);
 				}
 			}
@@ -265,17 +271,17 @@ public class StringParserUtility {
 	}
 	
     public static int getDuration(String lines[], int column) { //note duration/division = type?
-        int noteLength = 1;
+        int duration = 1;
         for (int i = column + 1; i <= lines[0].length() - 1; i++) { // i are the columns
             for (int j = 0; j < lines.length; j++) { // j are the rows
                 String curr = lines[j].substring(i, i + 1);
                 if (!(curr.equals("-"))) { // does this work once we get holding/pulling?
-                    return noteLength;
+                    return duration;
                 }
             }
-            noteLength++;
+            duration++;
         }
-        return noteLength;
+        return duration;
     } 
 
 	public static boolean isNumeric(String str) {
