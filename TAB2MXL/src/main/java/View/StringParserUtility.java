@@ -2,10 +2,12 @@ package View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
 
+import TAB2MXL.Beam;
 import TAB2MXL.Measure;
 import TAB2MXL.Note;
 import TAB2MXL.NoteUtility;
@@ -89,6 +91,67 @@ public class StringParserUtility {
 		}
 		return measureList;
 	}
+	
+	// any sequence that adds up to a quarter note, put beams in it
+	public static void fillBeams() {
+		HashMap<String, Float> noteEnum = new HashMap<>();
+		noteEnum.put("whole", 1f);
+		noteEnum.put("half", 0.5f);
+		noteEnum.put("quarter", 0.25f);
+		noteEnum.put("eighth", 0.125f);
+		noteEnum.put("16th", 0.0625f);
+		noteEnum.put("32nd", 0.03125f);
+		noteEnum.put("64th", 0.015625f);
+		
+		int beamNumber = 0;
+		
+		for (int i = 0; i < measureList.size(); i++) {
+			int trailer = 0;
+			int leader = 1;
+			
+			ArrayList<Note> noteList = measureList.get(i).noteList;
+			while (leader < noteList.size() && trailer != leader) {
+				
+				if (noteEnum.get(noteList.get(leader).type) > 0.125f) {
+					trailer = leader + 1;
+					leader = trailer + 1;
+					continue;
+				}
+				
+				float currSum = 0;
+				for (int j = trailer; i < leader; i++) {
+					float num = noteEnum.get(noteList.get(j).getType());
+					currSum += num;
+				}
+				
+				if (currSum > 0.25f) {
+					trailer++;
+					if (trailer == leader) {
+						leader++;
+					}
+					continue;
+					
+				} else if (currSum < 0.25f) {
+					leader++;
+					continue;
+				} else {
+					// Beam found
+					// beginning beam
+					noteList.get(trailer).beam = new Beam(beamNumber, "begin");
+					
+					// middle beams
+					for (int j = trailer + 1; j < leader; j++) {
+						noteList.get(j).beam = new Beam(beamNumber, "continue");
+					
+					// Ending beam
+					noteList.get(leader).beam = new Beam(beamNumber, "end");	
+					
+					beamNumber++;
+					}	
+				}		
+			}
+		}
+	}
 
 	public static void fillMeasureRepeats(String[] lines) throws Exception {
 		// Find the row on which this instrument puts the * 
@@ -108,24 +171,8 @@ public class StringParserUtility {
 		// Iterate through string
 		for (int i = 0; i < starLine.length() - 3; i++) {
 			ss = starLine.substring(i, i+4);
-			
-			// hit "*||*", a special case 
-			if (ss.equals("*||*")) {
-				if (!repeatStart) { // no repeat has been started
-					throw new Exception("Error - uneven repeat bars");
-				}
-				//update current measure
-				getMeasureByNum(currMeasure).repeatEnd = true;
-				getMeasureByNum(currMeasure).repeats = getRepeatNum(lines, starRow, i);
-				getMeasureByNum(currStart).repeats = getRepeatNum(lines, starRow, i);
-				
-				repeatStart = true;
-				repeatEnd = false;
-				currMeasure++;
-				currStart = currMeasure;
-			
-			//Beginning of repeat, i.e."||*-"
-			} else if (ss.matches("\\|\\|\\*.")) { 
+		
+				if (ss.matches("\\|\\|\\*.")) { 
 				currMeasure++;
 				System.out.println("Starting a repeat in measure "+ currMeasure);
 				if (repeatStart) { // already started a repeat

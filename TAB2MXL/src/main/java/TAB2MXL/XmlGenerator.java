@@ -348,16 +348,13 @@ public class XmlGenerator {
 				}
 				
 				if (xutil.includeBeams) {
-					DrumNote dn = (DrumNote) n;
-					if (dn.beamList != null) {
-						for (Beam b : dn.beamList) {
-							e = doc.createElement("beam");
-							attr = doc.createAttribute("number");
-							attr.setValue(String.valueOf(b.number));
-							e.setAttributeNode(attr);
-							e.appendChild(doc.createTextNode(b.state));
-							note.appendChild(e);
-						}
+					if (n.beam != null) {
+						e = doc.createElement("beam");
+						attr = doc.createAttribute("number");
+						attr.setValue(String.valueOf(n.beam.number));
+						e.setAttributeNode(attr);
+						e.appendChild(doc.createTextNode(n.beam.state));
+						note.appendChild(e);
 					}
 				}
 				
