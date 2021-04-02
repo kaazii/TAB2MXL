@@ -15,7 +15,6 @@ public class StringParserUtility {
 	public static ArrayList<Measure> measureList = new ArrayList<Measure>();
 	public static Hashtable<Integer, Integer> measureRepeats = new Hashtable<Integer, Integer>();
 
-
 	public static void clearMeasureList() {
 		StringParserUtility.measureList = new ArrayList<Measure>();
 	}
@@ -23,12 +22,12 @@ public class StringParserUtility {
 	public static ArrayList<Measure> stringParse(String rawInput) throws Exception { // potentially take timeBeatType
 																						// here
 		String measureGroups[] = rawInput.split("\\r?\\n\\r?\\n");
-		
+
 		int globalMeasureNumber = 1;
 		int measureIndex = 0;
-		
+
 		for (String input : measureGroups) {
-			//Amer's repeat function
+			// Amer's repeat function
 			String rawLines[] = input.split("\\r?\\n");
 			String[] lines;
 			// Change all instances of || into |; will parse repeats separately
@@ -39,7 +38,7 @@ public class StringParserUtility {
 			} else {
 				lines = rawLines;
 			}
-			
+
 			String splitLines[][] = new String[lines.length][]; // splitLines[row][column]
 
 			// Split up each line by "|", and put those arrays into the splitLines array.
@@ -50,7 +49,7 @@ public class StringParserUtility {
 
 			int measureCount = 0;
 			int numMeasures = splitLines[0].length - 1;
-			
+
 			String[] measureArray = new String[numMeasures];
 
 			for (int j = 1; j <= numMeasures; j++) {
@@ -76,7 +75,7 @@ public class StringParserUtility {
 				}
 				measureIndex++;
 			}
-			
+
 			// Set measure repeats, if any
 			if (has_repeats) {
 				fillMeasureRepeats(rawLines);
@@ -84,7 +83,6 @@ public class StringParserUtility {
 		}
 		return measureList;
 	}
-
 
 	public static void fillMeasureRepeats(String[] lines) throws Exception {
 		// Find the row on which this instrument puts the *
@@ -218,11 +216,28 @@ public class StringParserUtility {
 		for (Note note : noteList) {
 			if (currColumn == note.column) {
 				note.isChord = true;
-				System.out.println("fret: " + note.fret + " string: " + note.string + " isChord: " + note.isChord);
 			} else {
 				currColumn = note.column;
 			}
 		}
+	}
+
+	public static int doubleDigitCounter(String measure) {
+		int count = 0;
+		String lines[] = measure.split("\\r?\\n");
+
+		for (int i = 0; i < lines[0].length() - 1; i++) { // i are the columns
+			for (int j = 0; j < lines.length; j++) { // j are the rows
+				String curr = lines[j].substring(i, i + 1); // this is the current character that we are parsing
+				String next = lines[j].substring(i + 1, i + 2);
+				if (isNumeric(curr) && isNumeric(next)) { // this must be a note!
+					count++;
+					i++;
+					j = 0;
+				}
+			}
+		}
+		return count;
 	}
 
 	public static Measure measureParser(String measureString) {
@@ -234,14 +249,47 @@ public class StringParserUtility {
 		for (int i = 0; i < lines[0].length() - 1; i++) { // i are the columns
 			for (int j = 0; j < lines.length; j++) { // j are the rows
 				String curr = lines[j].substring(i, i + 1); // this is the current character that we are parsing
-				if (!curr.equals("-") && !(curr.contains("*"))) { // this must be a note!
-					Note note = getNote(j, Integer.parseInt(curr));
+				String next = lines[j].substring(i + 1, i + 2);
+
+				if (isNumeric(curr) && isNumeric(next)) {
+					Note note = getNote(j, Integer.parseInt(curr + next));
 					note.setColumn(i);
-					note.duration = getDuration(lines, i); // pass the current column index
-					System.out.println((float) note.getDuration() / (float) measure.getDivision());
+					note.duration = getDuration(lines, i + 1); // pass the current column index
 					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.getDivision()));
-					System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType() + " division :" + measure.getDivision()); // for testing 
+					System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration
+							+ " type: " + note.getType() + " division :" + measure.getDivision()); // for testing
+					System.out.println((float) note.getDuration() / (float) measure.getDivision());
 					measure.noteList.add(note);
+				}
+				else if (isNumeric(curr)) { // this must be a note
+					if (i > 0) {
+						String prev = lines[j].substring(i - 1, i);
+						if (!isNumeric(prev)) {
+							Note note = getNote(j, Integer.parseInt(curr));
+							note.setColumn(i);
+							note.duration = getDuration(lines, i); // pass the current column index
+							note.setType(NoteUtility
+									.getNoteType((float) note.getDuration() / (float) measure.getDivision()));
+							System.out.println(
+									"fret: " + note.fret + " string: " + note.string + " duration: " + note.duration
+											+ " type: " + note.getType() + " division :" + measure.getDivision()); // for
+																													// testing
+							System.out.println((float) note.getDuration() / (float) measure.getDivision());
+							measure.noteList.add(note);
+						}
+					} 
+					else{
+						Note note = getNote(j, Integer.parseInt(curr));
+						note.setColumn(i);
+						note.duration = getDuration(lines, i); // pass the current column index
+						note.setType(
+								NoteUtility.getNoteType((float) note.getDuration() / (float) measure.getDivision()));
+						System.out.println("fret: " + note.fret + " string: " + note.string + " duration: "
+								+ note.duration + " type: " + note.getType() + " division :" + measure.getDivision()); // for
+																														// testing
+						System.out.println((float) note.getDuration() / (float) measure.getDivision());
+						measure.noteList.add(note);
+					}
 				}
 			}
 		}
@@ -258,7 +306,7 @@ public class StringParserUtility {
 				if (!(curr.equals("-"))) { // does this work once we get holding/pulling?
 					division = lines[j].length() - i;
 					// System.out.println("division: " + division);
-					return division;
+					return division - doubleDigitCounter(measure);
 				}
 			}
 		}
