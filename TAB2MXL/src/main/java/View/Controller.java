@@ -143,7 +143,8 @@ public class Controller {
 	List<TimeHBOX> hboxList = new ArrayList<>();
 	//------------------------------------------//
 
-	static int beatType = 4;
+	public static int nume = 4;
+	public static int deno = 4;
 	public static String previousText;
 	
 	//---------------invalid model--------------//
@@ -518,7 +519,7 @@ public class Controller {
 	}
 
 	public void chosen1() {
-		beatType = 1;
+		nume = 1;
 		beat2.setSelected(false);
 		beat3.setSelected(false);
 		beat4.setSelected(false);
@@ -526,7 +527,7 @@ public class Controller {
 	}
 
 	public void chosen2() {
-		beatType = 2;
+		nume = 2;
 		setText();
 		beat1.setSelected(false);
 		beat3.setSelected(false);
@@ -535,7 +536,7 @@ public class Controller {
 	}
 
 	public void chosen3() {
-		beatType = 3;
+		nume = 3;
 		setText();
 		beat1.setSelected(false);
 		beat2.setSelected(false);
@@ -547,13 +548,13 @@ public class Controller {
 		beat2.setSelected(false);
 		beat3.setSelected(false);
 		beat1.setSelected(false);
-		beatType = 4;
+		nume = 4;
 		setText();
 
 	}
 
 	private void setText() {
-		beatsChoice.setText(beatType + "/4");
+		beatsChoice.setText(nume + "/4");
 	}
 
 	public void closePopup() {
