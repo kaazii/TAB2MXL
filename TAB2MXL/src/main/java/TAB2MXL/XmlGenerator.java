@@ -60,6 +60,8 @@ public class XmlGenerator {
 				Element e = doc.createElement("work-title");
 				e.appendChild(doc.createTextNode(Controller.TITLE));
 				work.appendChild(e);
+			} else {
+				System.out.println("No title detected");
 			}
 			
 			if (Controller.COMPOSER != "") {
@@ -77,6 +79,8 @@ public class XmlGenerator {
 				e.appendChild(doc.createTextNode(Controller.COMPOSER));
 				
 				identification.appendChild(e);				
+			} else {
+				System.out.println("No composer detected");
 			}
 			
 			// part-list element. Create only one part for now
@@ -199,7 +203,7 @@ public class XmlGenerator {
 
 			// fill in attributes for first measure
 			// TODO check if this is correct logic, not sure if only the first measure needs <attributes>
-			if (m.measureNumber == 1) {
+			if (measureNum == 1) {
 				// <attributes>
 				Element measureAttribute = doc.createElement("attributes");
 				measureElem.appendChild(measureAttribute);
@@ -344,16 +348,13 @@ public class XmlGenerator {
 				}
 				
 				if (xutil.includeBeams) {
-					DrumNote dn = (DrumNote) n;
-					if (dn.beamList != null) {
-						for (Beam b : dn.beamList) {
-							e = doc.createElement("beam");
-							attr = doc.createAttribute("number");
-							attr.setValue(String.valueOf(b.number));
-							e.setAttributeNode(attr);
-							e.appendChild(doc.createTextNode(b.state));
-							note.appendChild(e);
-						}
+					if (n.beam != null) {
+						e = doc.createElement("beam");
+						attr = doc.createAttribute("number");
+						attr.setValue(String.valueOf(n.beam.number));
+						e.setAttributeNode(attr);
+						e.appendChild(doc.createTextNode(n.beam.state));
+						note.appendChild(e);
 					}
 				}
 				
