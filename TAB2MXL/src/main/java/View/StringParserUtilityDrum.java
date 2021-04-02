@@ -60,7 +60,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 			
 			setChord(measureList.get(i).getNoteList());
 			measureList.get(i).measureNumber = i + 1;
-			measureList.get(i).setTimeSignature(Controller.beatType);
+			measureList.get(i).setTimeSignature(Controller.nume);
 			
 			Map<Integer, Integer> timeList = Controller.beatList;
 			if(timeList.containsKey(i+1)) {

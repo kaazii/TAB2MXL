@@ -69,7 +69,7 @@ public class StringParserUtility {
 				measureList.add(measureParser(measureArray[i]));
 				setChord(measureList.get(measureIndex).getNoteList());
 				measureList.get(measureIndex).measureNumber = globalMeasureNumber++;
-				measureList.get(measureIndex).setTimeSignature(Controller.beatType);
+				measureList.get(measureIndex).setTimeSignature(Controller.nume);
 
 				Map<Integer, Integer> timeList = Controller.beatList;
 				if (timeList.containsKey(i + 1)) {
