@@ -364,6 +364,48 @@ public class Controller {
 		INPUT = textInput;
 		DELETEBUTTON = deleteButton;
 		
+		if(!cleanup(INPUT.getText()).replace("\n", "").replace("\r", "").equals(INPUT.getText().replace("\n", "").replace("\r", ""))) {
+			checker();
+			System.out.println(cleanup(INPUT.getText()));
+		}
+		else {
+			
+			openOption();
+
+		}
+		
+
+	}
+	
+	private void openOption() {
+		if(!cleanup(INPUT.getText()).replace("\n", "").replace("\r", "").equals(INPUT.getText().replace("\n", "").replace("\r", ""))) {
+			checker();
+			System.out.println(cleanup(INPUT.getText()));
+		}
+		else {
+			
+			openOption();
+
+		}
+		
+
+	}
+	
+	private void openOption() {
+		if(!cleanup(INPUT.getText()).replace("\n", "").replace("\r", "").equals(INPUT.getText().replace("\n", "").replace("\r", ""))) {
+			checker();
+			System.out.println(cleanup(INPUT.getText()));
+		}
+		else {
+			
+			openOption();
+
+		}
+		
+
+	}
+	
+	private void openOption() {
 		Parent root;
 		try {
 			root = FXMLLoader.load(getClass().getResource("OptionBox.fxml"));
