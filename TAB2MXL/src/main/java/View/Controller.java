@@ -349,8 +349,6 @@ public class Controller {
 	}
 
 	public void translate() {
-		
-		
 		// beatsChoice.setItems(beatOptions);
 		// beatsChoice.setItems(beatOptions);
 		// beatsChoice.setValue("Beats");
@@ -361,9 +359,11 @@ public class Controller {
 		// textInput.setText(parser.stringParse(textInput.getText()));
 		// translateButton.setText("Save");
 		// textInput.setText(stringParse(textInput.getText()));
+		
 		TRANSLATE = translateButton;
 		INPUT = textInput;
 		DELETEBUTTON = deleteButton;
+		
 		Parent root;
 		try {
 			root = FXMLLoader.load(getClass().getResource("OptionBox.fxml"));
@@ -388,12 +388,6 @@ public class Controller {
 
 		
 		String lines[] = input.split("\\r?\\n");
-
-		// for error testing
-//		for (int i = 0; i < lines.length; i++) {
-//			System.out.println(lines[i]);
-//		}
-//		System.out.println(lines.length);
 
 		// basic checks
 		if (lines[0].toUpperCase().startsWith("E") && (lines.length % 6==0)) {
