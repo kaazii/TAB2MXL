@@ -8,69 +8,71 @@ import TAB2MXL.DrumNote;
 import TAB2MXL.Measure;
 import TAB2MXL.Note;
 import TAB2MXL.NoteUtility;
+import javafx.util.Pair;
 
 public class StringParserUtilityDrum extends StringParserUtility {
 	
-	public static ArrayList<Measure> stringParse(String input) throws Exception{ // potentially take timeBeatType here
-		String rawLines[] = input.split("\\r?\\n");
-		/*if (rawLines.length!=6)
-		{
-		throw new Exception("Error- Not a Guitar");
-		}
-		*/
-		String[] lines;
-		// Change all instances of || into |; will parse repeats separately
-		boolean has_repeats = false;
-		if (rawLines[0].matches(".*\\|\\|.*")) {
-			lines = convertRepeatsToNormal(rawLines);
-			has_repeats = true;
-		} else {
-			lines = rawLines;
-		}
-		String splitLines[][] = new String[lines.length][]; // splitLines[row][column]
-		// Split up each line by "|", and put those arrays into the splitLines array.
-		for (int i = 0; i < lines.length; i++) {
-			String currLine[] = lines[i].split("\\|");
-			splitLines[i] = currLine;
-			//System.out.println(splitLines[i][0]); // Prints the first entry of each line/array.. testing
-		}
-		int numMeasures = splitLines[0].length - 1;
-		System.out.println("numMeasures: " + numMeasures); //testing
-		int measureCount = 0;
-		String[] measureArray = new String[numMeasures];
+	public static ArrayList<Measure> stringParse(String rawInput) throws Exception{ // potentially take timeBeatType here
+		String measureGroups[] = rawInput.split("\\r?\\n\\r?\\n");
 
-		for (int j = 1; j <= numMeasures; j++) {
-			String measure = "";
-			for (int i = 0; i < splitLines.length; i++) { // splitlines.length = how many lines there are
-				String currString = splitLines[i][j];
-				measure += currString;
-				System.out.println(currString); //testing
-				measure += "\n"; //testing
+		int globalMeasureNumber = 1;
+		int measureIndex = 0;
+
+		for (String input : measureGroups) {
+			// Amer's repeat function
+			String rawLines[] = input.split("\\r?\\n");
+			String[] lines;
+			// Change all instances of || into |; will parse repeats separately
+			boolean has_repeats = false;
+			if (rawLines[0].matches(".*\\|\\|.*")) {
+				lines = convertRepeatsToNormal(rawLines);
+				has_repeats = true;
+			} else {
+				lines = rawLines;
 			}
-			System.out.println(""); //testing
-			measureArray[measureCount] = measure;
-			measureCount++;
-		}
-		System.out.println(Arrays.deepToString(measureArray));
-		
-		//call measureParser
-		for (int i = 0; i < measureArray.length; i++) {
-			// Pass on measure array and also the instrument to be parsed returns a measure object/
-			measureList.add(measureParser(measureArray[i], splitLines));
-			
-			setChord(measureList.get(i).getNoteList());
-			measureList.get(i).measureNumber = i + 1;
-			measureList.get(i).setTimeSignature(Controller.nume);
-			
-			Map<Integer, Integer> timeList = Controller.beatList;
-			if(timeList.containsKey(i+1)) {
-				measureList.get(i).setTimeSignature(timeList.get(i+1));
+
+			String splitLines[][] = new String[lines.length][]; // splitLines[row][column]
+
+			// Split up each line by "|", and put those arrays into the splitLines array.
+			for (int i = 0; i < lines.length; i++) {
+				String currLine[] = lines[i].split("\\|");
+				splitLines[i] = currLine;
 			}
-			
-		}
-		
-		if (has_repeats) {
-			fillMeasureRepeats(rawLines);
+
+			int measureCount = 0;
+			int numMeasures = splitLines[0].length - 1;
+
+			String[] measureArray = new String[numMeasures];
+
+			for (int j = 1; j <= numMeasures; j++) {
+				String measure = "";
+				for (int i = 0; i < splitLines.length; i++) { // splitlines.length = how many lines there are
+					String currString = splitLines[i][j];
+					measure += currString;
+					measure += "\n"; // testing
+				}
+				measureArray[measureCount] = measure;
+				measureCount++;
+			}
+
+			for (int i = 0; i < measureArray.length; i++) {
+				measureList.add(measureParser(measureArray[i], splitLines));
+				setChord(measureList.get(measureIndex).getNoteList());
+				measureList.get(measureIndex).measureNumber = globalMeasureNumber++;
+				measureList.get(measureIndex).setTimeSignature(Controller.nume);
+
+				Map<Integer, Pair<Integer, Integer>> timeList = Controller.beatList;
+				if(timeList.containsKey(measureList.get(measureIndex).measureNumber)) {
+					//only passing on the numerator for now
+					measureList.get(measureIndex).setTimeSignature(timeList.get(measureList.get(measureIndex).measureNumber).getKey());
+				}
+				measureIndex++;
+			}
+
+			// Set measure repeats, if any
+			if (has_repeats) {
+				fillMeasureRepeats(rawLines);
+			}
 		}
 		return measureList;
 	}
