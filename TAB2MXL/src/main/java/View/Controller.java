@@ -1,10 +1,10 @@
-
 package View;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -24,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -34,15 +35,21 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
@@ -74,7 +81,7 @@ public class Controller {
 	public Button translateButton;
 	@FXML
 	public TextArea textInput;
-	public static Type selected;
+	public static Type selected = Type.GUITAR;
 	@FXML
 	Button fileButton;
 	@FXML
@@ -136,8 +143,28 @@ public class Controller {
 	List<TimeHBOX> hboxList = new ArrayList<>();
 	//------------------------------------------//
 
-	static int beatType = 4;
+	public static int nume = 4;
+	public static int deno = 4;
 	public static String previousText;
+	
+	//---------------invalid model--------------//
+	@FXML
+	Label warning;
+	@FXML
+	Button modalConfirm;
+	
+	//---------------composer and title---------//
+	public static String COMPOSER = "";
+	public static String TITLE = "";
+	@FXML
+	TextField composerField;
+	
+	@FXML
+	TextField titleField;
+	
+	//-----------------validation Display--------
+	@FXML
+	TextFlow displayText;
 
 //	public void intialize() {
 //		translateButton.disableProperty().bind(textInput.textProperty().isEmpty());
@@ -215,7 +242,6 @@ public class Controller {
 		state = 0;
 		
 		try {
-			
 			if (file != null) {
 				Scanner fileIn = new Scanner(file);
 				if (!textInput.getText().isEmpty()) {
@@ -252,15 +278,15 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Confirm Restart");
 			popup.setScene(new Scene(root, 322, 140));
-
+			popup.setOnHidden(e->{
+				popup.close();
+			});
 			popup.show();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
 	}
 
 	public void dragDropFile() {
@@ -332,7 +358,8 @@ public class Controller {
 	}
 
 	public void translate() {
-
+		
+		
 		// beatsChoice.setItems(beatOptions);
 		// beatsChoice.setItems(beatOptions);
 		// beatsChoice.setValue("Beats");
@@ -346,24 +373,43 @@ public class Controller {
 		TRANSLATE = translateButton;
 		INPUT = textInput;
 		DELETEBUTTON = deleteButton;
+		if(!cleanup(INPUT.getText()).replace("\n", "").replace("\r", "").equals(INPUT.getText().replace("\n", "").replace("\r", ""))) {
+			checker();
+			System.out.println(cleanup(INPUT.getText()));
+		}
+		else {
+			
+			openOption();
+
+		}
+		
+
+	}
+	
+	private void openOption() {
 		Parent root;
 		try {
 			root = FXMLLoader.load(getClass().getResource("OptionBox.fxml"));
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Tranlation Options");
-			popup.setScene(new Scene(root, 322, 240));
-			
+			popup.setScene(new Scene(root, 322, 356));
+			popup.setOnHidden(e->{
+				popup.close();
+			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 	}
 
 	public void detect(String input) {
+
+		
 		String lines[] = input.split("\\r?\\n");
 
 		// for error testing
@@ -373,60 +419,107 @@ public class Controller {
 //		System.out.println(lines.length);
 
 		// basic checks
-		if (lines[0].toUpperCase().startsWith("E")) {
+		if (lines[0].toUpperCase().startsWith("E") && (lines.length % 6==0)) {
+			//System.out.println("This is a guitar"); // testing
 			guitarButtonClicked();
 			/*
 			 * Guitar
 			 */
 
-		} else if (lines[0].toUpperCase().startsWith("C")) {
+		} else if (lines[0].toUpperCase().startsWith("C") && (lines.length % 6==0)) {
+			//System.out.println("This is a drum"); // testing
 			drumButtonClicked();
 			// Drum
-		} else if (lines[0].toUpperCase().startsWith("G")) {
+		} else if (lines[0].toUpperCase().startsWith("G") && (lines.length % 4==0)) {
+			//System.out.println("This is a bass"); // testing
 			bassButtonClicked();
 			// Bass
 		}
 	}
 
-	private String XMLGenerate() { // Pass parsing to here
+	private String XMLGenerate() throws Exception { // Pass parsing to here
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
-
+		String xmlString = "";
+		String instrumentName = "DRUMS";
 //		Measure.timeBeats = beatType; // Numerator
 //		Measure.timeBeatType = 4; // Denominator
 //		Measure.beatList = beatList;
+		
 		if(selected == Type.GUITAR) {
-			myList = StringParserUtility.stringParse(INPUT.getText());
+			System.out.println("Guitar");
+			instrumentName = "GUITAR";
+			try {
+				StringParserUtility.clearMeasureList();
+				myList = StringParserUtility.stringParse(cleanup(INPUT.getText()));
+			} catch (Exception e) {
+				// TODO error handle here
+				error(e);
+			}
+		}
+		else if(selected == Type.BASS) {
+			System.out.println("Bass");
+			instrumentName = "BASS";
+			try {
+				StringParserUtilityBass.clearMeasureList();
+				myList = StringParserUtilityBass.stringParse(cleanup(INPUT.getText()));
+			} catch (Exception e) {
+				// TODO error handle here
+				error(e);
+			}
 		}
 		else {
-			myList = StringParserUtilityDrum.stringParse(INPUT.getText());
+			System.out.println("Drums");
+			StringParserUtilityDrum.clearMeasureList();
+			myList = StringParserUtilityDrum.stringParse(cleanup(INPUT.getText()));
 		}
 
-		String xmlString = XmlGenerator.Generate(myList);
+		try {
+			xmlString = XmlGenerator.Generate(myList,instrumentName);
+		}
+		catch (Exception e) {
+			error(e);
+		}
+
+		
 		// System.out.println(xmlString);
 		return xmlString;
 	}
 
-	public void confirmTranslate() { // Beat type box?
-		state = 1;
-		previousText = INPUT.getText();
-		closePopup();
-		INPUT.setText(XMLGenerate());
-		//TRANSLATE.setText("Save");
-		DELETEBUTTON.setDisable(false);
-		TRANSLATE.setDisable(true);
-		//set the list
+	public void confirmTranslate() throws Exception { // Beat type box?
+		if(isInvalid()) {
+			
+			System.out.println("reached\n");
+			showInvalid();
+			
+			optionConfirm.getScene().getWindow().hide();
+			
+			return;
+		}
+		
+		
 		for (TimeHBOX hbox : hboxList) {
 			Pair<Integer, Integer> range = hbox.getRange();
 			for(int i = range.getKey(); i <= range.getValue(); i ++) {
 				beatList.put(i, hbox.getTimeSignature());
 			}
 		}
+		
+		state = 1;
+		previousText = INPUT.getText();
+		closePopup();
+		//TRANSLATE.setText("Save");
+		DELETEBUTTON.setDisable(false);
+		TRANSLATE.setDisable(true);
+		//set the list
+		COMPOSER = composerField.getText();
+		TITLE = titleField.getText();
+		INPUT.setText(XMLGenerate());
 
 	}
 
 	public void chosen1() {
-		beatType = 1;
+		nume = 1;
 		beat2.setSelected(false);
 		beat3.setSelected(false);
 		beat4.setSelected(false);
@@ -434,7 +527,7 @@ public class Controller {
 	}
 
 	public void chosen2() {
-		beatType = 2;
+		nume = 2;
 		setText();
 		beat1.setSelected(false);
 		beat3.setSelected(false);
@@ -443,7 +536,7 @@ public class Controller {
 	}
 
 	public void chosen3() {
-		beatType = 3;
+		nume = 3;
 		setText();
 		beat1.setSelected(false);
 		beat2.setSelected(false);
@@ -455,13 +548,13 @@ public class Controller {
 		beat2.setSelected(false);
 		beat3.setSelected(false);
 		beat1.setSelected(false);
-		beatType = 4;
+		nume = 4;
 		setText();
 
 	}
 
 	private void setText() {
-		beatsChoice.setText(beatType + "/4");
+		beatsChoice.setText(nume + "/4");
 	}
 
 	public void closePopup() {
@@ -511,7 +604,10 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Confirm Clear");
 			popup.setScene(new Scene(root, 322, 140));
-
+			popup.setOnHidden(e->{
+				popup.close();
+			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -543,7 +639,10 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Save Options");
 			popup.setScene(new Scene(root, 322, 280));
-
+			popup.setOnHidden(e->{
+				popup.close();
+			});
+			popup.setResizable(false);
 			popup.show();
 
 		} catch (IOException e) {
@@ -582,6 +681,7 @@ public class Controller {
 		state = 0;
 		DELETEBUTTON.setDisable(true);
 		resetCancel.getScene().getWindow().hide();
+		
 	}
 
 	/**
@@ -597,6 +697,10 @@ public class Controller {
 				fileChooser.getExtensionFilters().add(extFilter);
 				File savefile = fileChooser.showSaveDialog(confirmSave.getScene().getWindow());
 				if (savefile != null) {
+					if(savefile.length()!= 0) {
+						PrintWriter pw = new PrintWriter(savefile);
+						pw.close();
+					}
 					FileWriter myWriter = new FileWriter(savefile);
 					myWriter.write(INPUT.getText());
 					myWriter.close();
@@ -670,6 +774,7 @@ public class Controller {
 		timeList.getScene().getWindow().setHeight(timeList.getScene().getWindow().getHeight() + 32);
 	}
 	
+	
 	public void hoverChange() {
 		
 		plus.getScene().setCursor(Cursor.HAND);
@@ -677,10 +782,185 @@ public class Controller {
 		plus.setTooltip(timeTip);
 
 		timeTip.setShowDelay(new Duration(0));
-		
 	}
 
 	public void hoverBack() {
 		plus.getScene().setCursor(Cursor.DEFAULT);
 	}
+	
+	//-----------invalid-------------------------
+	public void showInvalid() {
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("invalid.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.WINDOW_MODAL);
+			popup.setTitle("Invalid Input");
+			popup.setScene(new Scene(root, 322, 120));
+			popup.setOnHidden(e->{
+				popup.close();
+			});
+			popup.setResizable(false);
+			popup.show();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void hoverModalChange() {
+		
+		cursorToHand(modalConfirm, null);
+		
+	}
+
+	
+
+	public void hoverModalBack() {
+		cursorToDefault(modalConfirm);
+	}
+	
+	public void closeWarning() {
+		warning.getScene().getWindow().hide();
+		
+		
+	}
+	
+	//Checks for illegal characters in the input
+	
+	public boolean isInvalid() {
+		//final String NEW_LINE = System.getProperty("line.separator");
+		boolean illegalChar=false;
+		//store the text tab
+
+		String tempInput = cleanup(INPUT.getText());
+		//string containing all possible characters for the text tab for all 3 instruments
+
+		String validChars = "0123456789-|EADGBECHSTMxoshp[]*";
+
+		//remove new line from the string(the contains method wasn't working properly otherwise)
+		tempInput = tempInput.replace("\n", "").replace("\r", "");
+		//compare each character in the tempInput string with validChars
+		for(int i = 0; i < tempInput.length(); i++) {
+		    if(!(validChars.contains(Character.toString(tempInput.charAt(i)))))
+		    {
+		        System.out.println(tempInput.charAt(i)+" did not match");
+		        //set to true if illegal character found
+		        illegalChar=true;
+		    }
+		}
+		return illegalChar;
+		//if(INPUT.getText().startsWith("s")) return true;
+		//return false;
+	}
+	//------------hover helper---------------
+	private void cursorToHand(Button node, String tooltip) {
+		node.getScene().setCursor(Cursor.HAND);
+		if(tooltip != null) {
+			Tooltip tip = new Tooltip(tooltip);
+			node.setTooltip(tip);
+			tip.setShowDelay(new Duration(0));
+		}
+		
+	}
+	private void cursorToDefault(Button node) {
+		node.getScene().setCursor(Cursor.DEFAULT);
+		
+		
+	}
+	
+	//--------------Clear measureList------------
+	
+	
+	//--------------error catch---------------
+	private void error(Exception e) {
+		e.printStackTrace();
+		showInvalid();
+	}
+	
+
+	//-----input clean up-----------------
+	public static String cleanup(String input) {
+		StringBuilder sb = new StringBuilder();
+		
+		String[] lines = input.split("\\r?\\n");
+		boolean consecutive = false; // if there is consecutive lines to be ignored
+		for(int i = 0; i < lines.length; i ++) {
+			//System.out.println(lines[i]);
+			if(!lines[i].contains("-") || !lines[i].contains("|")) {
+				if(consecutive) continue;
+				else {
+					consecutive = true;
+					if(!sb.isEmpty())
+						sb.append("\n");
+				}
+				
+			}
+			else {
+				sb.append(lines[i]);
+				sb.append("\n");
+				consecutive = false;
+			}
+		}
+		
+		
+		
+		return sb.toString();
+	}
+	
+	
+	//----------------------ignore text--------------
+	
+	public void checker() {
+		Parent root;
+		try {
+			INPUT = textInput;
+			root = FXMLLoader.load(getClass().getResource("display.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.WINDOW_MODAL);
+			popup.setTitle("Input Ignored");
+			popup.setScene(new Scene(root, 600, 500));
+			popup.setOnHidden(e->{
+				popup.close();
+			});
+			popup.setResizable(false);
+			popup.show();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public void displayValid() {
+		displayText.getChildren().clear();
+		displayText.setVisible(true);
+		String[] lines = INPUT.getText().split("\\r?\\n");
+		for(int i = 0; i < lines.length; i ++) {
+			Text t = new Text();
+			t.setText(lines[i]+"\n");
+			t.setFont(Font.font("Monospaced", FontWeight.NORMAL, 12));
+			//System.out.println(lines[i]);
+			if((!lines[i].contains("-") || !lines[i].contains("|")) && !lines[i].equals("\\r?\\n")) {
+				
+				t.setStrikethrough(true);
+				t.setFill(Color.RED);
+				
+			}
+			displayText.getChildren().add(t);
+		}
+	
+	}
+	
+	public void cancelIgnore() {
+		displayText.setVisible(false);
+		displayText.getScene().getWindow().hide();
+	}
+	public void confirmIgnore() {
+		cancelIgnore();
+		openOption();
+	}
+
 }

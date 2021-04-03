@@ -1,9 +1,13 @@
 package TAB2MXL;
 
+import java.util.ArrayList;
+
 public class Note {
 
+	public Beam beam;
+	
 	public boolean isChord = false; //true if it's a chord
-	public int column;
+	public int column; //for chords
 	
 	public int duration;
 	public int octave; 
@@ -24,6 +28,7 @@ public class Note {
 	
 	public Note() {}
 	//*************************setter**************************
+	
 	public void setOctave(int octave) {
 		this.octave = octave;
 	}

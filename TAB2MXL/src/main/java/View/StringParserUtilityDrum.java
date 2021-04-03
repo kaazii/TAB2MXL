@@ -9,29 +9,31 @@ import TAB2MXL.Measure;
 import TAB2MXL.Note;
 import TAB2MXL.NoteUtility;
 
-public final class StringParserUtilityDrum {
-
-	public static ArrayList<Measure> measureList = new ArrayList<Measure>();
-
+public class StringParserUtilityDrum extends StringParserUtility {
 	
-	/*
-	 * measureParser needs to be implemented
-	 */
-	public static ArrayList<Measure> stringParse(String input) { // potentially take timeBeatType here
-		String lines[] = input.split("\\r?\\n");
+	public static ArrayList<Measure> stringParse(String input) throws Exception{ // potentially take timeBeatType here
+		String rawLines[] = input.split("\\r?\\n");
+		/*if (rawLines.length!=6)
+		{
+		throw new Exception("Error- Not a Guitar");
+		}
+		*/
+		String[] lines;
+		// Change all instances of || into |; will parse repeats separately
+		boolean has_repeats = false;
+		if (rawLines[0].matches(".*\\|\\|.*")) {
+			lines = convertRepeatsToNormal(rawLines);
+			has_repeats = true;
+		} else {
+			lines = rawLines;
+		}
 		String splitLines[][] = new String[lines.length][]; // splitLines[row][column]
-		
-		System.out.println("lines: " + lines[0].length());
-
 		// Split up each line by "|", and put those arrays into the splitLines array.
 		for (int i = 0; i < lines.length; i++) {
 			String currLine[] = lines[i].split("\\|");
 			splitLines[i] = currLine;
-			System.out.println(splitLines[i][0]); // Prints the first entry of each line/array.. testing
+			//System.out.println(splitLines[i][0]); // Prints the first entry of each line/array.. testing
 		}
-
-		System.out.println(Arrays.deepToString(splitLines)); // prints the second line which is now split into multiple arrays... testing
-
 		int numMeasures = splitLines[0].length - 1;
 		System.out.println("numMeasures: " + numMeasures); //testing
 		int measureCount = 0;
@@ -58,7 +60,7 @@ public final class StringParserUtilityDrum {
 			
 			setChord(measureList.get(i).getNoteList());
 			measureList.get(i).measureNumber = i + 1;
-			measureList.get(i).setTimeSignature(Controller.beatType);
+			measureList.get(i).setTimeSignature(Controller.nume);
 			
 			Map<Integer, Integer> timeList = Controller.beatList;
 			if(timeList.containsKey(i+1)) {
@@ -66,39 +68,16 @@ public final class StringParserUtilityDrum {
 			}
 			
 		}
+		
+		if (has_repeats) {
+			fillMeasureRepeats(rawLines);
+		}
 		return measureList;
-	}
-
-	public static String checkTabType(String input) {
-		// split the input into different lines
-		String lines[] = input.split("\\r?\\n");
-		if (lines[0].toUpperCase().startsWith("E")) {
-			System.out.println("This is a Guitar Tab.");
-		} else if (lines[0].toUpperCase().startsWith("C")) {
-			System.out.println("This is a Drum Tab.");
-		} else if (lines[0].toUpperCase().startsWith("G")) {
-			System.out.println("This is a Bass Tab.");
-		}
-		return "";
-	}
-	
-	public static void setChord(ArrayList<Note> noteList) {
-		int currColumn = -1;
-		for (Note note : noteList) {
-			if (currColumn == note.column) {
-				note.isChord = true;
-				System.out.println("fret: " + note.fret + " string: " + note.string + " isChord: " + note.isChord);
-			}
-			else 
-			{
-				currColumn = note.column;
-			}
-		}
 	}
 	
 	public static Measure measureParser(String measureString, String[][] splitLines) {
 		Measure measure = new Measure(getDivison(measureString));
-		Measure.divisions = getDivison(measureString);
+		measure.divisions = getDivison(measureString);
 		
 		String lines[] = measureString.split("\\r?\\n");
 		
@@ -108,11 +87,13 @@ public final class StringParserUtilityDrum {
 				String instrument = splitLines[j][0];
 				String curr = lines[j].substring(i, i + 1); //this is the current character that we are parsing
 				if (!(curr.equals("-"))) { // this must be a note!
+					
 					Note note = getNote(instrument);
+					if(instrument.equals("HH")) note = getNote("HHx");
 					if(curr.equals("x")) ((DrumNote) note).setNotehead("x");
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); //pass the current column index
-					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) Measure.divisions));
+					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.divisions));
 					System.out.println("instrument " + instrument + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
 					measure.noteList.add(note);
 				}
@@ -120,53 +101,10 @@ public final class StringParserUtilityDrum {
 		}
 		return measure;
 	}
-	
-	
-	public static int getDivison(String measure) { //returns the division of a measure
-		int division = 0;
-		String lines[] = measure.split("\\r?\\n");
-		
-		for (int i = 0; i < lines[0].length() - 1; i++) { // i are the columns
-			
-			for (int j = 0; j < lines.length; j++) { // j are the rows
-				String curr = lines[j].substring(i, i + 1);
-				
-				if (!(curr.equals("-"))) { // does this work once we get holding/pulling?
-					division = lines[j].length() - i;
-					System.out.println("division: " + division);
-					return division;
-				}
-			}
-		}
-		return division;
-	}
-	
-    public static int getDuration(String lines[], int column) { //note duration/division = type?
-        int noteLength = 1;
-        for (int i = column + 1; i <= lines[0].length() - 1; i++) { // i are the columns
-            for (int j = 0; j < lines.length; j++) { // j are the rows
-                String curr = lines[j].substring(i, i + 1);
-                if (!(curr.equals("-"))) { // does this work once we get holding/pulling?
-                    return noteLength;
-                }
-            }
-            noteLength++;
-        }
-        return noteLength;
-    } 
-
-	public static boolean isNumeric(String str) {
-		return str.matches("-?\\d+(\\.\\d+)?"); // match a number with optional '-' and decimal.
-	}
 
 	public static Note getNote(String instrument) {
 		NoteUtility noteGetter = new NoteUtility();
 		noteGetter.initializeDrum();
 		return noteGetter.drumNotes.get(instrument);
 	}
-
-	public ArrayList<Measure> getMeasureList() {
-		return StringParserUtilityDrum.measureList;
-	}
 }
-
