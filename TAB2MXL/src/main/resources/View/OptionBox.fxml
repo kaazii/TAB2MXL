@@ -9,11 +9,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="322.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
+<Pane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="360.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
    <children>
-      <HBox prefWidth="322.0">
+      <HBox prefWidth="360.0">
          <children>
-            <VBox prefWidth="322.0">
+            <VBox prefWidth="360.0">
                <children>
                   <Label prefHeight="56.0" prefWidth="322.0" text="Translation Options">
                      <font>
@@ -34,7 +34,7 @@
                         <Insets left="15.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="composerField" minWidth="200.0" prefWidth="200.0" promptText="Composer Name" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-width: 2;">
+                  <TextField fx:id="composerField" minWidth="150.0" prefWidth="150.0" promptText="Composer Name" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-width: 2;">
                      <VBox.margin>
                         <Insets left="15.0" right="100.0" />
                      </VBox.margin>
@@ -47,7 +47,7 @@
                         <Insets left="15.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="titleField" minWidth="200.0" prefWidth="200.0" promptText="Score Title" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-width: 2;">
+                  <TextField fx:id="titleField" minWidth="200.0" prefWidth="150.0" promptText="Score Title" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-width: 2;">
                      <VBox.margin>
                         <Insets left="15.0" right="100.0" />
                      </VBox.margin>
@@ -62,17 +62,20 @@
                   </Label>
                   <HBox prefWidth="203.0">
                      <children>
-                        <MenuButton id="beatsChoice" fx:id="beatsChoice" mnemonicParsing="false" prefHeight="0.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-radius: 10; -fx-border-color: #F0F4F0; -fx-border-width: 2;" text="4/4" textAlignment="RIGHT">
-                           <items>
-                              <RadioMenuItem fx:id="beat1" mnemonicParsing="false" onAction="#chosen1" text="1/4" />
-                              <RadioMenuItem fx:id="beat2" mnemonicParsing="false" onAction="#chosen2" text="2/4" />
-                              <RadioMenuItem fx:id="beat3" mnemonicParsing="false" onAction="#chosen3" text="3/4" />
-                              <RadioMenuItem fx:id="beat4" mnemonicParsing="false" onAction="#chosen4" selected="true" text="4/4" />
-                           </items>
+                        <TextField fx:id="numeText" onKeyPressed="#numberValidation" prefWidth="40.0" promptText="4" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-width: 2;">
                            <HBox.margin>
                               <Insets left="15.0" />
                            </HBox.margin>
-                        </MenuButton>
+                        </TextField>
+                        <Text fill="#828f9c" strokeType="OUTSIDE" strokeWidth="0.0" text="/">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" top="3.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="denoText" layoutX="25.0" layoutY="10.0" onKeyPressed="#numberValidation" prefWidth="40.0" promptText="4" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-width: 2;" />
                         <Button fx:id="plus" maxHeight="200.0" mnemonicParsing="false" onAction="#add" onMouseEntered="#hoverChange" onMouseExited="#hoverBack" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: transparent; -fx-background-image: url(&quot;add-24.png&quot;); -fx-background-repeat: no-repeat; -fx-background-insets: 2px;">
                            <HBox.margin>
                               <Insets left="25.0" top="2.0" />
@@ -83,7 +86,7 @@
                   <VBox fx:id="timeList" maxHeight="300.0" prefWidth="300.0" />
                   <HBox prefWidth="322.0">
                      <VBox.margin>
-                        <Insets bottom="25.0" top="25.0" />
+                        <Insets bottom="25.0" left="15.0" top="25.0" />
                      </VBox.margin>
                      <children>
                         <Button id="optionCancel" fx:id="optionCancel" mnemonicParsing="false" onAction="#closePopup" prefHeight="42.0" prefWidth="133.0" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10;" text="Cancel">

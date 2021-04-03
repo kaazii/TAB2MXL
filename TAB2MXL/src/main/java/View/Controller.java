@@ -9,6 +9,8 @@ import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +42,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -137,10 +140,14 @@ public class Controller {
 	//---------------Time Signature List --------//
 	@FXML
 	VBox timeList;
-	public static Map<Integer, Integer> beatList = new HashMap<>();
+	public static Map<Integer, Pair<Integer,Integer>> beatList = new HashMap<>();
 	@FXML
 	Button plus;
 	List<TimeHBOX> hboxList = new ArrayList<>();
+	@FXML
+	TextField numeText;
+	@FXML
+	TextField denoText;
 	//------------------------------------------//
 
 	public static int nume = 4;
@@ -393,7 +400,7 @@ public class Controller {
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Tranlation Options");
-			popup.setScene(new Scene(root, 322, 356));
+			popup.setScene(new Scene(root, 360, 356));
 			popup.setOnHidden(e->{
 				popup.close();
 			});
@@ -504,6 +511,12 @@ public class Controller {
 				beatList.put(i, hbox.getTimeSignature());
 			}
 		}
+		// if the text fields are not empty, set nume and deno
+		// else use the default 4/4
+		if(!numeText.getText().isEmpty()) nume = Integer.parseInt(numeText.getText());
+		else nume = 4;
+		if(!denoText.getText().isEmpty()) deno = Integer.parseInt(denoText.getText());
+		else deno = 4;
 		
 		state = 1;
 		previousText = INPUT.getText();
@@ -961,6 +974,41 @@ public class Controller {
 	public void confirmIgnore() {
 		cancelIgnore();
 		openOption();
+	}
+	
+	//----------------Text Field validation-----------------
+	public void numberValidation() {
+		DecimalFormat format = new DecimalFormat( "0" );
+		numeText.setTextFormatter( new TextFormatter<>(c ->{
+		    if ( c.getControlNewText().isEmpty() ){
+		        return c;
+		    }
+		   
+		    ParsePosition parsePosition = new ParsePosition( 0 );
+		    Object object = format.parse( c.getControlNewText(), parsePosition );
+
+		    if ( object == null || parsePosition.getIndex() < c.getControlNewText().length() ){
+		        return null;
+		    }
+		    else{
+		        return c;
+		    }
+		}));
+		denoText.setTextFormatter( new TextFormatter<>(c ->{
+		    if ( c.getControlNewText().isEmpty() ){
+		        return c;
+		    }
+		   
+		    ParsePosition parsePosition = new ParsePosition( 0 );
+		    Object object = format.parse( c.getControlNewText(), parsePosition );
+
+		    if ( object == null || parsePosition.getIndex() < c.getControlNewText().length() ){
+		        return null;
+		    }
+		    else{
+		        return c;
+		    }
+		}));
 	}
 
 }
