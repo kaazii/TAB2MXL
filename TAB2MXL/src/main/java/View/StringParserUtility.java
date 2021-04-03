@@ -11,6 +11,7 @@ import TAB2MXL.Beam;
 import TAB2MXL.Measure;
 import TAB2MXL.Note;
 import TAB2MXL.NoteUtility;
+import javafx.util.Pair;
 
 public class StringParserUtility {
 
@@ -71,9 +72,10 @@ public class StringParserUtility {
 				measureList.get(measureIndex).measureNumber = globalMeasureNumber++;
 				measureList.get(measureIndex).setTimeSignature(Controller.nume);
 
-				Map<Integer, Integer> timeList = Controller.beatList;
-				if (timeList.containsKey(i + 1)) {
-					measureList.get(measureIndex).setTimeSignature(timeList.get(i + 1));
+				Map<Integer, Pair<Integer, Integer>> timeList = Controller.beatList;
+				if(timeList.containsKey(measureList.get(measureIndex).measureNumber)) {
+					//only passing on the numerator for now
+					measureList.get(measureIndex).setTimeSignature(timeList.get(measureList.get(measureIndex).measureNumber).getKey());
 				}
 				measureIndex++;
 			}
