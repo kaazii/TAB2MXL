@@ -444,22 +444,23 @@ public class Controller {
 //		System.out.println(lines.length);
 
 		// basic checks
-		if ( lines[0].contains("x") || lines[0].contains("o")) {
-			//System.out.println("This is a drum"); // testing
-			drumButtonClicked();
-			// Drum
-		}
-		else if (lines[0].toUpperCase().startsWith("E") || (lines.length == 6)) {
+		if ((lines[0].toUpperCase().startsWith("E") || (lines.length == 6)) && !lines[0].contains("o") && !lines[0].contains("x")) {
 			//System.out.println("This is a guitar"); // testing
 			guitarButtonClicked();
 			/*
 			 * Guitar
 			 */
 
-		} else if (lines[0].toUpperCase().startsWith("G") && (lines.length == 5 || lines.length == 4)) {
+		}
+		else if (lines[0].toUpperCase().startsWith("G") && (lines.length == 5 || lines.length == 4) && !lines[0].contains("o") && !lines[0].contains("x")) {
 			//System.out.println("This is a bass"); // testing
 			bassButtonClicked();
 			// Bass
+		}
+		else if (lines[0].contains("x") || lines[0].contains("o")) {
+			//System.out.println("This is a drum"); // testing
+			drumButtonClicked();
+			// Drum
 		}
 		else {
 			showNotDetected();
@@ -505,6 +506,7 @@ public class Controller {
 		}
 		else {
 			showNotDetected();
+			TRANSLATE.setDisable(false);
 			return previousText;
 		}
 
@@ -887,7 +889,7 @@ public class Controller {
 		String tempInput = cleanup(INPUT.getText());
 		//string containing all possible characters for the text tab for all 3 instruments
 
-		String validChars = "0123456789-|EADGBECHSTMxoshp[]*";
+		String validChars = "0123456789-|EADGBECHSTMxgmaoshp[]*";
 		
 		//must be same length
 		String[] splitInput = tempInput.split("\\r?\\n\\r?\\n");
@@ -1093,4 +1095,6 @@ public class Controller {
 	public void closeInstrument() {
 		instrumentConfirm.getScene().getWindow().hide();
 	}
+	
+	
 }
