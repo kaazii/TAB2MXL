@@ -74,6 +74,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				fillMeasureRepeats(rawLines);
 			}
 		}
+		fillBeams(measureList);
 		return measureList;
 	}
 	
@@ -96,7 +97,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); //pass the current column index
 					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.divisions));
-					System.out.println("instrument " + instrument + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
+					//System.out.println("instrument " + instrument + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
 					measure.noteList.add(note);
 				}
 			}
