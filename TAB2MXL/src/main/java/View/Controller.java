@@ -172,6 +172,13 @@ public class Controller {
 	//-----------------validation Display--------
 	@FXML
 	TextFlow displayText;
+	
+	
+	//-------------------instrument popup---------
+	@FXML
+	Button instrumentConfirm;
+	public static CheckBox AUTO;
+	
 
 //	public void intialize() {
 //		translateButton.disableProperty().bind(textInput.textProperty().isEmpty());
@@ -262,6 +269,7 @@ public class Controller {
 //					translateButton.setText("Translate");
 //				}
 				if (translateButton.isDisable()) {
+					
 					translateButton.setDisable(false);
 				}
 				if (autoDetect.isSelected()) {
@@ -338,7 +346,7 @@ public class Controller {
 		 * gets called directly from the ui to detect the type of tablatures
 		 */
 		if (autoDetect.isSelected()) {
-			detect(textInput.getText());
+			detect(cleanup(textInput.getText()));
 		}
 	}
 
@@ -358,9 +366,9 @@ public class Controller {
 			saveButton.setDisable(false);
 		}
 
-		if (autoDetect.isSelected()) {
-			detect(textInput.getText());
-		}
+//		if (autoDetect.isSelected()) {
+//			detect(textInput.getText());
+//		}
 
 	}
 
@@ -377,13 +385,20 @@ public class Controller {
 		// textInput.setText(parser.stringParse(textInput.getText()));
 		// translateButton.setText("Save");
 		// textInput.setText(stringParse(textInput.getText()));
+		
 		TRANSLATE = translateButton;
 		INPUT = textInput;
 		DELETEBUTTON = deleteButton;
+		AUTO = autoDetect;
+		clearMeasureList();
 		if(!cleanup(INPUT.getText()).replace("\n", "").replace("\r", "").equals(INPUT.getText().replace("\n", "").replace("\r", ""))) {
 			checker();
 			System.out.println(cleanup(INPUT.getText()));
 		}
+		else if(isInvalid()) {
+			showInvalid();
+		}
+		else if(AUTO.isSelected()&&!detect(cleanup(INPUT.getText()))) return;
 		else {
 			
 			openOption();
@@ -414,10 +429,13 @@ public class Controller {
 		
 	}
 
-	public void detect(String input) {
+	public boolean detect(String input) {
+		//return true if detected
 
+		String[] splitInput = input.split("\\r?\\n\\r?\\n");
 		
-		String lines[] = input.split("\\r?\\n");
+		
+		String lines[] = splitInput[0].split("\\r?\\n");
 
 		// for error testing
 //		for (int i = 0; i < lines.length; i++) {
@@ -426,23 +444,32 @@ public class Controller {
 //		System.out.println(lines.length);
 
 		// basic checks
-		if (lines[0].toUpperCase().startsWith("E") && (lines.length % 6==0)) {
+		if ((lines[0].toUpperCase().startsWith("E") || (lines.length == 6)) && !lines[0].contains("o") && !lines[0].contains("x")) {
 			//System.out.println("This is a guitar"); // testing
 			guitarButtonClicked();
 			/*
 			 * Guitar
 			 */
 
-		} else if (lines[0].toUpperCase().startsWith("C") && (lines.length % 6==0)) {
-			//System.out.println("This is a drum"); // testing
-			drumButtonClicked();
-			// Drum
-		} else if (lines[0].toUpperCase().startsWith("G") && (lines.length % 4==0)) {
+		}
+		else if (lines[0].toUpperCase().startsWith("G") && (lines.length == 5 || lines.length == 4) && !lines[0].contains("o") && !lines[0].contains("x")) {
 			//System.out.println("This is a bass"); // testing
 			bassButtonClicked();
 			// Bass
 		}
+		else if (lines[0].contains("x") || lines[0].contains("o")) {
+			//System.out.println("This is a drum"); // testing
+			drumButtonClicked();
+			// Drum
+		}
+		else {
+			showNotDetected();
+			return false;
+		}
+		return true;
 	}
+
+	
 
 	private String XMLGenerate() throws Exception { // Pass parsing to here
 		// TODO pass in the MEASURE list to XmlGenerator
@@ -452,12 +479,11 @@ public class Controller {
 //		Measure.timeBeats = beatType; // Numerator
 //		Measure.timeBeatType = 4; // Denominator
 //		Measure.beatList = beatList;
-		
 		if(selected == Type.GUITAR) {
 			System.out.println("Guitar");
 			instrumentName = "GUITAR";
 			try {
-				StringParserUtility.clearMeasureList();
+				
 				myList = StringParserUtility.stringParse(cleanup(INPUT.getText()));
 			} catch (Exception e) {
 				// TODO error handle here
@@ -468,17 +494,20 @@ public class Controller {
 			System.out.println("Bass");
 			instrumentName = "BASS";
 			try {
-				StringParserUtilityBass.clearMeasureList();
 				myList = StringParserUtilityBass.stringParse(cleanup(INPUT.getText()));
 			} catch (Exception e) {
 				// TODO error handle here
 				error(e);
 			}
 		}
-		else {
+		else if(selected == Type.DRUM){
 			System.out.println("Drums");
-			StringParserUtilityDrum.clearMeasureList();
 			myList = StringParserUtilityDrum.stringParse(cleanup(INPUT.getText()));
+		}
+		else {
+			showNotDetected();
+			TRANSLATE.setDisable(false);
+			return previousText;
 		}
 
 		try {
@@ -493,6 +522,16 @@ public class Controller {
 		return xmlString;
 	}
 
+	private void clearMeasureList() {
+		// TODO Auto-generated method stub
+		StringParserUtility.clearMeasureList();
+
+		StringParserUtilityBass.clearMeasureList();
+
+		StringParserUtilityDrum.clearMeasureList();
+		
+	}
+
 	public void confirmTranslate() throws Exception { // Beat type box?
 		if(isInvalid()) {
 			
@@ -503,6 +542,8 @@ public class Controller {
 			
 			return;
 		}
+		
+		
 		
 		
 		for (TimeHBOX hbox : hboxList) {
@@ -676,7 +717,6 @@ public class Controller {
 
 		TRANSLATE.setDisable(false);
 		state = 0;
-		
 		DELETEBUTTON.setDisable(true);
 		clearCancel.getScene().getWindow().hide();
 	}
@@ -849,9 +889,23 @@ public class Controller {
 		String tempInput = cleanup(INPUT.getText());
 		//string containing all possible characters for the text tab for all 3 instruments
 
-		String validChars = "0123456789-|EADGBECHSTMxoshp[]*";
-
+		String validChars = "0123456789-|EADGBECHSTMxgmaoshp[]*";
+		
+		//must be same length
+		String[] splitInput = tempInput.split("\\r?\\n\\r?\\n");
+		
+		if(splitInput.length == 0) return true;
+		for(int i = 0; i < splitInput.length; i ++) {
+			String[] splitLines = splitInput[i].split("\\r?\\n");
+			if(splitLines.length == 0) return true;
+			int length = splitLines[0].length();
+			for(int j = 1;j < splitLines.length; j++) {
+				if(splitLines[j].length() != length) return true;
+			}
+			
+		}
 		//remove new line from the string(the contains method wasn't working properly otherwise)
+		
 		tempInput = tempInput.replace("\n", "").replace("\r", "");
 		//compare each character in the tempInput string with validChars
 		for(int i = 0; i < tempInput.length(); i++) {
@@ -862,6 +916,7 @@ public class Controller {
 		        illegalChar=true;
 		    }
 		}
+		
 		return illegalChar;
 		//if(INPUT.getText().startsWith("s")) return true;
 		//return false;
@@ -1010,5 +1065,36 @@ public class Controller {
 		    }
 		}));
 	}
+	
+	// Instrument not detected
+	
+	private void showNotDetected() {
+		// TODO Auto-generated method stub
+		//no longer activated
+		AUTO.setSelected(false);
+		Parent root;
+		try {
+			INPUT = textInput;
+			root = FXMLLoader.load(getClass().getResource("instrument.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.WINDOW_MODAL);
+			popup.setTitle("No Instrument Detected");
+			popup.setScene(new Scene(root, 322, 120));
+			popup.setOnHidden(e->{
+				popup.close();
+			});
+			popup.setResizable(false);
+			popup.show();
 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void closeInstrument() {
+		instrumentConfirm.getScene().getWindow().hide();
+	}
+	
+	
 }
