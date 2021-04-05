@@ -38,8 +38,6 @@ public class XmlGenerator {
 
 		xutil = new XMLUtility(instrumentString);
 
-		System.out.println("Generating XML for instrument <" + xutil.instrument + ">");
-		System.out.println("Generating XML with clef sign <" + xutil.clefSign + ">");
 		String xmlString = "";
 
 		try {
@@ -240,7 +238,6 @@ public class XmlGenerator {
 				Element clef = doc.createElement("clef");
 				measureAttribute.appendChild(clef);
 
-				System.out.println("Generating XML with clef sign <" + xutil.clefSign + ">");
 				// --<sign>
 				e = doc.createElement("sign");
 				e.appendChild(doc.createTextNode(xutil.clefSign));
