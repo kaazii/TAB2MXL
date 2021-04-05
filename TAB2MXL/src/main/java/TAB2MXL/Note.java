@@ -16,7 +16,9 @@ public class Note {
 	public int column; //for chords
 	
 	public int duration;
-	public float floatDuration;;
+	
+	public float floatDuration;
+	
 	public int octave; 
 	
 	public String step;

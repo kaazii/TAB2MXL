@@ -96,9 +96,10 @@ public class StringParserUtilityDrum extends StringParserUtility {
 					if(curr.equals("x")) ((DrumNote) note).setNotehead("x");
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); //pass the current column index
+					note.floatDuration = note.duration / (float) 4;
 
 					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.divisions, note));
-					System.out.println("instrument " + instrument + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
+					System.out.println("instrument " + instrument + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType() + " division :" + measure.divisions); // for testing
 					measure.noteList.add(note);
 				}
 			}

@@ -24,7 +24,7 @@ public class StringParserUtility {
 	}
 
 	public static ArrayList<Measure> stringParse(String rawInput) throws Exception { // potentially take timeBeatType
-																						// here
+		// here
 		String measureGroups[] = rawInput.split("\\r?\\n\\r?\\n");
 
 		int globalMeasureNumber = 1;
@@ -68,7 +68,7 @@ public class StringParserUtility {
 			}
 
 			for (int i = 0; i < measureArray.length; i++) { // calling measureParse on each individual measure in the
-															// measureArray
+				// measureArray
 				measureList.add(measureParser(measureArray[i], globalMeasureNumber++));
 				setChord(measureList.get(measureIndex++).getNoteList());
 			}
@@ -78,7 +78,7 @@ public class StringParserUtility {
 				fillMeasureRepeats(rawLines);
 			}
 		}
-		
+
 		fillBeams(measureList);
 		return measureList;
 	}
@@ -87,7 +87,7 @@ public class StringParserUtility {
 	public static void fillBeams(ArrayList<Measure> measureList) {
 		HashMap<String, Float> noteEnum = new HashMap<>();
 		HashMap<String, Integer> noteTypeToBeamNumber = new HashMap<>();
-		
+
 		noteEnum.put("whole", 1f);
 		noteEnum.put("half", 0.5f);
 		noteEnum.put("quarter", 0.25f);
@@ -95,65 +95,64 @@ public class StringParserUtility {
 		noteEnum.put("16th", 0.0625f);
 		noteEnum.put("32nd", 0.03125f);
 		noteEnum.put("64th", 0.015625f);
-		
+
 		noteTypeToBeamNumber = new HashMap<>();
 		noteTypeToBeamNumber.put("eighth", 1);
 		noteTypeToBeamNumber.put("16th", 2);
 		noteTypeToBeamNumber.put("32nd", 3);
 		noteTypeToBeamNumber.put("64th", 4);
-		
+
 		int beamNumber = 1;
 		for (int i = 0; i < measureList.size(); i++) {
 			int trailer = 0;
 			int leader = 1;
 			float currSum = 0;
 			ArrayList<Note> noteList = measureList.get(i).noteList;
-			while (leader < noteList.size() && trailer != leader) 
+			while (leader < noteList.size() && trailer != leader)
 				if (noteEnum.get(noteList.get(leader).type) > 0.125f) {
 					trailer = leader + 1;
 					leader = trailer + 1;
 					continue;
-        }
-				
-				for (int j = trailer; j <= leader; j++) {
-
-					float num = noteEnum.get(noteList.get(j).getType());
-					currSum += num;
 				}
 
-				if (currSum > 0.25f) {
-					trailer++;
-					if (trailer == leader) {
-						leader++;
-					}
-					currSum = 0;
-					continue;
+			for (int j = trailer; j <= leader; j++) {
 
-				} else if (currSum < 0.25f) {
+				float num = noteEnum.get(noteList.get(j).getType());
+				currSum += num;
+			}
+
+			if (currSum > 0.25f) {
+				trailer++;
+				if (trailer == leader) {
 					leader++;
-					continue;
-				} else {
-					// Beam found
-					// beginning beam
-					System.out.printf("Found a beam from notes <%s>-<%s>\n", trailer, leader);
-					beamNumber = noteTypeToBeamNumber.get(noteList.get(trailer).type);
-					noteList.get(trailer).beam = new Beam(beamNumber, "begin");
+				}
+				currSum = 0;
+				continue;
 
-					// middle beams
-					for (int j = trailer + 1; j < leader; j++) {
-						beamNumber = noteTypeToBeamNumber.get(noteList.get(trailer).type);
-						noteList.get(j).beam = new Beam(beamNumber, "continue");
-					}
-					
-					// Ending beam
+			} else if (currSum < 0.25f) {
+				leader++;
+				continue;
+			} else {
+				// Beam found
+				// beginning beam
+				System.out.printf("Found a beam from notes <%s>-<%s>\n", trailer, leader);
+				beamNumber = noteTypeToBeamNumber.get(noteList.get(trailer).type);
+				noteList.get(trailer).beam = new Beam(beamNumber, "begin");
+
+				// middle beams
+				for (int j = trailer + 1; j < leader; j++) {
 					beamNumber = noteTypeToBeamNumber.get(noteList.get(trailer).type);
-					noteList.get(leader).beam = new Beam(beamNumber, "end");	
-					
-					trailer = leader + 1;
-					leader = trailer + 1;
-					currSum = 0;
-					continue;
-				}		
+					noteList.get(j).beam = new Beam(beamNumber, "continue");
+				}
+
+				// Ending beam
+				beamNumber = noteTypeToBeamNumber.get(noteList.get(trailer).type);
+				noteList.get(leader).beam = new Beam(beamNumber, "end");
+
+				trailer = leader + 1;
+				leader = trailer + 1;
+				currSum = 0;
+				continue;
 			}
 		}
 	}
@@ -320,63 +319,82 @@ public class StringParserUtility {
 			for (int j = 0; j < lines.length; j++) { // j are the rows
 				String curr = lines[j].substring(i, i + 1); // this is the current character that we are parsing
 				String next = lines[j].substring(i + 1, i + 2);
-				
+				if (isNumeric(curr) && isNumeric(next)) {
+					Note note = getNote(j, Integer.parseInt(curr + next));
+					note.setColumn(i + 1);
+					note.floatDuration = (float) (getDuration(lines, i + 1) * timeSignature);
+					note.setType(NoteUtility
+							.getNoteType((float) note.getFloatDuration() / (float) measure.getDivision(), note));
+					System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration
+							+ " type: " + note.getType() + " division :" + measure.getDivision());
+					System.out.println((float) note.getDuration() / (float) measure.getDivision());
+					measure.noteList.add(note);
+				} else if (isNumeric(curr)) {
+					if (i > 0) {
+						String prev = lines[j].substring(i - 1, i);
+						if (!isNumeric(prev)) {
+							Note note = getNote(j, Integer.parseInt(curr));
+							note.setColumn(i);
+							note.floatDuration = (float) (getDuration(lines, i) * timeSignature);
+							note.setType(NoteUtility.getNoteType(
+									(float) note.getFloatDuration() / (float) measure.getDivision(), note));
+							System.out.println(
+									"fret: " + note.fret + " string: " + note.string + " duration: " + note.duration
+											+ " type: " + note.getType() + " division :" + measure.getDivision());
+							System.out.println((float) note.getDuration() / (float) measure.getDivision());
+							measure.noteList.add(note);
+						}
+					} else {
+						Note note = getNote(j, Integer.parseInt(curr));
+						note.setColumn(i);
+						note.floatDuration = (float) (getDuration(lines, i) * timeSignature);
+						note.setType(NoteUtility
+								.getNoteType((float) note.getFloatDuration() / (float) measure.getDivision(), note));
+						System.out.println("fret: " + note.fret + " string: " + note.string + " duration: "
+								+ note.duration + " type: " + note.getType() + " division :" + measure.getDivision()); //
+						System.out.println((float) note.getDuration() / (float) measure.getDivision());
+						measure.noteList.add(note);
+					}
+				}
+				/*
 				if (isNumeric(curr)) {
 					int index = lines[j].indexOf("-", i);
 					String currNote = lines[j].substring(i, index);
 					if (i > 0) {
 						String prev = lines[j].substring(i - 1, i);
 						if (isDash(prev)) {
-							if (isNumeric(currNote)) { //double
+							if (isNumeric(currNote)) { // double
+								System.out.println(currNote);
 								Note note = getNote(j, Integer.parseInt(currNote));
 								note.setColumn(i + currNote.length() - 1); // index
-								
-								note.floatDuration = (float) (getDuration(lines, i + currNote.length() - 1) * timeSignature); // pass the current column											
-								note.setType(NoteUtility.getNoteType((float) note.getFloatDuration() / (float) measure.getDivision(), note));
-								System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration
-										+ " type: " + note.getType() + " division :" + measure.getDivision()); // for testing
-								System.out.println((float) note.getDuration() / (float) measure.getDivision()); 
+
+								note.floatDuration = (float) (getDuration(lines, i + currNote.length() - 1)
+										* timeSignature); // pass the current column
+								note.setType(NoteUtility.getNoteType(
+										(float) note.getFloatDuration() / (float) measure.getDivision(), note));
+								System.out.println(
+										"fret: " + note.fret + " string: " + note.string + " duration: " + note.duration
+												+ " type: " + note.getType() + " division :" + measure.getDivision()); // for
+																														// testing
+								System.out.println((float) note.getDuration() / (float) measure.getDivision());
 								measure.noteList.add(note);
 							}
 						}
-					}
-				}
+					} else if (isNumeric(currNote)) { // double
+						System.out.println(currNote);
+						Note note = getNote(j, Integer.parseInt(currNote));
+						note.setColumn(i + currNote.length() - 1); // index
 
-				if (isNumeric(curr) && isNumeric(next)) { // if the current fret is a double digit
-					Note note = getNote(j, Integer.parseInt(curr + next));
-					note.setColumn(i + 1); // index
-					note.floatDuration = (float) (getDuration(lines, i + 1) * timeSignature); // pass the current column											
-					note.setType(NoteUtility.getNoteType((float) note.getFloatDuration() / (float) measure.getDivision(), note));
-					System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration
-							+ " type: " + note.getType() + " division :" + measure.getDivision()); // for testing
-					System.out.println((float) note.getDuration() / (float) measure.getDivision()); 
-					measure.noteList.add(note);
-				} else if (isNumeric(curr)) { // this must be a note
-					if (i > 0) {
-						String prev = lines[j].substring(i - 1, i);
-						if (!isNumeric(prev)) {
-							Note note = getNote(j, Integer.parseInt(curr));
-							note.setColumn(i);
-							note.floatDuration = (float) (getDuration(lines, i) * timeSignature); // pass the current
-							note.setType(NoteUtility.getNoteType((float) note.getFloatDuration() / (float) measure.getDivision(), note));
-							System.out.println(
-									"fret: " + note.fret + " string: " + note.string + " duration: " + note.duration
-											+ " type: " + note.getType() + " division :" + measure.getDivision()); // for
-																													// testing
-							System.out.println((float) note.getDuration() / (float) measure.getDivision()); 
-							measure.noteList.add(note);
-						}
-					} else {
-						Note note = getNote(j, Integer.parseInt(curr));
-						note.setColumn(i);
-						note.floatDuration = (float) (getDuration(lines, i) * timeSignature); // pass the current column
-						note.setType(NoteUtility.getNoteType((float) note.getFloatDuration() / (float) measure.getDivision(), note));
+						note.floatDuration = (float) (getDuration(lines, i + currNote.length() - 1) * timeSignature); // pass
+						note.setType(NoteUtility
+								.getNoteType((float) note.getFloatDuration() / (float) measure.getDivision(), note));
 						System.out.println("fret: " + note.fret + " string: " + note.string + " duration: "
-								+ note.duration + " type: " + note.getType() + " division :" + measure.getDivision()); // for testing																							// testing
-						System.out.println((float) note.getDuration() / (float) measure.getDivision()); 
-						measure.noteList.add(note);
+								+ note.duration + " type: " + note.getType() + " division :" + measure.getDivision()); // for
+																														// testing
+						System.out.println((float) note.getDuration() / (float) measure.getDivision());
+						measure.noteList.add(note); 
 					}
-				}
+				} */
 			}
 		}
 		return measure;
@@ -416,11 +434,11 @@ public class StringParserUtility {
 	public static boolean isNumeric(String str) {
 		return str.matches("-?\\d+(\\.\\d+)?"); // match a number with optional '-' and decimal.
 	}
-	
+
 	public static boolean isLetter(String str) {
 		return str.matches("[a-zA-Z]");
 	}
-	
+
 	public static boolean isDash(String str) {
 		return str.equals("-");
 	}
