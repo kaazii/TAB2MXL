@@ -90,7 +90,7 @@ public class Main2 extends Application{
 	}
 
 	
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) throws Exception {		
 		//System.out.println(getClass().getResource("PrimaryStage.fxml"));
 		Parent root = FXMLLoader.load(getClass().getResource("PrimaryStage.fxml"));
 		
