@@ -7,9 +7,16 @@ public class Note {
 	public Beam beam;
 	
 	public boolean isChord = false; //true if it's a chord
+	public boolean isDotted = false; //true if it's a dotted note
+	public String complexType = "";
+	
+	public boolean isStart;
+	public boolean isStop;
+	
 	public int column; //for chords
 	
 	public int duration;
+	public float floatDuration;;
 	public int octave; 
 	
 	public String step;
@@ -87,6 +94,10 @@ public class Note {
 	
 	public int getDuration() {
 		return duration;
+	}
+	
+	public float getFloatDuration() {
+		return this.floatDuration;
 	}
 	
 }

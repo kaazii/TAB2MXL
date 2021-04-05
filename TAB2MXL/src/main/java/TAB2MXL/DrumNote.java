@@ -38,4 +38,9 @@ public class DrumNote extends Note {
 		this.instrumentName = name;
 	}
 
+	public int getFret() {
+		// TODO Auto-generated method stub
+		return fret;
+	}
+
 }
