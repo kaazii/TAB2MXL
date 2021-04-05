@@ -325,6 +325,12 @@ public class XmlGenerator {
 				e.appendChild(doc.createTextNode(n.type));
 				note.appendChild(e);
 				
+			      // -</dot>
+                if (n.isDotted) {
+                    e = doc.createElement("dot");
+                    note.appendChild(e);
+                }
+				
 				//stem if it's drums
 				if (xutil.includeNoteHead) {
 					DrumNote dn = (DrumNote) n;
