@@ -258,7 +258,6 @@ public class Controller {
 		try {
 			if (file != null) {
 				Scanner fileIn = new Scanner(file);
-				clearMeasureList();
 				if (!textInput.getText().isEmpty()) {
 					textInput.clear();
 				}
@@ -386,6 +385,7 @@ public class Controller {
 		// textInput.setText(parser.stringParse(textInput.getText()));
 		// translateButton.setText("Save");
 		// textInput.setText(stringParse(textInput.getText()));
+		
 		TRANSLATE = translateButton;
 		INPUT = textInput;
 		DELETEBUTTON = deleteButton;
@@ -478,7 +478,6 @@ public class Controller {
 //		Measure.timeBeats = beatType; // Numerator
 //		Measure.timeBeatType = 4; // Denominator
 //		Measure.beatList = beatList;
-		clearMeasureList();
 		if(selected == Type.GUITAR) {
 			System.out.println("Guitar");
 			instrumentName = "GUITAR";
@@ -630,7 +629,6 @@ public class Controller {
 		if (selectAll) {
 			state = 0;
 			deleteButton1.setDisable(true);
-			clearMeasureList();
 			selectAll = false;
 			return;
 
@@ -717,7 +715,6 @@ public class Controller {
 
 		TRANSLATE.setDisable(false);
 		state = 0;
-		clearMeasureList();
 		DELETEBUTTON.setDisable(true);
 		clearCancel.getScene().getWindow().hide();
 	}
@@ -734,7 +731,6 @@ public class Controller {
 		INPUT.setText(previousText);
 		state = 0;
 		DELETEBUTTON.setDisable(true);
-		clearMeasureList();
 		resetCancel.getScene().getWindow().hide();
 		
 	}
