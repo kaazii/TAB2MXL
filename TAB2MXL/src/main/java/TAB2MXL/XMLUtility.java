@@ -9,17 +9,17 @@ public class XMLUtility {
 	String octaveTagString = "octave";
 	String clefSign = "TAB";
 	String clefLine = "5";
-	
+
 	boolean includeStaffDetails = true;
 	boolean includeInstrumentInNote = false;
 	boolean includeNoteHead = false;
 	boolean includeNotations = true;
 	boolean includeBeams = false;
-	
+
 	// DRUMS or GUITAR or BASS
 	public XMLUtility(String instrument) {
 		this.instrument = instrument;
-		
+
 		if (instrument.equals("DRUMS")) {
 			instrument = "DRUMS";
 			this.includeStaffDetails = false;
@@ -33,7 +33,7 @@ public class XMLUtility {
 			this.clefSign = "percussion";
 			this.clefLine = "2";
 		} else if (instrument.equals("BASS")) {
-			
+
 		} else {
 			instrument = "GUITAR";
 			pitchTagString = "pitch";
@@ -41,7 +41,6 @@ public class XMLUtility {
 			octaveTagString = "octave";
 			clefSign = "TAB";
 			clefLine = "5";
-			
 			includeStaffDetails = true;
 			includeInstrumentInNote = false;
 			includeNoteHead = false;
