@@ -7,9 +7,7 @@ package TAB2MXL;
     	public  Note[][] BassNote = new Note[4][13];
     	
     	public  void initialise() {
-    		
     		// for the G string on Bass
-    		
     		BassNote[0][0] = new Note("G", 2, 0, 1);
     		BassNote[0][1] = new Note("G", 2, 1, 1);
     		BassNote[0][2] = new Note("A", 2, 2, 1);
@@ -73,16 +71,5 @@ package TAB2MXL;
     		BassNote[3][10] = new Note("D", 2, 10, 4);
     		BassNote[3][11] = new Note("D", 2, 11, 4);
     		BassNote[3][12] = new Note("E", 2, 12, 4);
-    		
-
-    		
-    		
-    		
-    		
     	}
     }
-
-    
-    
-    
-    
