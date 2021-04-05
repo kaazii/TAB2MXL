@@ -7,7 +7,7 @@ public class Note {
 	public Beam beam;
 	
 	public boolean isChord = false; //true if it's a chord
-	public int column;
+	public int column; //for chords
 	
 	public int duration;
 	public int octave; 
