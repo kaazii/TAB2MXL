@@ -35,6 +35,8 @@ public class XmlGenerator {
 			throw new Exception("Measure List passed into XML generator is empty");
 		}
 		
+		XMLUtility xutil = new XMLUtility(instrumentString);
+		
 		String xmlString = "";
 		
 		try {
@@ -106,9 +108,7 @@ public class XmlGenerator {
 			Measure m = measureList.get(0);
 			Note n = m.getNoteList().get(0);
 			
-			if (n instanceof DrumNote) {
-				// Update XML Util to match instrument
-				XmlGenerator.xutil = new XMLUtility("DRUMS");
+			if (XmlGenerator.xutil.instrument.equals("DRUMS")) {
 				
 				// Add drum instrument list
 				Hashtable<String, String> instrumentList = generateDrumInstruments(measureList);
@@ -127,8 +127,6 @@ public class XmlGenerator {
 					scoreInstrument.appendChild(instrumentName);
 					instrumentName.appendChild(doc.createTextNode(instrumentList.get(id)));
 				}
-			} else if (instrumentString == "BASS") {
-				
 			}
 			// Set part name as the instrument name
 			partName.appendChild(doc.createTextNode(xutil.instrument));
@@ -180,7 +178,6 @@ public class XmlGenerator {
 			DrumNote dn = (DrumNote) note;
 			
 			if (!ht.containsKey(dn.instrumentId)) {
-				// TODO get actual instrument name
 				ht.put(dn.instrumentId, dn.instrumentName);
 			}
 		}
@@ -201,72 +198,70 @@ public class XmlGenerator {
 			measureElem.setAttributeNode(attr);
 			partElement.appendChild(measureElem);
 
-			// fill in attributes for first measure
-			// TODO check if this is correct logic, not sure if only the first measure needs <attributes>
-			if (measureNum == 1) {
-				// <attributes>
-				Element measureAttribute = doc.createElement("attributes");
-				measureElem.appendChild(measureAttribute);
-	
-				// -<divisions>
-				Element e = doc.createElement("divisions");
-				e.appendChild(doc.createTextNode(String.valueOf(m.divisions)));
-				measureAttribute.appendChild(e);
-	
-				// -<Key>
-				Element key = doc.createElement("key");
-				measureAttribute.appendChild(key);
-	
-				// --<fifths>
-				e = doc.createElement("fifths");
-				e.appendChild(doc.createTextNode(XmlGenerator.fifths));
-				key.appendChild(e);
-	
-				// -<time>
-				Element time = doc.createElement("time");
-				measureAttribute.appendChild(time);
-	
-				// --<beats>
-				e = doc.createElement("beats");
-				e.appendChild(doc.createTextNode(String.valueOf(m.timeBeats)));
-				time.appendChild(e);
-	
-				// --<beat-type>
-				e = doc.createElement("beat-type");
-				e.appendChild(doc.createTextNode(String.valueOf(m.timeBeatType)));
-				time.appendChild(e);
-	
-				// -<clef>
-				Element clef = doc.createElement("clef");
-				measureAttribute.appendChild(clef);
-	
+			// fill in attributes ALL measures
+			// <attributes>
+			Element measureAttribute = doc.createElement("attributes");
+			measureElem.appendChild(measureAttribute);
+
+			// -<divisions>
+			Element e = doc.createElement("divisions");
+			e.appendChild(doc.createTextNode(String.valueOf(m.divisions)));
+			measureAttribute.appendChild(e);
+
+			// -<Key>
+			Element key = doc.createElement("key");
+			measureAttribute.appendChild(key);
+
+			// --<fifths>
+			e = doc.createElement("fifths");
+			e.appendChild(doc.createTextNode(XmlGenerator.fifths));
+			key.appendChild(e);
+
+			// -<time>
+			Element time = doc.createElement("time");
+			measureAttribute.appendChild(time);
+
+			// --<beats>
+			e = doc.createElement("beats");
+			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeats)));
+			time.appendChild(e);
+
+			// --<beat-type>
+			e = doc.createElement("beat-type");
+			e.appendChild(doc.createTextNode(String.valueOf(m.timeBeatType)));
+			time.appendChild(e);
+
+			// -<clef>
+			Element clef = doc.createElement("clef");
+			measureAttribute.appendChild(clef);
+
 //				// --<sign>
 //				e = doc.createElement("sign");
 //				e.appendChild(doc.createTextNode(Measure.clefSign));
 //				clef.appendChild(e);
-				
+			
 //				// --<line>
 //				e = doc.createElement("line");
 //				e.appendChild(doc.createTextNode(String.valueOf(m.clefLine)));
 //				clef.appendChild(e);
-				
-				// --<sign>
-				e = doc.createElement("sign");
-				e.appendChild(doc.createTextNode(xutil.clefSign));
-				clef.appendChild(e);
-	
-				// --<line>
-				e = doc.createElement("line");
-				e.appendChild(doc.createTextNode(xutil.clefLine));
-				clef.appendChild(e);
-				
-				// -<staff-details>
-				if (xutil.includeStaffDetails) {
-					Element staffDetails = doc.createElement("staff-details");
-					addGuitarStaffDetails(staffDetails);
-					measureAttribute.appendChild(staffDetails);
-				}
+			
+			// --<sign>
+			e = doc.createElement("sign");
+			e.appendChild(doc.createTextNode(xutil.clefSign));
+			clef.appendChild(e);
+
+			// --<line>
+			e = doc.createElement("line");
+			e.appendChild(doc.createTextNode(xutil.clefLine));
+			clef.appendChild(e);
+			
+			// -<staff-details>
+			if (xutil.includeStaffDetails) {
+				Element staffDetails = doc.createElement("staff-details");
+				addGuitarStaffDetails(staffDetails);
+				measureAttribute.appendChild(staffDetails);
 			}
+			
 			
 			// Barline logic for repeats - LEFT BARLINE
 			if (m.repeatStart && m.repeats > 0) {
@@ -291,7 +286,7 @@ public class XmlGenerator {
 				note.appendChild(pitch);
 
 				// --<step>
-				Element e = doc.createElement(xutil.stepTagString);
+				e = doc.createElement(xutil.stepTagString);
 				e.appendChild(doc.createTextNode(n.step));
 				pitch.appendChild(e);
 

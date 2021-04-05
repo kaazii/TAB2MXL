@@ -225,6 +225,7 @@ public class NoteUtility {
 		} else {
 			type = "whole";
 		}
+		System.out.println("Note type: " + typeAsNum);
 		return type;
 	}
 }

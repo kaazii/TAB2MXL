@@ -22,9 +22,6 @@ public class StringParserUtility {
     }
 	
 	public static ArrayList<Measure> stringParse(String input) throws Exception { // potentially take timeBeatType here
-		String testLines[] = input.split("\\r?\\n\\r?\\n");
-		System.out.println(Arrays.deepToString(testLines));
-		
 		
 		String rawLines[] = input.split("\\r?\\n");
 		String[] lines;
@@ -89,12 +86,16 @@ public class StringParserUtility {
 		if (has_repeats) {
 			fillMeasureRepeats(rawLines);
 		}
+		
+		fillBeams(measureList);
 		return measureList;
 	}
 	
 	// any sequence that adds up to a quarter note, put beams in it
-	public static void fillBeams() {
+	public static void fillBeams(ArrayList<Measure> measureList) {
 		HashMap<String, Float> noteEnum = new HashMap<>();
+		HashMap<String, Integer> noteTypeToBeamNumber = new HashMap<>();
+		
 		noteEnum.put("whole", 1f);
 		noteEnum.put("half", 0.5f);
 		noteEnum.put("quarter", 0.25f);
@@ -103,23 +104,27 @@ public class StringParserUtility {
 		noteEnum.put("32nd", 0.03125f);
 		noteEnum.put("64th", 0.015625f);
 		
-		int beamNumber = 0;
+		noteTypeToBeamNumber = new HashMap<>();
+		noteTypeToBeamNumber.put("eighth", 1);
+		noteTypeToBeamNumber.put("16th", 2);
+		noteTypeToBeamNumber.put("32nd", 3);
+		noteTypeToBeamNumber.put("64th", 4);
 		
+		int beamNumber = 1;
 		for (int i = 0; i < measureList.size(); i++) {
 			int trailer = 0;
 			int leader = 1;
-			
+			float currSum = 0;
 			ArrayList<Note> noteList = measureList.get(i).noteList;
 			while (leader < noteList.size() && trailer != leader) {
-				
 				if (noteEnum.get(noteList.get(leader).type) > 0.125f) {
 					trailer = leader + 1;
 					leader = trailer + 1;
 					continue;
 				}
 				
-				float currSum = 0;
-				for (int j = trailer; i < leader; i++) {
+				
+				for (int j = trailer; j <= leader; j++) {
 					float num = noteEnum.get(noteList.get(j).getType());
 					currSum += num;
 				}
@@ -129,6 +134,7 @@ public class StringParserUtility {
 					if (trailer == leader) {
 						leader++;
 					}
+					currSum = 0;
 					continue;
 					
 				} else if (currSum < 0.25f) {
@@ -137,17 +143,24 @@ public class StringParserUtility {
 				} else {
 					// Beam found
 					// beginning beam
+					System.out.printf("Found a beam from notes <%s>-<%s>\n", trailer, leader);
+					beamNumber = noteTypeToBeamNumber.get(noteList.get(trailer).type);
 					noteList.get(trailer).beam = new Beam(beamNumber, "begin");
 					
 					// middle beams
 					for (int j = trailer + 1; j < leader; j++) {
+						beamNumber = noteTypeToBeamNumber.get(noteList.get(trailer).type);
 						noteList.get(j).beam = new Beam(beamNumber, "continue");
+					}
 					
 					// Ending beam
+					beamNumber = noteTypeToBeamNumber.get(noteList.get(trailer).type);
 					noteList.get(leader).beam = new Beam(beamNumber, "end");	
 					
-					beamNumber++;
-					}	
+					trailer = leader + 1;
+					leader = trailer + 1;
+					currSum = 0;
+					continue;
 				}		
 			}
 		}
@@ -268,7 +281,7 @@ public class StringParserUtility {
 		for (Note note : noteList) {
 			if (currColumn == note.column) {
 				note.isChord = true;
-				System.out.println("fret: " + note.fret + " string: " + note.string + " isChord: " + note.isChord);
+				//System.out.println("fret: " + note.fret + " string: " + note.string + " isChord: " + note.isChord);
 			}
 			else 
 			{
@@ -290,9 +303,9 @@ public class StringParserUtility {
 					Note note = getNote(j, Integer.parseInt(curr));
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); //pass the current column index
-					System.out.println((float) note.getDuration() / (float) measure.getDivision());
+					//System.out.println((float) note.getDuration() / (float) measure.getDivision());
 					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.getDivision()));
-					System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType() + " division :" + measure.getDivision()); // for testing
+					//System.out.println("fret: " + note.fret + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType() + " division :" + measure.getDivision()); // for testing
 					measure.noteList.add(note);
 				}
 			}

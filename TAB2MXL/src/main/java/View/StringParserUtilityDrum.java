@@ -35,7 +35,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 			//System.out.println(splitLines[i][0]); // Prints the first entry of each line/array.. testing
 		}
 		int numMeasures = splitLines[0].length - 1;
-		System.out.println("numMeasures: " + numMeasures); //testing
+		//System.out.println("numMeasures: " + numMeasures); //testing
 		int measureCount = 0;
 		String[] measureArray = new String[numMeasures];
 
@@ -44,14 +44,14 @@ public class StringParserUtilityDrum extends StringParserUtility {
 			for (int i = 0; i < splitLines.length; i++) { // splitlines.length = how many lines there are
 				String currString = splitLines[i][j];
 				measure += currString;
-				System.out.println(currString); //testing
+				//System.out.println(currString); //testing
 				measure += "\n"; //testing
 			}
-			System.out.println(""); //testing
+			//System.out.println(""); //testing
 			measureArray[measureCount] = measure;
 			measureCount++;
 		}
-		System.out.println(Arrays.deepToString(measureArray));
+		//System.out.println(Arrays.deepToString(measureArray));
 		
 		//call measureParser
 		for (int i = 0; i < measureArray.length; i++) {
@@ -72,6 +72,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 		if (has_repeats) {
 			fillMeasureRepeats(rawLines);
 		}
+		fillBeams(measureList);
 		return measureList;
 	}
 	
@@ -94,7 +95,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); //pass the current column index
 					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.divisions));
-					System.out.println("instrument " + instrument + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
+					//System.out.println("instrument " + instrument + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType()); // for testing
 					measure.noteList.add(note);
 				}
 			}
