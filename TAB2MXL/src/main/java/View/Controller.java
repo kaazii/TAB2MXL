@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,28 +14,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import TAB2MXL.Measure;
-import TAB2MXL.Note;
 import TAB2MXL.XmlGenerator;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioMenuItem;
@@ -46,7 +34,6 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -55,7 +42,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -865,48 +851,49 @@ public class Controller {
 	// Checks for illegal characters in the input
 
 	public boolean isInvalid() {
-		// final String NEW_LINE = System.getProperty("line.separator");
-		boolean illegalChar = false;
-		// store the text tab
-
-		String tempInput = cleanup(INPUT.getText());
-		// string containing all possible characters for the text tab for all 3
-		// instruments
-
-		String validChars = "0123456789-|EADGBECHSTMxgmaoshp[]*";
-
-		// must be same length
-		String[] splitInput = tempInput.split("\\r?\\n\\r?\\n");
-
-		if (splitInput.length == 0)
-			return true;
-		for (int i = 0; i < splitInput.length; i++) {
-			String[] splitLines = splitInput[i].split("\\r?\\n");
-			if (splitLines.length == 0)
-				return true;
-			int length = splitLines[0].length();
-			for (int j = 1; j < splitLines.length; j++) {
-				if (splitLines[j].length() != length)
-					return true;
-			}
-
-		}
-		// remove new line from the string(the contains method wasn't working properly
-		// otherwise)
-
-		tempInput = tempInput.replace("\n", "").replace("\r", "");
-		// compare each character in the tempInput string with validChars
-		for (int i = 0; i < tempInput.length(); i++) {
-			if (!(validChars.contains(Character.toString(tempInput.charAt(i))))) {
-				System.out.println(tempInput.charAt(i) + " did not match");
-				// set to true if illegal character found
-				illegalChar = true;
-			}
-		}
-
-		return illegalChar;
-		// if(INPUT.getText().startsWith("s")) return true;
-		// return false;
+//		// final String NEW_LINE = System.getProperty("line.separator");
+//		boolean illegalChar = false;
+//		// store the text tab
+//
+//		String tempInput = cleanup(INPUT.getText());
+//		// string containing all possible characters for the text tab for all 3
+//		// instruments
+//
+//		String validChars = "0123456789-|EADGBECHSTMxgmaoshp[]*XREPEAT";
+//
+//		// must be same length
+//		String[] splitInput = tempInput.split("\\r?\\n\\r?\\n");
+//
+//		if (splitInput.length == 0)
+//			return true;
+//		for (int i = 0; i < splitInput.length; i++) {
+//			String[] splitLines = splitInput[i].split("\\r?\\n");
+//			if (splitLines.length == 0)
+//				return true;
+//			int length = splitLines[0].length();
+//			for (int j = 1; j < splitLines.length; j++) {
+//				if (splitLines[j].length() != length)
+//					return true;
+//			}
+//
+//		}
+//		// remove new line from the string(the contains method wasn't working properly
+//		// otherwise)
+//
+//		tempInput = tempInput.replace("\n", "").replace("\r", "");
+//		// compare each character in the tempInput string with validChars
+//		for (int i = 0; i < tempInput.length(); i++) {
+//			if (!(validChars.contains(Character.toString(tempInput.charAt(i))))) {
+//				System.out.println(tempInput.charAt(i) + " did not match");
+//				// set to true if illegal character found
+//				illegalChar = true;
+//			}
+//		}
+//
+//		return illegalChar;
+//		// if(INPUT.getText().startsWith("s")) return true;
+//		// return false;
+		return false;
 	}
 
 	// ------------hover helper---------------
