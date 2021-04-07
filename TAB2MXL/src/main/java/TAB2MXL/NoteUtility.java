@@ -3,32 +3,28 @@ package TAB2MXL;
 import java.util.HashMap;
 import java.util.Map;
 
-import TAB2MXL.Note;
-
 public class NoteUtility {
 
-	public  Note[][] guitarNote = new Note[6][25];
+	public Note[][] guitarNote = new Note[6][25];
 	public Map<String, Note> drumNotes = new HashMap<>();
 
-	
 	public void initializeDrum() {
-		//Bass Drum
+		// Bass Drum
 		drumNotes.put("BD", new DrumNote("F", 4, "P1-I36", "Bass Drum 1"));
-		//Snare Drum
+		// Snare Drum
 		drumNotes.put("SD", new DrumNote("C", 5, "P1-I39", "Snare"));
 		// Hi-Hat
 		drumNotes.put("HH", new DrumNote("G", 5, "P1-I47", "Open Hi Hat"));
 		drumNotes.put("HHx", new DrumNote("G", 5, "P1-I43", "Closed Hi Hat"));
-		//Low Tom
-		//drumNotes.put("MT", new DrumNote("D", 5, "P1-I46"));
+		// Low Tom
+		// drumNotes.put("MT", new DrumNote("D", 5, "P1-I46"));
 		drumNotes.put("RC", new DrumNote("F", 5, "P1-I52", "Ride Cymbal 1"));
 		drumNotes.put("CC", new DrumNote("A", 5, "P1-I50", "Crash Cymbal 1"));
 		drumNotes.put("HT", new DrumNote("E", 5, "P1-I48", "Low-Mid Tom"));
 		drumNotes.put("MT", new DrumNote("D", 5, "P1-I46", "Low Tom"));
 		drumNotes.put("FT", new DrumNote("A", 4, "P1-I42", "Low Floor Tom"));
 	}
-	
-	
+
 	public void initialise() {
 
 		// for the E string on guitar
@@ -195,66 +191,46 @@ public class NoteUtility {
 		guitarNote[5][23] = new Note("D", 4, 23, 6);
 		guitarNote[5][24] = new Note("E", 4, 24, 6);
 	}
-	
-	public static String getNoteType(float typeAsNum, Note note) { //maybe convert to map if we have time later
+
+	public static String getNoteType(float typeAsNum, Note note) { // maybe convert to map if we have time later
 		String type = "";
 		if (Float.compare(typeAsNum, 1f) == 0) {
 			type = "whole";
-		}
-		else if (Float.compare(typeAsNum, 0.5f) == 0) {
+		} else if (Float.compare(typeAsNum, 0.5f) == 0) {
 			type = "half";
-		}
-		else if (Float.compare(typeAsNum, 0.25f) == 0)
-		{
+		} else if (Float.compare(typeAsNum, 0.25f) == 0) {
 			type = "quarter";
-		}
-		else if (Float.compare(typeAsNum, 0.125f) == 0) {
+		} else if (Float.compare(typeAsNum, 0.125f) == 0) {
 			type = "eighth";
-		}
-		else if (Float.compare(typeAsNum, 0.0625f) == 0) {
+		} else if (Float.compare(typeAsNum, 0.0625f) == 0) {
 			type = "16th";
-		}
-		else if (Float.compare(typeAsNum, 0.03125f) == 0)
-		{
+		} else if (Float.compare(typeAsNum, 0.03125f) == 0) {
 			type = "32nd";
-		}
-		else if (Float.compare(typeAsNum, 0.015625f) == 0)
-		{
+		} else if (Float.compare(typeAsNum, 0.015625f) == 0) {
 			type = "64th";
-		} 
-		else if (Float.compare(typeAsNum, 1.5f) == 0) {
+		} else if (Float.compare(typeAsNum, 1.5f) == 0) {
 			type = "whole";
 			note.isDotted = true;
-		}
-		else if (Float.compare(typeAsNum, 0.75f) == 0) {
+		} else if (Float.compare(typeAsNum, 0.75f) == 0) {
 			type = "half";
 			note.isDotted = true;
-		}
-		else if (Float.compare(typeAsNum, 0.375f) == 0)
-		{
+		} else if (Float.compare(typeAsNum, 0.375f) == 0) {
 			type = "quarter";
 			note.isDotted = true;
-		}
-		else if (Float.compare(typeAsNum, 0.1875f) == 0) {
+		} else if (Float.compare(typeAsNum, 0.1875f) == 0) {
 			type = "eighth";
 			note.isDotted = true;
-		}
-		else if (Float.compare(typeAsNum, 0.09375f) == 0) {
+		} else if (Float.compare(typeAsNum, 0.09375f) == 0) {
 			type = "16th";
 			note.isDotted = true;
-		}
-		else if (Float.compare(typeAsNum, 0.046875f) == 0)
-		{
+		} else if (Float.compare(typeAsNum, 0.046875f) == 0) {
 			type = "32nd";
 			note.isDotted = true;
-		}
-		else if (Float.compare(typeAsNum, 0.0234375f) == 0)
-		{
+		} else if (Float.compare(typeAsNum, 0.0234375f) == 0) {
 			type = "64th";
 			note.isDotted = true;
-		} 
-		else {
-			type = "null";
+		} else {
+			type = "Note not found";
 		}
 		note.duration = (int) (note.getFloatDuration() * 4);
 		return type;
