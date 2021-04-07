@@ -12,6 +12,8 @@ import javafx.util.Pair;
 
 public class StringParserUtilityDrum extends StringParserUtility {
 	
+	static Map<Integer, Pair<Integer, Integer>> timeList = Controller.beatList;
+	
 	public static ArrayList<Measure> stringParse(String rawInput) throws Exception{ // potentially take timeBeatType here
 		String measureGroups[] = rawInput.split("\\r?\\n\\r?\\n");
 
@@ -57,15 +59,15 @@ public class StringParserUtilityDrum extends StringParserUtility {
 
 			for (int i = 0; i < measureArray.length; i++) {
 				measureList.add(measureParser(measureArray[i], splitLines));
-				setChord(measureList.get(measureIndex).getNoteList());
 				measureList.get(measureIndex).measureNumber = globalMeasureNumber++;
 				measureList.get(measureIndex).setTimeSignature(Controller.nume);
+				setChord(measureList.get(measureIndex).getNoteList());
 
-				Map<Integer, Pair<Integer, Integer>> timeList = Controller.beatList;
+				/*
 				if(timeList.containsKey(measureList.get(measureIndex).measureNumber)) {
 					//only passing on the numerator for now
 					measureList.get(measureIndex).setTimeSignature(timeList.get(measureList.get(measureIndex).measureNumber).getKey());
-				}
+				} */
 				measureIndex++;
 			}
 
@@ -74,7 +76,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				fillMeasureRepeats(rawLines);
 			}
 		}
-		fillBeams(measureList);
+		//fillBeams(measureList); needs to be re coded
 		return measureList;
 	}
 	
