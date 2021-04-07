@@ -253,7 +253,7 @@ public class NoteUtility {
 			type = "64th";
 			note.isDotted = true;
 		} 
-		else {
+		else { 
 			type = "null";
 		}
 		note.duration = (int) (note.getFloatDuration() * 4);

@@ -472,7 +472,7 @@ public class StringParserUtility {
 		for (int i = column + 1; i <= lines[0].length() - 1; i++) { // i are the columns
 			for (int j = 0; j < lines.length; j++) { // j are the rows
 				String curr = lines[j].substring(i, i + 1);
-				if (isNumeric(curr)) { // does this work once we get holding/pulling?
+				if (!(curr.equals("-"))) { // does this work once we get holding/pulling?, replace this with isNumeric
 					return duration;
 				}
 			}
