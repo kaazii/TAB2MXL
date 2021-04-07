@@ -9,5 +9,4 @@ public class Beam {
 		this.number = number;
 		this.state = state;
 	}
-
 }
