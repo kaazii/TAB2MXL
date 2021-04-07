@@ -63,11 +63,11 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				measureList.get(measureIndex).setTimeSignature(Controller.nume);
 				setChord(measureList.get(measureIndex).getNoteList());
 
-				/*
+				
 				if(timeList.containsKey(measureList.get(measureIndex).measureNumber)) {
 					//only passing on the numerator for now
 					measureList.get(measureIndex).setTimeSignature(timeList.get(measureList.get(measureIndex).measureNumber).getKey());
-				} */
+				} 
 				measureIndex++;
 			}
 
@@ -97,9 +97,10 @@ public class StringParserUtilityDrum extends StringParserUtility {
 					if(instrument.equals("HH")) note = getNote("HHx");
 					if(curr.equals("x")) ((DrumNote) note).setNotehead("x");
 					note.setColumn(i);
+					
 					note.duration = getDuration(lines, i); //pass the current column index
-					note.floatDuration = note.duration / (float) 4;
-
+					note.floatDuration = note.duration / 4f;
+					
 					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.divisions, note));
 					System.out.println("instrument " + instrument + " string: " + note.string + " duration: " + note.duration + " type: " + note.getType() + " division :" + measure.divisions); // for testing
 					measure.noteList.add(note);
