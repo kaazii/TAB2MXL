@@ -26,9 +26,13 @@ public class StringParserUtilityDrum extends StringParserUtility {
 			String[] lines;
 			// Change all instances of || into |; will parse repeats separately
 			boolean has_repeats = false;
+			boolean has_repeats_above = false;
 			if (rawLines[0].matches(".*\\|\\|.*")) {
 				lines = convertRepeatsToNormal(rawLines);
 				has_repeats = true;
+			} else if (rawLines[0].matches(".+REPEAT.+")) {
+				lines = convertRepeatsToNormalRepeatsAbove(rawLines);
+				has_repeats_above = true;
 			} else {
 				lines = rawLines;
 			}
@@ -80,6 +84,8 @@ public class StringParserUtilityDrum extends StringParserUtility {
 			// Set measure repeats, if any
 			if (has_repeats) {
 				fillMeasureRepeats(rawLines);
+			} else if (has_repeats_above) {
+				fillMeasureRepeatsRepeatsAbove(rawLines);
 			}
 		}
 		fillBeams(measureList);
