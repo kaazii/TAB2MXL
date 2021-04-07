@@ -257,7 +257,6 @@ public class NoteUtility {
 			type = "null";
 		}
 		note.duration = (int) (note.getFloatDuration() * 4);
-		System.out.println("Note type: " + typeAsNum);
 		return type;
 	}
 }

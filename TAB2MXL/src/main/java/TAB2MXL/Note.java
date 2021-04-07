@@ -8,10 +8,12 @@ public class Note {
 	
 	public boolean isChord = false; //true if it's a chord
 	public boolean isDotted = false; //true if it's a dotted note
-	public String complexType = "";
+	public boolean isHarmonic = false; //true if it's a harmonic
+
+	public String startOrStop = ""; //either "start" or "stop"
+	public String complexType = ""; // h, s or p
 	
-	public boolean isStart;
-	public boolean isStop;
+	public int complexTypeNumber;
 	
 	public int column; //for chords
 	
@@ -102,4 +104,11 @@ public class Note {
 		return this.floatDuration;
 	}
 	
+	public void start() {
+		this.startOrStop = "start";
+	}
+	
+	public void stop() {
+		this.startOrStop = "stop";
+	}
 }
