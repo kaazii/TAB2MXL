@@ -1,11 +1,10 @@
 package View;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Stack;
 
 import TAB2MXL.Beam;
 import TAB2MXL.Measure;
@@ -81,6 +80,7 @@ public class StringParserUtility {
 			if (has_repeats) {
 				fillMeasureRepeats(rawLines);
 			}
+
 		}
 		// fillBeams(measureList);
 		return measureList;
@@ -89,8 +89,7 @@ public class StringParserUtility {
 	// any sequence that adds up to a quarter note, put beams in it
 	public static void fillBeams(ArrayList<Measure> measureList) {
 		HashMap<String, Float> noteEnum = new HashMap<>();
-		HashMap<String, Integer> noteTypeToBeamNumber = new HashMap<>();
-
+		HashMap<String, Integer> beamNumberGuide = new HashMap<>();
 		noteEnum.put("whole", 1f);
 		noteEnum.put("half", 0.5f);
 		noteEnum.put("quarter", 0.25f);
@@ -99,65 +98,122 @@ public class StringParserUtility {
 		noteEnum.put("32nd", 0.03125f);
 		noteEnum.put("64th", 0.015625f);
 
-		noteTypeToBeamNumber = new HashMap<>();
-		noteTypeToBeamNumber.put("eighth", 1);
-		noteTypeToBeamNumber.put("16th", 2);
-		noteTypeToBeamNumber.put("32nd", 3);
-		noteTypeToBeamNumber.put("64th", 4);
+		beamNumberGuide.put("eighth", 1);
+		beamNumberGuide.put("16th", 2);
+		beamNumberGuide.put("32nd", 3);
+		beamNumberGuide.put("64th", 4);
 
 		int beamNumber = 1;
 		for (int i = 0; i < measureList.size(); i++) {
 			int trailer = 0;
 			int leader = 1;
 			float currSum = 0;
-			ArrayList<Note> noteList = measureList.get(i).noteList;
-			while (leader < noteList.size() && trailer != leader)
-				if (noteEnum.get(noteList.get(leader).type) > 0.125f) {
+			ArrayList<Note> noteList = getNoteListToBeam(measureList.get(i).noteList);
+
+			while (leader < noteList.size() && trailer != leader) {
+				currSum = 0;
+				if (noteEnum.get(noteList.get(leader).type) > noteEnum.get("eighth")) {
 					trailer = leader + 1;
 					leader = trailer + 1;
 					continue;
 				}
 
-			for (int j = trailer; j <= leader; j++) {
+				for (int j = trailer; j <= leader; j++) {
+					float num = noteEnum.get(noteList.get(j).getType());
+					currSum += num;
+				}
 
-				float num = noteEnum.get(noteList.get(j).getType());
-				currSum += num;
-			}
+				if (currSum > noteEnum.get("quarter")) {
+					trailer++;
+					if (trailer == leader) {
+						leader++;
+					}
+					continue;
 
-			if (currSum > 0.25f) {
-				trailer++;
-				if (trailer == leader) {
+				} else if (currSum < noteEnum.get("quarter")) {
 					leader++;
+					continue;
+				} else {
+					// Beam found
+					// beginning beam
+					System.out.printf("Found a beam from notes <%s>-<%s> in Measure <%s>\n", trailer, leader, i);
+					ArrayList<Integer> beamRange = new ArrayList<Integer>();
+
+					beamNumber = beamNumberGuide.get(noteList.get(trailer).type);
+					beamRange.add(beamNumber);
+
+					if (beamNumber > 1) {
+						System.out.println("Beam range > 1. Adding ");
+						for (int newBeamRange = 1; newBeamRange < beamNumber; newBeamRange++) {
+							System.out.print(newBeamRange + ",");
+							beamRange.add(newBeamRange);
+						}
+						Collections.sort(beamRange);
+					}
+
+					// Begin all beam(s)
+					for (int b : beamRange) {
+						System.out.println("Beginning beam " + b);
+						noteList.get(trailer).beamList.add(new Beam(b, "begin"));
+					}
+
+					// middle beams
+					for (int j = trailer + 1; j < leader; j++) {
+						beamNumber = beamNumberGuide.get(noteList.get(trailer).type);
+
+						if (!beamRange.contains(beamNumber)) { // new beam number introduced
+
+							for (int b : beamRange) {
+								noteList.get(j).beamList.add(new Beam(b, "continue"));
+							}
+
+							beamRange.add(beamNumber);
+							Collections.sort(beamRange);
+							noteList.get(j).beamList.add(new Beam(beamNumber, "begin"));
+						} else { // no new numbers introduced, continue everything
+							for (int b : beamRange) {
+								noteList.get(j).beamList.add(new Beam(b, "continue"));
+							}
+						}
+					}
+
+					// Ending beam
+					beamNumber = beamNumberGuide.get(noteList.get(trailer).type);
+
+					for (int b : beamRange) {
+						noteList.get(leader).beamList.add(new Beam(b, "end"));
+					}
+
+					trailer = leader + 1;
+					leader = trailer + 1;
 				}
-				currSum = 0;
-				continue;
-
-			} else if (currSum < 0.25f) {
-				leader++;
-				continue;
-			} else {
-				// Beam found
-				// beginning beam
-				System.out.printf("Found a beam from notes <%s>-<%s>\n", trailer, leader);
-				beamNumber = noteTypeToBeamNumber.get(noteList.get(trailer).type);
-				noteList.get(trailer).beam = new Beam(beamNumber, "begin");
-
-				// middle beams
-				for (int j = trailer + 1; j < leader; j++) {
-					beamNumber = noteTypeToBeamNumber.get(noteList.get(trailer).type);
-					noteList.get(j).beam = new Beam(beamNumber, "continue");
-				}
-
-				// Ending beam
-				beamNumber = noteTypeToBeamNumber.get(noteList.get(trailer).type);
-				noteList.get(leader).beam = new Beam(beamNumber, "end");
-
-				trailer = leader + 1;
-				leader = trailer + 1;
-				currSum = 0;
-				continue;
 			}
 		}
+	}
+
+	public static ArrayList<Note> getNoteListToBeam(ArrayList<Note> noteList) {
+		ArrayList<Note> noteListToBeam = new ArrayList<Note>();
+
+		int currColumn = -1;
+		boolean hitChord = false;
+		for (int j = 0; j < noteList.size(); j++) {
+			Note n = noteList.get(j);
+
+			// New note in new column
+			if (n.column != currColumn) {
+				hitChord = false;
+				currColumn = n.column;
+				noteListToBeam.add(n);
+			}
+
+			if (hitChord && n.isChord) {
+				continue;
+			} else if (n.isChord) {
+				hitChord = true;
+			}
+		}
+
+		return noteListToBeam;
 	}
 
 	public static void fillMeasureRepeats(String[] lines) throws Exception {
@@ -322,7 +378,6 @@ public class StringParserUtility {
 		for (int i = 0; i < lines[0].length() - 1; i++) { // i are the columns
 			for (int j = 0; j < lines.length; j++) { // j are the rows
 				String curr = lines[j].substring(i, i + 1); // this is the current character that we are parsing
-
 				if (i > 0) {
 					String prev = lines[j].substring(i - 1, i);
 					if (isNumeric(curr)) {
@@ -331,38 +386,33 @@ public class StringParserUtility {
 						if (isDash(prev)) {
 							if (isNumeric(currNote)) { // double or single
 								parsingFunction(currNote, lines, measure, i, j, timeSignature, false);
-							} 
-							else if (currNote.matches("^\\d{1,2}[psh]{1}\\d{1,2}$")) {
+							} else if (currNote.matches("^\\d{1,2}[psh]{1}\\d{1,2}$")) {
 								String complexType = currNote.replaceAll("\\d", ""); // only left with p, h, or s
 								String[] noteSplit = currNote.split(complexType); // 13p15 -> p , s , h
 
 								parsingFunctionComplex(noteSplit, lines, measure, i, j, timeSignature, complexType);
 							}
 						}
-					} 
-					else if (curr.equals("[")) {
+					} else if (curr.equals("[")) {
 						int index = lines[j].indexOf("]", i);
 						String currNote = lines[j].substring(i + 1, index);
 						parsingFunction(currNote, lines, measure, i + 1, j, timeSignature, true);
 					}
-				} 
-				else if (i == 0) {
+				} else if (i == 0) {
 					if (isNumeric(curr)) {
 						int index = lines[j].indexOf("-", i);
 						String currNote = lines[j].substring(i, index);
 						if (isNumeric(currNote)) {
 							if (isNumeric(currNote)) { // if i == 0
 								parsingFunction(currNote, lines, measure, i, j, timeSignature, false);
-							}
-							else if (currNote.matches("^\\d{1,2}[psh]{1}\\d{1,2}$")) { //
+							} else if (currNote.matches("^\\d{1,2}[psh]{1}\\d{1,2}$")) { //
 								String[] noteSplit = currNote.split("^[hps]$");
 								String complexType = currNote.replaceAll("\\d", ""); // only left with p, h, or s
 
 								parsingFunctionComplex(noteSplit, lines, measure, i, j, timeSignature, complexType);
 							}
-						} 
-					}
-					else if (curr.equals("[")) {
+						}
+					} else if (curr.equals("[")) {
 						int index = lines[j].indexOf("]", i);
 						String currNote = lines[j].substring(i + 1, index);
 						parsingFunction(currNote, lines, measure, i + 1, j, timeSignature, true);
@@ -378,7 +428,7 @@ public class StringParserUtility {
 		System.out.println("currNote :" + currNote);
 		Note note = getNote(j, Integer.parseInt(currNote));
 		note.setColumn(i + currNote.length() - 1); // index
-
+		note.stem = "up";
 		note.floatDuration = (float) (getDuration(lines, i + currNote.length() - 1) * timeSignature); // pass the
 		// current
 		// column
@@ -398,6 +448,8 @@ public class StringParserUtility {
 
 		Note firstNote = getNote(j, Integer.parseInt(firstNoteString));
 		Note secondNote = getNote(j, Integer.parseInt(secondNoteString));
+		firstNote.stem = "up";
+		secondNote.stem = "up";
 
 		firstNote.complexType = complexType;
 		secondNote.complexType = complexType;
