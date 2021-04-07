@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class DrumNote extends Note {
 	public String notehead;
 	public String instrumentId;
-	public String stem;
 	public String instrumentName;
 	
 
