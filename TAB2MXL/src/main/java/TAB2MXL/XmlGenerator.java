@@ -361,6 +361,80 @@ public class XmlGenerator {
 					Element technical = doc.createElement("technical");
 					notations.appendChild(technical);
 
+					// <hammer-on> / <pull-off>
+					if (n.complexType != "") {
+						String complexTypeString;
+						String complexType = n.complexType.toUpperCase();
+
+						if (complexType.equals("H")) {
+							complexTypeString = "hammer-on";
+						} else if (complexType.equals("P")) {
+							complexTypeString = "pull-off";
+						} else if (complexType.equals("S")) {
+							complexTypeString = "slide";
+						} else {
+							complexTypeString = "complexTypeStringNotFound";
+						}
+
+						if (complexTypeString == "slide") {
+							e = doc.createElement(complexTypeString);
+
+							attr = doc.createAttribute("line-type");
+							attr.setValue("solid");
+							e.setAttributeNode(attr);
+
+							attr = doc.createAttribute("number");
+							attr.setValue(String.valueOf(n.complexTypeNumber));
+							e.setAttributeNode(attr);
+
+							notations.appendChild(e);
+						} else {
+							e = doc.createElement(complexTypeString);
+							e.appendChild(doc.createTextNode(complexType));
+
+							attr = doc.createAttribute("number");
+							attr.setValue(String.valueOf(n.complexTypeNumber));
+							e.setAttributeNode(attr);
+
+							attr = doc.createAttribute("type");
+							attr.setValue(n.startOrStop);
+							e.setAttributeNode(attr);
+
+							technical.appendChild(e);
+
+							// <slur>
+							e = doc.createElement("slur");
+							attr = doc.createAttribute("number");
+							attr.setValue(String.valueOf(n.complexTypeNumber));
+							e.setAttributeNode(attr);
+
+							attr = doc.createAttribute("placement");
+							attr.setValue("above");
+							e.setAttributeNode(attr);
+
+							attr = doc.createAttribute("type");
+							attr.setValue(n.startOrStop);
+							e.setAttributeNode(attr);
+
+							notations.appendChild(e);
+						}
+					}
+
+					// <harmonic>
+					if (n.isHarmonic) {
+						e = doc.createElement("harmonic");
+
+						attr = doc.createAttribute("placement");
+						attr.setValue("above");
+						e.setAttributeNode(attr);
+
+						attr = doc.createAttribute("print-object");
+						attr.setValue("yes");
+						e.setAttributeNode(attr);
+
+						technical.appendChild(e);
+					}
+
 					// --<string>
 					e = doc.createElement("string");
 					e.appendChild(doc.createTextNode(String.valueOf(n.string)));
