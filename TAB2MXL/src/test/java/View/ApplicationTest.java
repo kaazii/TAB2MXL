@@ -4,14 +4,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 
+import org.hamcrest.Matcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
+import org.testfx.assertions.api.StyleableAssert;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
+import org.testfx.matcher.base.StyleableMatchers;
 import org.testfx.matcher.control.LabeledMatchers;
 
 import javafx.fxml.FXMLLoader;
@@ -78,6 +81,17 @@ class ApplicationTest {
 //		robot.clickOn("#deleteButton");
 //		FxAssert.verifyThat("#saveButton",NodeMatchers.isDisabled());
 //		FxAssert.verifyThat("#translateButton",NodeMatchers.isDisabled());
+//	}
+	
+	@Test
+	void fileButtonEnabled(FxRobot robot) {
+		FxAssert.verifyThat("#fileButton", NodeMatchers.isEnabled());
+	}
+//	
+//	@Test
+//	void testInstrumentButton(FxRobot robot) {
+//		robot.clickOn("#bassButton");
+//		StyleableAssert.assertThat("#bassButton", StyleableMatchers.hasStyle("-fx-font-size: 20;\r\n" + "-fx-background-color: transparent;\r\n" + "-fx-text-fill: #828F9C;"));
 //	}
 
 

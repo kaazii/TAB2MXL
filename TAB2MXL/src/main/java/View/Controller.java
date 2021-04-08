@@ -1014,7 +1014,7 @@ public class Controller {
 			if((!lines[i].contains("-") || !lines[i].contains("|")) && !lines[i].equals("\\r?\\n")) {
 				
 				t.setStrikethrough(true);
-				t.setFill(Color.RED);
+				t.setFill(Color.DARKGREY);
 				
 			}
 			displayText.getChildren().add(t);
