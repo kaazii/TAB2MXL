@@ -136,11 +136,11 @@ public class Controller {
 	boolean selectAll;
 	public static int state = 0;// 0 untraslated, 1 translated
 	// ----------------------------------------//
-	
-	//---------------Time Signature List --------//
+
+	// ---------------Time Signature List --------//
 	@FXML
 	VBox timeList;
-	public static Map<Integer, Pair<Integer,Integer>> beatList = new HashMap<>();
+	public static Map<Integer, Pair<Integer, Integer>> beatList = new HashMap<>();
 	@FXML
 	Button plus;
 	List<TimeHBOX> hboxList = new ArrayList<>();
@@ -148,37 +148,35 @@ public class Controller {
 	TextField numeText;
 	@FXML
 	TextField denoText;
-	//------------------------------------------//
+	// ------------------------------------------//
 
 	public static int nume = 4;
 	public static int deno = 4;
 	public static String previousText;
-	
-	//---------------invalid model--------------//
+
+	// ---------------invalid model--------------//
 	@FXML
 	Label warning;
 	@FXML
 	Button modalConfirm;
-	
-	//---------------composer and title---------//
+
+	// ---------------composer and title---------//
 	public static String COMPOSER = "";
 	public static String TITLE = "";
 	@FXML
 	TextField composerField;
-	
+
 	@FXML
 	TextField titleField;
-	
-	//-----------------validation Display--------
+
+	// -----------------validation Display--------
 	@FXML
 	TextFlow displayText;
-	
-	
-	//-------------------instrument popup---------
+
+	// -------------------instrument popup---------
 	@FXML
 	Button instrumentConfirm;
 	public static CheckBox AUTO;
-	
 
 //	public void intialize() {
 //		translateButton.disableProperty().bind(textInput.textProperty().isEmpty());
@@ -254,7 +252,7 @@ public class Controller {
 
 	private void putString() {
 		state = 0;
-		
+
 		try {
 			if (file != null) {
 				Scanner fileIn = new Scanner(file);
@@ -269,7 +267,7 @@ public class Controller {
 //					translateButton.setText("Translate");
 //				}
 				if (translateButton.isDisable()) {
-					
+
 					translateButton.setDisable(false);
 				}
 				if (autoDetect.isSelected()) {
@@ -293,7 +291,7 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Confirm Restart");
 			popup.setScene(new Scene(root, 322, 140));
-			popup.setOnHidden(e->{
+			popup.setOnHidden(e -> {
 				popup.close();
 			});
 			popup.show();
@@ -373,41 +371,38 @@ public class Controller {
 	}
 
 	public void translate() {
-		
-		
+
 		// beatsChoice.setItems(beatOptions);
 		// beatsChoice.setItems(beatOptions);
 		// beatsChoice.setValue("Beats");
-		
-		
+
 		// translated text goes here
 		// textInput.setText(parser.checkTabType(textInput.getText())); //for Amer
 		// textInput.setText(parser.stringParse(textInput.getText()));
 		// translateButton.setText("Save");
 		// textInput.setText(stringParse(textInput.getText()));
-		
+
 		TRANSLATE = translateButton;
 		INPUT = textInput;
 		DELETEBUTTON = deleteButton;
 		AUTO = autoDetect;
 		clearMeasureList();
-		if(!cleanup(INPUT.getText()).replace("\n", "").replace("\r", "").equals(INPUT.getText().replace("\n", "").replace("\r", ""))) {
+		if (!cleanup(INPUT.getText()).replace("\n", "").replace("\r", "")
+				.equals(INPUT.getText().replace("\n", "").replace("\r", ""))) {
 			checker();
 			System.out.println(cleanup(INPUT.getText()));
-		}
-		else if(isInvalid()) {
+		} else if (isInvalid()) {
 			showInvalid();
-		}
-		else if(AUTO.isSelected()&&!detect(cleanup(INPUT.getText()))) return;
+		} else if (AUTO.isSelected() && !detect(cleanup(INPUT.getText())))
+			return;
 		else {
-			
+
 			openOption();
 
 		}
-		
 
 	}
-	
+
 	private void openOption() {
 		Parent root;
 		try {
@@ -416,7 +411,7 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Tranlation Options");
 			popup.setScene(new Scene(root, 360, 356));
-			popup.setOnHidden(e->{
+			popup.setOnHidden(e -> {
 				popup.close();
 			});
 			popup.setResizable(false);
@@ -426,15 +421,14 @@ public class Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public boolean detect(String input) {
-		//return true if detected
+		// return true if detected
 
 		String[] splitInput = input.split("\\r?\\n\\r?\\n");
-		
-		
+
 		String lines[] = splitInput[0].split("\\r?\\n");
 
 		// for error testing
@@ -444,32 +438,29 @@ public class Controller {
 //		System.out.println(lines.length);
 
 		// basic checks
-		if ((lines[0].toUpperCase().startsWith("E") || (lines.length == 6)) && !lines[0].contains("o") && !lines[0].contains("x")) {
-			//System.out.println("This is a guitar"); // testing
+		if ((lines[0].toUpperCase().startsWith("E") || (lines.length == 6)) && !lines[0].contains("o")
+				&& !lines[0].contains("x")) {
+			// System.out.println("This is a guitar"); // testing
 			guitarButtonClicked();
 			/*
 			 * Guitar
 			 */
 
-		}
-		else if (lines[0].toUpperCase().startsWith("G") && (lines.length == 5 || lines.length == 4) && !lines[0].contains("o") && !lines[0].contains("x")) {
-			//System.out.println("This is a bass"); // testing
+		} else if (lines[0].toUpperCase().startsWith("G") && (lines.length == 5 || lines.length == 4)
+				&& !lines[0].contains("o") && !lines[0].contains("x")) {
+			// System.out.println("This is a bass"); // testing
 			bassButtonClicked();
 			// Bass
-		}
-		else if (lines[0].contains("x") || lines[0].contains("o")) {
-			//System.out.println("This is a drum"); // testing
+		} else if (lines[0].contains("x") || lines[0].contains("o")) {
+			// System.out.println("This is a drum"); // testing
 			drumButtonClicked();
 			// Drum
-		}
-		else {
+		} else {
 			showNotDetected();
 			return false;
 		}
 		return true;
 	}
-
-	
 
 	private String XMLGenerate() throws Exception { // Pass parsing to here
 		// TODO pass in the MEASURE list to XmlGenerator
@@ -479,18 +470,17 @@ public class Controller {
 //		Measure.timeBeats = beatType; // Numerator
 //		Measure.timeBeatType = 4; // Denominator
 //		Measure.beatList = beatList;
-		if(selected == Type.GUITAR) {
+		if (selected == Type.GUITAR) {
 			System.out.println("Guitar");
 			instrumentName = "GUITAR";
 			try {
-				
+
 				myList = StringParserUtility.stringParse(cleanup(INPUT.getText()));
 			} catch (Exception e) {
 				// TODO error handle here
 				error(e);
 			}
-		}
-		else if(selected == Type.BASS) {
+		} else if (selected == Type.BASS) {
 			System.out.println("Bass");
 			instrumentName = "BASS";
 			try {
@@ -499,25 +489,21 @@ public class Controller {
 				// TODO error handle here
 				error(e);
 			}
-		}
-		else if(selected == Type.DRUM){
+		} else if (selected == Type.DRUM) {
 			System.out.println("Drums");
 			myList = StringParserUtilityDrum.stringParse(cleanup(INPUT.getText()));
-		}
-		else {
+		} else {
 			showNotDetected();
 			TRANSLATE.setDisable(false);
 			return previousText;
 		}
 
 		try {
-			xmlString = XmlGenerator.Generate(myList,instrumentName);
-		}
-		catch (Exception e) {
+			xmlString = XmlGenerator.Generate(myList, instrumentName);
+		} catch (Exception e) {
 			error(e);
 		}
 
-		
 		// System.out.println(xmlString);
 		return xmlString;
 	}
@@ -529,43 +515,44 @@ public class Controller {
 		StringParserUtilityBass.clearMeasureList();
 
 		StringParserUtilityDrum.clearMeasureList();
-		
+
 	}
 
 	public void confirmTranslate() throws Exception { // Beat type box?
-		if(isInvalid()) {
-			
+		if (isInvalid()) {
+
 			System.out.println("reached\n");
 			showInvalid();
-			
+
 			optionConfirm.getScene().getWindow().hide();
-			
+
 			return;
 		}
-		
-		
-		
-		
+
 		for (TimeHBOX hbox : hboxList) {
 			Pair<Integer, Integer> range = hbox.getRange();
-			for(int i = range.getKey(); i <= range.getValue(); i ++) {
+			for (int i = range.getKey(); i <= range.getValue(); i++) {
 				beatList.put(i, hbox.getTimeSignature());
 			}
 		}
 		// if the text fields are not empty, set nume and deno
 		// else use the default 4/4
-		if(!numeText.getText().isEmpty()) nume = Integer.parseInt(numeText.getText());
-		else nume = 4;
-		if(!denoText.getText().isEmpty()) deno = Integer.parseInt(denoText.getText());
-		else deno = 4;
-		
+		if (!numeText.getText().isEmpty())
+			nume = Integer.parseInt(numeText.getText());
+		else
+			nume = 4;
+		if (!denoText.getText().isEmpty())
+			deno = Integer.parseInt(denoText.getText());
+		else
+			deno = 4;
+
 		state = 1;
 		previousText = INPUT.getText();
 		closePopup();
-		//TRANSLATE.setText("Save");
+		// TRANSLATE.setText("Save");
 		DELETEBUTTON.setDisable(false);
 		TRANSLATE.setDisable(true);
-		//set the list
+		// set the list
 		COMPOSER = composerField.getText();
 		TITLE = titleField.getText();
 		INPUT.setText(XMLGenerate());
@@ -614,7 +601,7 @@ public class Controller {
 	public void closePopup() {
 
 		optionCancel.getScene().getWindow().hide();
-		
+
 	}
 
 	public void resetSelect() {
@@ -658,7 +645,7 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Confirm Clear");
 			popup.setScene(new Scene(root, 322, 140));
-			popup.setOnHidden(e->{
+			popup.setOnHidden(e -> {
 				popup.close();
 			});
 			popup.setResizable(false);
@@ -693,7 +680,7 @@ public class Controller {
 			popup.initModality(Modality.APPLICATION_MODAL);
 			popup.setTitle("Save Options");
 			popup.setScene(new Scene(root, 322, 280));
-			popup.setOnHidden(e->{
+			popup.setOnHidden(e -> {
 				popup.close();
 			});
 			popup.setResizable(false);
@@ -734,7 +721,7 @@ public class Controller {
 		state = 0;
 		DELETEBUTTON.setDisable(true);
 		resetCancel.getScene().getWindow().hide();
-		
+
 	}
 
 	/**
@@ -750,7 +737,7 @@ public class Controller {
 				fileChooser.getExtensionFilters().add(extFilter);
 				File savefile = fileChooser.showSaveDialog(confirmSave.getScene().getWindow());
 				if (savefile != null) {
-					if(savefile.length()!= 0) {
+					if (savefile.length() != 0) {
 						PrintWriter pw = new PrintWriter(savefile);
 						pw.close();
 					}
@@ -817,19 +804,17 @@ public class Controller {
 	enum Save {
 		FILE, MUSICXML;
 	}
-	
-	
-	//-------------time list-------------------
+
+	// -------------time list-------------------
 	public void add() {
-		
-		TimeHBOX hbox = new TimeHBOX(timeList,hboxList);
+
+		TimeHBOX hbox = new TimeHBOX(timeList, hboxList);
 		timeList.getChildren().add(hbox.get());
 		timeList.getScene().getWindow().setHeight(timeList.getScene().getWindow().getHeight() + 32);
 	}
-	
-	
+
 	public void hoverChange() {
-		
+
 		plus.getScene().setCursor(Cursor.HAND);
 		Tooltip timeTip = new Tooltip("Add a signature");
 		plus.setTooltip(timeTip);
@@ -840,8 +825,8 @@ public class Controller {
 	public void hoverBack() {
 		plus.getScene().setCursor(Cursor.DEFAULT);
 	}
-	
-	//-----------invalid-------------------------
+
+	// -----------invalid-------------------------
 	public void showInvalid() {
 		Parent root;
 		try {
@@ -850,7 +835,7 @@ public class Controller {
 			popup.initModality(Modality.WINDOW_MODAL);
 			popup.setTitle("Invalid Input");
 			popup.setScene(new Scene(root, 322, 120));
-			popup.setOnHidden(e->{
+			popup.setOnHidden(e -> {
 				popup.close();
 			});
 			popup.setResizable(false);
@@ -861,124 +846,122 @@ public class Controller {
 			e.printStackTrace();
 		}
 	}
-	public void hoverModalChange() {
-		
-		cursorToHand(modalConfirm, null);
-		
-	}
 
-	
+	public void hoverModalChange() {
+
+		cursorToHand(modalConfirm, null);
+
+	}
 
 	public void hoverModalBack() {
 		cursorToDefault(modalConfirm);
 	}
-	
+
 	public void closeWarning() {
 		warning.getScene().getWindow().hide();
-		
-		
+
 	}
-	
-	//Checks for illegal characters in the input
-	
+
+	// Checks for illegal characters in the input
+
 	public boolean isInvalid() {
-		//final String NEW_LINE = System.getProperty("line.separator");
-		boolean illegalChar=false;
-		//store the text tab
+		// final String NEW_LINE = System.getProperty("line.separator");
+		boolean illegalChar = false;
+		// store the text tab
 
 		String tempInput = cleanup(INPUT.getText());
-		//string containing all possible characters for the text tab for all 3 instruments
+		// string containing all possible characters for the text tab for all 3
+		// instruments
 
 		String validChars = "0123456789-|EADGBECHSTMxgmaoshp[]*";
-		
-		//must be same length
+
+		// must be same length
 		String[] splitInput = tempInput.split("\\r?\\n\\r?\\n");
-		
-		if(splitInput.length == 0) return true;
-		for(int i = 0; i < splitInput.length; i ++) {
+
+		if (splitInput.length == 0)
+			return true;
+		for (int i = 0; i < splitInput.length; i++) {
 			String[] splitLines = splitInput[i].split("\\r?\\n");
-			if(splitLines.length == 0) return true;
+			if (splitLines.length == 0)
+				return true;
 			int length = splitLines[0].length();
-			for(int j = 1;j < splitLines.length; j++) {
-				if(splitLines[j].length() != length) return true;
+			for (int j = 1; j < splitLines.length; j++) {
+				if (splitLines[j].length() != length)
+					return true;
 			}
-			
+
 		}
-		//remove new line from the string(the contains method wasn't working properly otherwise)
-		
+		// remove new line from the string(the contains method wasn't working properly
+		// otherwise)
+
 		tempInput = tempInput.replace("\n", "").replace("\r", "");
-		//compare each character in the tempInput string with validChars
-		for(int i = 0; i < tempInput.length(); i++) {
-		    if(!(validChars.contains(Character.toString(tempInput.charAt(i)))))
-		    {
-		        System.out.println(tempInput.charAt(i)+" did not match");
-		        //set to true if illegal character found
-		        illegalChar=true;
-		    }
+		// compare each character in the tempInput string with validChars
+		for (int i = 0; i < tempInput.length(); i++) {
+			if (!(validChars.contains(Character.toString(tempInput.charAt(i))))) {
+				System.out.println(tempInput.charAt(i) + " did not match");
+				// set to true if illegal character found
+				illegalChar = true;
+			}
 		}
-		
+
 		return illegalChar;
-		//if(INPUT.getText().startsWith("s")) return true;
-		//return false;
+		// if(INPUT.getText().startsWith("s")) return true;
+		// return false;
 	}
-	//------------hover helper---------------
+
+	// ------------hover helper---------------
 	private void cursorToHand(Button node, String tooltip) {
 		node.getScene().setCursor(Cursor.HAND);
-		if(tooltip != null) {
+		if (tooltip != null) {
 			Tooltip tip = new Tooltip(tooltip);
 			node.setTooltip(tip);
 			tip.setShowDelay(new Duration(0));
 		}
-		
+
 	}
+
 	private void cursorToDefault(Button node) {
 		node.getScene().setCursor(Cursor.DEFAULT);
-		
-		
+
 	}
-	
-	//--------------Clear measureList------------
-	
-	
-	//--------------error catch---------------
+
+	// --------------Clear measureList------------
+
+	// --------------error catch---------------
 	private void error(Exception e) {
 		e.printStackTrace();
 		showInvalid();
 	}
-	
 
-	//-----input clean up-----------------
+	// -----input clean up-----------------
 	public static String cleanup(String input) {
 		StringBuilder sb = new StringBuilder();
-		
+
 		String[] lines = input.split("\\r?\\n");
 		boolean consecutive = false; // if there is consecutive lines to be ignored
-		for(int i = 0; i < lines.length; i ++) {
-			//System.out.println(lines[i]);
-			if(!lines[i].contains("-") || !lines[i].contains("|")) {
-				if(consecutive) continue;
+		for (int i = 0; i < lines.length; i++) {
+			// System.out.println(lines[i]);
+			if (!lines[i].contains("-") || !lines[i].contains("|")) {
+				if (consecutive)
+					continue;
 				else {
 					consecutive = true;
-					if(!sb.isEmpty())
+					if (!sb.isEmpty())
 						sb.append("\n");
 				}
-				
-			}
-			else {
+
+			} else {
 				sb.append(lines[i]);
 				sb.append("\n");
 				consecutive = false;
 			}
 		}
-		
-		
-		
+
 		return sb.toString();
 	}
-	
-	
-	//----------------------ignore text--------------
-	
+
+	// ----------------------ignore text--------------
+
 	public void checker() {
 		Parent root;
 		try {
@@ -988,7 +971,7 @@ public class Controller {
 			popup.initModality(Modality.WINDOW_MODAL);
 			popup.setTitle("Input Ignored");
 			popup.setScene(new Scene(root, 600, 500));
-			popup.setOnHidden(e->{
+			popup.setOnHidden(e -> {
 				popup.close();
 			});
 			popup.setResizable(false);
@@ -998,79 +981,77 @@ public class Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
-	
+
 	public void displayValid() {
 		displayText.getChildren().clear();
 		displayText.setVisible(true);
 		String[] lines = INPUT.getText().split("\\r?\\n");
-		for(int i = 0; i < lines.length; i ++) {
+		for (int i = 0; i < lines.length; i++) {
 			Text t = new Text();
-			t.setText(lines[i]+"\n");
+			t.setText(lines[i] + "\n");
 			t.setFont(Font.font("Monospaced", FontWeight.NORMAL, 12));
-			//System.out.println(lines[i]);
-			if((!lines[i].contains("-") || !lines[i].contains("|")) && !lines[i].equals("\\r?\\n")) {
-				
+			// System.out.println(lines[i]);
+			if ((!lines[i].contains("-") || !lines[i].contains("|")) && !lines[i].equals("\\r?\\n")) {
+
 				t.setStrikethrough(true);
+
 				t.setFill(Color.DARKGREY);
 				
+
 			}
 			displayText.getChildren().add(t);
 		}
-	
 	}
-	
+
 	public void cancelIgnore() {
 		displayText.setVisible(false);
 		displayText.getScene().getWindow().hide();
 	}
+
 	public void confirmIgnore() {
 		cancelIgnore();
 		openOption();
 	}
-	
-	//----------------Text Field validation-----------------
+
+	// ----------------Text Field validation-----------------
 	public void numberValidation() {
-		DecimalFormat format = new DecimalFormat( "0" );
-		numeText.setTextFormatter( new TextFormatter<>(c ->{
-		    if ( c.getControlNewText().isEmpty() ){
-		        return c;
-		    }
-		   
-		    ParsePosition parsePosition = new ParsePosition( 0 );
-		    Object object = format.parse( c.getControlNewText(), parsePosition );
+		DecimalFormat format = new DecimalFormat("0");
+		numeText.setTextFormatter(new TextFormatter<>(c -> {
+			if (c.getControlNewText().isEmpty()) {
+				return c;
+			}
 
-		    if ( object == null || parsePosition.getIndex() < c.getControlNewText().length() ){
-		        return null;
-		    }
-		    else{
-		        return c;
-		    }
+			ParsePosition parsePosition = new ParsePosition(0);
+			Object object = format.parse(c.getControlNewText(), parsePosition);
+
+			if (object == null || parsePosition.getIndex() < c.getControlNewText().length()) {
+				return null;
+			} else {
+				return c;
+			}
 		}));
-		denoText.setTextFormatter( new TextFormatter<>(c ->{
-		    if ( c.getControlNewText().isEmpty() ){
-		        return c;
-		    }
-		   
-		    ParsePosition parsePosition = new ParsePosition( 0 );
-		    Object object = format.parse( c.getControlNewText(), parsePosition );
+		denoText.setTextFormatter(new TextFormatter<>(c -> {
+			if (c.getControlNewText().isEmpty()) {
+				return c;
+			}
 
-		    if ( object == null || parsePosition.getIndex() < c.getControlNewText().length() ){
-		        return null;
-		    }
-		    else{
-		        return c;
-		    }
+			ParsePosition parsePosition = new ParsePosition(0);
+			Object object = format.parse(c.getControlNewText(), parsePosition);
+
+			if (object == null || parsePosition.getIndex() < c.getControlNewText().length()) {
+				return null;
+			} else {
+				return c;
+			}
 		}));
 	}
-	
+
 	// Instrument not detected
-	
+
 	private void showNotDetected() {
 		// TODO Auto-generated method stub
-		//no longer activated
+		// no longer activated
 		AUTO.setSelected(false);
 		Parent root;
 		try {
@@ -1080,7 +1061,7 @@ public class Controller {
 			popup.initModality(Modality.WINDOW_MODAL);
 			popup.setTitle("No Instrument Detected");
 			popup.setScene(new Scene(root, 322, 120));
-			popup.setOnHidden(e->{
+			popup.setOnHidden(e -> {
 				popup.close();
 			});
 			popup.setResizable(false);
@@ -1091,10 +1072,8 @@ public class Controller {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void closeInstrument() {
 		instrumentConfirm.getScene().getWindow().hide();
 	}
-	
-	
 }

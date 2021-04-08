@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class DrumNote extends Note {
 	public String notehead;
 	public String instrumentId;
-	public String stem;
 	public String instrumentName;
 	
 
@@ -36,6 +35,11 @@ public class DrumNote extends Note {
 	
 	public void setInstrumentName(String name) {
 		this.instrumentName = name;
+	}
+
+	public int getFret() {
+		// TODO Auto-generated method stub
+		return fret;
 	}
 
 }
