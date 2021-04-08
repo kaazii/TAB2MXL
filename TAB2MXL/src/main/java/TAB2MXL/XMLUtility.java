@@ -33,7 +33,17 @@ public class XMLUtility {
 			this.clefSign = "percussion";
 			this.clefLine = "2";
 		} else if (instrument.equals("BASS")) {
-
+			instrument = "BASS";
+			pitchTagString = "pitch";
+			stepTagString = "step";
+			octaveTagString = "octave";
+			clefSign = "TAB";
+			clefLine = "5";
+			includeStaffDetails = true;
+			includeInstrumentInNote = false;
+			includeNoteHead = false;
+			includeNotations = true;
+			includeBeams = false;
 		} else {
 			instrument = "GUITAR";
 			pitchTagString = "pitch";
