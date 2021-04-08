@@ -81,7 +81,7 @@ class DrumNoteTest {
 	@Test
 	public void testSecondConstructor() {
 		note = new DrumNote("F", 4, "P1-I43", "Bass Drum 1");
-		assertEquals("P1-I43", note.instrumentId);
+		assertEquals("P1-I43", note.getInstrumentId());
 	}
 	
 	@Test
@@ -94,5 +94,11 @@ class DrumNoteTest {
 	public void testSetNotehead() {
 		note.setNotehead("o");
 		assertEquals("o", note.getNotehead());
+	}
+	
+	@Test
+	public void testSetInstrumentName() {
+		note.setInstrumentName("Snare Drum");
+		assertEquals("Snare Drum", note.instrumentName);
 	}
 }

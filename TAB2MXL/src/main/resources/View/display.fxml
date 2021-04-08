@@ -17,7 +17,7 @@
                         <Font size="19.0" />
                      </font>
                      <VBox.margin>
-                        <Insets left="30.0" top="30.0" />
+                        <Insets left="30.0" top="20.0" />
                      </VBox.margin>
                   </Label>
                   <Label text="Some of your input will be ignored. The ignored text is highlighted in red">
