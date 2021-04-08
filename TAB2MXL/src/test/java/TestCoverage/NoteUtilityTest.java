@@ -38,7 +38,8 @@ class NoteUtilityTest {
 	
 	@Test
 	void testNoteType() {
-		String type = noteUtil.getNoteType(1);
+		Note note = noteUtil.guitarNote[0][0];
+		String type = NoteUtility.getNoteType(1,note);
 		
 		assertEquals("whole", type);
 	}
