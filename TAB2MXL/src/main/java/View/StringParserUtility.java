@@ -53,7 +53,7 @@ public class StringParserUtility {
 				String currLine[] = lines[i].split("\\|");
 				splitLines[i] = currLine;
 			}
-
+ 
 			int measureCount = 0;
 			int numMeasures = splitLines[0].length - 1;
 
