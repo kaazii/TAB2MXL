@@ -11,12 +11,29 @@ public class Note {
 	
 	public int string;
 	public int fret;
+	public int alter=0;
 	
 	public Note(String step, int octave, int fret, int string) {
 		this.step = step;
 		this.octave = octave; 
 		this.fret=fret;
 		this.string=string;
+	}
+	public Note(String step, int octave, int fret, int string,int alter) {
+		this.step = step;
+		this.octave = octave; 
+		this.fret = fret;
+		this.string = string;
+		this.alter=alter;
+	}
+	public Note(String step,int alter,int octave) {
+		this.step = step;
+		this.alter=alter;
+		this.octave = octave; 
+	}
+	public Note(String step,int alter) {
+		this.step = step;
+		this.alter=alter;
 	}
 	
 	public Note() {}
@@ -75,6 +92,12 @@ public class Note {
 	
 	public int getDuration() {
 		return duration;
+	}
+	public int getAlter() {
+		return alter;
+	}
+	public void setAlter(int alter) {
+		this.alter = alter;
 	}
 	
 }
