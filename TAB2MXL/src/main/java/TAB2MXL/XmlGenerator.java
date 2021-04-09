@@ -456,6 +456,17 @@ public class XmlGenerator {
 			// right Barline
 			if (m.repeatEnd && m.repeats > 0) {
 				addBarline(measureElem, "right", m.repeats);
+			} else if (measureNum == measureList.size() - 1) { // ending barline
+				Element barline = doc.createElement("barline");
+				attr = doc.createAttribute("location");
+				attr.setValue("right");
+				barline.setAttributeNode(attr);
+				measureElem.appendChild(barline);
+
+				// <bar-style>
+				Element e = doc.createElement("bar-style");
+				e.appendChild(doc.createTextNode("light-heavy"));
+				barline.appendChild(e);
 			}
 		}
 	}
