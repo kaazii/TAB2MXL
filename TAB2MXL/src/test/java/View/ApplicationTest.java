@@ -3,6 +3,7 @@ package View;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,18 +16,21 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 import org.testfx.matcher.base.StyleableMatchers;
+import org.testfx.matcher.base.WindowMatchers;
 import org.testfx.matcher.control.LabeledMatchers;
+import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 @ExtendWith(ApplicationExtension.class)
 class ApplicationTest {
 
 	@Start
-	private void statr(Stage primaryStage) {
+	private void start(Stage primaryStage) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("PrimaryStage.fxml"));
 			primaryStage.setTitle("TAB2XML");
@@ -92,6 +96,19 @@ class ApplicationTest {
 //	void testInstrumentButton(FxRobot robot) {
 //		robot.clickOn("#bassButton");
 //		StyleableAssert.assertThat("#bassButton", StyleableMatchers.hasStyle("-fx-font-size: 20;\r\n" + "-fx-background-color: transparent;\r\n" + "-fx-text-fill: #828F9C;"));
+//	}
+	
+	/*
+	 * A new window opens when translate is clicked
+	 */
+	
+//	@Test
+//	void testIgnore(FxRobot robot) {
+//		robot.clickOn("#textInput");
+//		robot.write("hi");
+//		robot.clickOn("#translateButton");
+//		WaitForAsyncUtils.sleep(500L, TimeUnit.MILLISECONDS);
+//		FxAssert.verifyThat(robot.window("Input Ignored"), WindowMatchers.isShowing());
 //	}
 
 

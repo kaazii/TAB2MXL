@@ -28,10 +28,10 @@ public class Main {
 				+ "MT|----------------|------oo--------|\n"
 				+ "BD|o-------o-------|o-------o-------|\n"
 				+ "");
+		StringParserUtility.clearMeasureList();
 		ArrayList<Measure> measureList = StringParserUtilityDrum.stringParse(res);
 		String result = XmlGenerator.Generate(measureList, "DRUMS");
 		System.out.println(result);
-		
 		
 
 		//addidng 
