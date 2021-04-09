@@ -1,5 +1,8 @@
 package TAB2MXL;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import TAB2MXL.Note;
 
 public class NoteUtility {
