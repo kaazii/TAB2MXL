@@ -344,7 +344,7 @@ public class Controller {
 		 * gets called directly from the ui to detect the type of tablatures
 		 */
 		if (autoDetect.isSelected()) {
-			detect(cleanup(textInput.getText()));
+			detect(repeatCleanUp(textInput.getText()));
 		}
 	}
 
@@ -381,19 +381,21 @@ public class Controller {
 		// textInput.setText(parser.stringParse(textInput.getText()));
 		// translateButton.setText("Save");
 		// textInput.setText(stringParse(textInput.getText()));
-
+		
 		TRANSLATE = translateButton;
 		INPUT = textInput;
 		DELETEBUTTON = deleteButton;
 		AUTO = autoDetect;
+		System.out.println(cleanup(INPUT.getText()));
+		System.out.print(isInvalid());
 		clearMeasureList();
 		if (!cleanup(INPUT.getText()).replace("\n", "").replace("\r", "")
 				.equals(INPUT.getText().replace("\n", "").replace("\r", ""))) {
 			checker();
-			System.out.println(cleanup(INPUT.getText()));
+			
 		} else if (isInvalid()) {
 			showInvalid();
-		} else if (AUTO.isSelected() && !detect(cleanup(INPUT.getText())))
+		} else if (AUTO.isSelected() && !detect(repeatCleanUp(INPUT.getText())))
 			return;
 		else {
 
@@ -873,19 +875,24 @@ public class Controller {
 		// string containing all possible characters for the text tab for all 3
 		// instruments
 
-		String validChars = "0123456789-|EADGBECHSTMxgmaoshp[]*";
+		String validChars = "0123456789-|EARPDGBECHSTMXxgmaoshp []*\n";
 
 		// must be same length
 		String[] splitInput = tempInput.split("\\r?\\n\\r?\\n");
-
+		/*clear all Repeat ones*/
+		
 		if (splitInput.length == 0)
 			return true;
 		for (int i = 0; i < splitInput.length; i++) {
 			String[] splitLines = splitInput[i].split("\\r?\\n");
 			if (splitLines.length == 0)
 				return true;
-			int length = splitLines[0].length();
+			if(splitLines[0].contains("REPEAT") && splitLines.length == 1) return true;
+			int length = 0;
+			if(splitLines[0].contains("REPEAT")) length = splitLines[1].length();
+			else length = splitLines[0].length();
 			for (int j = 1; j < splitLines.length; j++) {
+				
 				if (splitLines[j].length() != length)
 					return true;
 			}
@@ -942,6 +949,32 @@ public class Controller {
 		for (int i = 0; i < lines.length; i++) {
 			// System.out.println(lines[i]);
 			if (!lines[i].contains("-") || !lines[i].contains("|")) {
+				if (consecutive)
+					continue;
+				else {
+					consecutive = true;
+					if (!sb.isEmpty())
+						sb.append("\n");
+				}
+
+			} else {
+				sb.append(lines[i]);
+				sb.append("\n");
+				consecutive = false;
+			}
+		}
+
+		return sb.toString();
+	}
+	
+	public static String repeatCleanUp(String input) {
+		StringBuilder sb = new StringBuilder();
+
+		String[] lines = input.split("\\r?\\n");
+		boolean consecutive = false; // if there is consecutive lines to be ignored
+		for (int i = 0; i < lines.length; i++) {
+			// System.out.println(lines[i]);
+			if (!lines[i].contains("-") || !lines[i].contains("|") || lines[i].contains("REPEAT")) {
 				if (consecutive)
 					continue;
 				else {
