@@ -39,9 +39,13 @@ public class StringParserUtility {
 			String[] lines;
 			// Change all instances of || into |; will parse repeats separately
 			boolean has_repeats = false;
+			boolean has_repeats_above = false;
 			if (rawLines[0].matches(".*\\|\\|.*")) {
 				lines = convertRepeatsToNormal(rawLines);
 				has_repeats = true;
+			} else if (rawLines[0].matches(".+REPEAT.+")) {
+				lines = convertRepeatsToNormalRepeatsAbove(rawLines);
+				has_repeats_above = true;
 			} else {
 				lines = rawLines;
 			}
@@ -79,10 +83,12 @@ public class StringParserUtility {
 			// Set measure repeats, if any
 			if (has_repeats) {
 				fillMeasureRepeats(rawLines);
+			} else if (has_repeats_above) {
+				fillMeasureRepeatsRepeatsAbove(rawLines);
 			}
 
 		}
-		// fillBeams(measureList);
+		fillBeams(measureList);
 		return measureList;
 	}
 
@@ -143,9 +149,7 @@ public class StringParserUtility {
 					beamRange.add(beamNumber);
 
 					if (beamNumber > 1) {
-						System.out.println("Beam range > 1. Adding ");
 						for (int newBeamRange = 1; newBeamRange < beamNumber; newBeamRange++) {
-							System.out.print(newBeamRange + ",");
 							beamRange.add(newBeamRange);
 						}
 						Collections.sort(beamRange);
@@ -153,7 +157,6 @@ public class StringParserUtility {
 
 					// Begin all beam(s)
 					for (int b : beamRange) {
-						System.out.println("Beginning beam " + b);
 						noteList.get(trailer).beamList.add(new Beam(b, "begin"));
 					}
 
@@ -268,6 +271,80 @@ public class StringParserUtility {
 		}
 	}
 
+	public static void fillMeasureRepeatsRepeatsAbove(String[] lines) throws Exception {
+		// Find the actual first line of measures
+		int firstLineIndex = 0;
+		while (firstLineIndex < lines.length && lines[firstLineIndex].matches(".+REPEAT.+")) {
+			firstLineIndex++;
+		}
+		int repeatIndex = firstLineIndex - 1;
+
+		if (firstLineIndex == lines.length - 1 || firstLineIndex == 0) {
+			throw new Exception("No repeats above measure detected");
+		}
+
+		String repeatLine = lines[repeatIndex];
+		String firstLine = lines[firstLineIndex];
+		System.out.printf("Computing repeats using this line: <\n%s\n>\n", repeatLine);
+		// First first | in the repeat line
+		int barIndex = getNextBarIndex(lines[firstLineIndex], -1); // skip past the first bar in the line
+		boolean inRepeat = false;
+
+		// Special case: check if the first measure is part of a repeat
+		if (repeatLine.charAt(barIndex) == '|') {
+			System.out.println("First measure is a repeat. Beginning a repeat");
+			getMeasureByNum(1).repeatStart = true;
+			getMeasureByNum(1).repeats = getRepeatNumAbove(repeatLine, barIndex);
+			inRepeat = true;
+		}
+
+		int currMeasure = 1;
+
+		for (int charIndex = barIndex + 1; charIndex < firstLine.length(); charIndex++) {
+			char thisChar = firstLine.charAt(charIndex);
+
+			if (thisChar == '|') {
+				if (repeatLine.charAt(charIndex) == '|') {
+					System.out.println("Detected a | at index " + charIndex + " in measure " + currMeasure);
+					// found a measure | in firstLine in the same place as a | in repeatLine
+
+					if (inRepeat) { // This marks the end of a repeat
+						inRepeat = false;
+						getMeasureByNum(currMeasure).repeatEnd = true;
+						getMeasureByNum(currMeasure).repeats = getRepeatNumAbove(repeatLine, barIndex);
+						System.out.println("Ending repeat at measure " + currMeasure);
+
+						// Check if a repeat is starting for the next measure
+						if (charIndex < repeatLine.length() - 1 && repeatLine.charAt(charIndex + 1) == '-') {
+							System.out.println("Next measure is part of a new repeat. Starting a repeat");
+							inRepeat = true;
+							getMeasureByNum(currMeasure + 1).repeatStart = true;
+							getMeasureByNum(currMeasure + 1).repeats = getRepeatNumAbove(repeatLine, charIndex);
+						}
+					} else { // this marks the beginning of a repeat
+						System.out.println("Starting repeat at measure " + currMeasure + 1);
+						inRepeat = true;
+						getMeasureByNum(currMeasure + 1).repeatStart = true;
+						getMeasureByNum(currMeasure + 1).repeats = getRepeatNumAbove(repeatLine, charIndex);
+					}
+					barIndex = charIndex;
+				}
+				currMeasure++;
+			}
+		}
+	}
+
+	private static int getNextBarIndex(String line, int start) {
+		int barIndex = start + 1;
+		while (!(line.charAt(barIndex) == '|')) {
+			barIndex++;
+		}
+		if (barIndex >= line.length()) {
+			return -1;
+		}
+		return barIndex;
+	}
+
 	public static String[] convertRepeatsToNormal(String[] lines) {
 		String newLines[] = new String[lines.length];
 		StringBuilder sb = new StringBuilder();
@@ -295,6 +372,27 @@ public class StringParserUtility {
 		return newLines;
 	}
 
+	public static String[] convertRepeatsToNormalRepeatsAbove(String[] lines) {
+		// String newLines[] = new String[lines.length];
+		ArrayList<String> newLinesList = new ArrayList<String>();
+
+		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+			if (!lines[lineIndex].matches(".+REPEAT.+")) {
+				newLinesList.add(lines[lineIndex]);
+			}
+		}
+
+		String[] newLines = new String[newLinesList.size()];
+		newLines = newLinesList.toArray(newLines);
+
+		System.out.println("Detected repeats above tablature. This is the clean version:");
+
+		for (String line : newLines) {
+			System.out.println(line);
+		}
+		return newLines;
+	}
+
 	public static String checkTabType(String input) {
 		// split the input into different lines
 		String lines[] = input.split("\\r?\\n");
@@ -311,8 +409,17 @@ public class StringParserUtility {
 	// Get the repeat number, such as 4 in "4|", given the location of the ending
 	// "*" in that measure
 	private static int getRepeatNum(String[] lines, int starRow, int starCol) {
-		System.out.println(Character.getNumericValue(lines[0].charAt(starCol + 2)));
 		return Character.getNumericValue(lines[0].charAt(starCol + 2));
+	}
+
+	private static int getRepeatNumAbove(String repeatLine, int barIndex) {
+		int repeatNum = 0;
+		for (int i = barIndex; i < repeatLine.length(); i++) {
+			if (repeatLine.charAt(i) == 'R') {
+				repeatNum = Character.getNumericValue(repeatLine.charAt(i + 7));
+			}
+		}
+		return repeatNum;
 	}
 
 	// Find the row on which this instrument puts the * for repeats
