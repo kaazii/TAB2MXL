@@ -24,17 +24,16 @@ public class Main {
 		//govind
 		//test
 		
-		String res = Controller.cleanup("  |——Repeat—2X-----|\n"
-				+ "CC|x---------------|--------x-------|\n"
-				+ "HH|--x-x-x-x-x-x-x-|----------------|\n"
-				+ "SD|----o-------o---|oooo------------|\n"
-				+ "HT|----------------|----oo----------|\n"
-				+ "MT|----------------|------oo--------|\n"
-				+ "BD|o-------o-------|o-------o-------|\n"
+		String res = Controller.cleanup("CC|x---------------||---------x-------4||\n"
+				+ "HH|--x-x-x-x-x-x-x-||------------------||\n"
+				+ "SD|----o-------o---||*oooo------------*||\n"
+				+ "HT|----------------||*----oo----------*||\n"
+				+ "MT|----------------||-------oo---------||\n"
+				+ "BD|o-------o-------||-o-------o--------||\n"
 				+ "");
 		StringParserUtility.clearMeasureList();
-		ArrayList<Measure> measureList = StringParserUtility.stringParse(res);
-		String result = XmlGenerator.Generate(measureList, "DRUM");
+		ArrayList<Measure> measureList = StringParserUtilityDrum.stringParse(res);
+		String result = XmlGenerator.Generate(measureList, "DRUMS");
 		System.out.println(result);
 		
 
