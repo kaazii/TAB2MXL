@@ -62,12 +62,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				measureList.get(measureIndex).measureNumber = globalMeasureNumber++;
 				measureList.get(measureIndex).setTimeSignature(Controller.nume);
 				setChord(measureList.get(measureIndex).getNoteList());
-				/*
-				 * if(timeList.containsKey(measureList.get(measureIndex).measureNumber)) {
-				 * //only passing on the numerator for now
-				 * measureList.get(measureIndex).setTimeSignature(timeList.get(measureList.get(
-				 * measureIndex).measureNumber).getKey()); }
-				 */
+		
 				Map<Integer, Pair<Integer, Integer>> timeList = Controller.beatList;
 				if (timeList.containsKey(measureList.get(measureIndex).measureNumber)) {
 					// only passing on the numerator for now

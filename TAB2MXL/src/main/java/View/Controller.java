@@ -889,7 +889,6 @@ public class Controller {
 				if (splitLines[j].length() != length)
 					return true;
 			}
-
 		}
 		// remove new line from the string(the contains method wasn't working properly
 		// otherwise)
@@ -903,7 +902,6 @@ public class Controller {
 				illegalChar = true;
 			}
 		}
-
 		return illegalChar;
 		// if(INPUT.getText().startsWith("s")) return true;
 		// return false;
