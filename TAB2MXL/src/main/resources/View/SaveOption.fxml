@@ -24,9 +24,9 @@
                   <Insets left="15.0" />
                </VBox.margin>
             </Label>
-            <Label prefHeight="32.0" prefWidth="322.0" text="      What format would you like to save the content as?" textFill="#828f9c">
+            <Label prefHeight="32.0" prefWidth="322.0" text="What format would you like to save the content as?">
                <VBox.margin>
-                  <Insets left="20.0" />
+                  <Insets left="18.0" />
                </VBox.margin>
                <font>
                   <Font size="12.0" />
