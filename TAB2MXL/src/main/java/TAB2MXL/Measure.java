@@ -7,6 +7,8 @@ public class Measure {
 	public int measureNumber;
 
 	public ArrayList<Note> noteList = new ArrayList<Note>();
+	public ArrayList<GraceNote> graceNotes = new ArrayList<GraceNote>(); 
+	
 	public int divisions;
 
 	public int keyFifths = 0; // always 0
