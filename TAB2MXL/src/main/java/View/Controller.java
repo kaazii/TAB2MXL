@@ -544,9 +544,10 @@ public class Controller {
 			closePopup();
 			return;
 		}
-		INPUT.setText(XMLGenerate());
+		
 		state = 1;
 		previousText = INPUT.getText();
+		INPUT.setText(XMLGenerate());
 		closePopup();
 		// TRANSLATE.setText("Save");
 		DELETEBUTTON.setDisable(false);
