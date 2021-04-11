@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,28 +14,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import TAB2MXL.Measure;
-import TAB2MXL.Note;
 import TAB2MXL.XmlGenerator;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioMenuItem;
@@ -46,7 +34,6 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -55,7 +42,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -65,9 +51,9 @@ public class Controller {
 	 * ----------------------------------------------- variable for two screen
 	 * communication
 	 */
-	private static TextArea INPUT;
-	private static Button TRANSLATE;
-	private static Button DELETEBUTTON;
+	public static TextArea INPUT;
+	public static Button TRANSLATE;
+	public static Button DELETEBUTTON;
 	// private static int CONFIRM;
 	// ------------------------------------------------
 	@FXML
@@ -344,7 +330,7 @@ public class Controller {
 		 * gets called directly from the ui to detect the type of tablatures
 		 */
 		if (autoDetect.isSelected()) {
-			detect(cleanup(textInput.getText()));
+			detect(repeatCleanUp(textInput.getText()));
 		}
 	}
 
@@ -386,14 +372,16 @@ public class Controller {
 		INPUT = textInput;
 		DELETEBUTTON = deleteButton;
 		AUTO = autoDetect;
+		System.out.println(cleanup(INPUT.getText()));
+		System.out.print(isInvalid());
 		clearMeasureList();
 		if (!cleanup(INPUT.getText()).replace("\n", "").replace("\r", "")
 				.equals(INPUT.getText().replace("\n", "").replace("\r", ""))) {
 			checker();
-			System.out.println(cleanup(INPUT.getText()));
+
 		} else if (isInvalid()) {
 			showInvalid();
-		} else if (AUTO.isSelected() && !detect(cleanup(INPUT.getText())))
+		} else if (AUTO.isSelected() && !detect(repeatCleanUp(INPUT.getText())))
 			return;
 		else {
 
@@ -446,7 +434,7 @@ public class Controller {
 			 * Guitar
 			 */
 
-		} else if (lines[0].toUpperCase().startsWith("G") && (lines.length == 5 || lines.length == 4)
+		} else if (lines[0].toUpperCase().startsWith("G") || (lines.length == 5 || lines.length == 4)
 				&& !lines[0].contains("o") && !lines[0].contains("x")) {
 			// System.out.println("This is a bass"); // testing
 			bassButtonClicked();
@@ -462,7 +450,7 @@ public class Controller {
 		return true;
 	}
 
-	private String XMLGenerate() throws Exception { // Pass parsing to here
+	public String XMLGenerate() throws Exception { // Pass parsing to here
 		// TODO pass in the MEASURE list to XmlGenerator
 		ArrayList<Measure> myList = new ArrayList<Measure>();
 		String xmlString = "";
@@ -546,16 +534,23 @@ public class Controller {
 		else
 			deno = 4;
 
+		// set the list
+		COMPOSER = composerField.getText();
+		TITLE = titleField.getText();
+		
+
+		if (selected == Type.BASS || selected == Type.GUITAR) {
+			openPopup("Tuning.fxml", "Tunning Option", 360, 377);
+			closePopup();
+			return;
+		}
+		INPUT.setText(XMLGenerate());
 		state = 1;
 		previousText = INPUT.getText();
 		closePopup();
 		// TRANSLATE.setText("Save");
 		DELETEBUTTON.setDisable(false);
 		TRANSLATE.setDisable(true);
-		// set the list
-		COMPOSER = composerField.getText();
-		TITLE = titleField.getText();
-		INPUT.setText(XMLGenerate());
 
 	}
 
@@ -865,6 +860,7 @@ public class Controller {
 	// Checks for illegal characters in the input
 
 	public boolean isInvalid() {
+
 		// final String NEW_LINE = System.getProperty("line.separator");
 		boolean illegalChar = false;
 		// store the text tab
@@ -873,10 +869,11 @@ public class Controller {
 		// string containing all possible characters for the text tab for all 3
 		// instruments
 
-		String validChars = "0123456789-|EADGBECHSTMxgmaoshp[]*";
+		String validChars = "0123456789-|EARPDGBECHSTMXxgmaoshp []*\n";
 
 		// must be same length
 		String[] splitInput = tempInput.split("\\r?\\n\\r?\\n");
+		/* clear all Repeat ones */
 
 		if (splitInput.length == 0)
 			return true;
@@ -884,8 +881,15 @@ public class Controller {
 			String[] splitLines = splitInput[i].split("\\r?\\n");
 			if (splitLines.length == 0)
 				return true;
-			int length = splitLines[0].length();
+			if (splitLines[0].contains("REPEAT") && splitLines.length == 1)
+				return true;
+			int length = 0;
+			if (splitLines[0].contains("REPEAT"))
+				length = splitLines[1].length();
+			else
+				length = splitLines[0].length();
 			for (int j = 1; j < splitLines.length; j++) {
+
 				if (splitLines[j].length() != length)
 					return true;
 			}
@@ -905,6 +909,7 @@ public class Controller {
 		return illegalChar;
 		// if(INPUT.getText().startsWith("s")) return true;
 		// return false;
+
 	}
 
 	// ------------hover helper---------------
@@ -926,7 +931,7 @@ public class Controller {
 	// --------------Clear measureList------------
 
 	// --------------error catch---------------
-	private void error(Exception e) {
+	void error(Exception e) {
 		e.printStackTrace();
 		showInvalid();
 	}
@@ -940,6 +945,32 @@ public class Controller {
 		for (int i = 0; i < lines.length; i++) {
 			// System.out.println(lines[i]);
 			if (!lines[i].contains("-") || !lines[i].contains("|")) {
+				if (consecutive)
+					continue;
+				else {
+					consecutive = true;
+					if (!sb.isEmpty())
+						sb.append("\n");
+				}
+
+			} else {
+				sb.append(lines[i]);
+				sb.append("\n");
+				consecutive = false;
+			}
+		}
+
+		return sb.toString();
+	}
+
+	public static String repeatCleanUp(String input) {
+		StringBuilder sb = new StringBuilder();
+
+		String[] lines = input.split("\\r?\\n");
+		boolean consecutive = false; // if there is consecutive lines to be ignored
+		for (int i = 0; i < lines.length; i++) {
+			// System.out.println(lines[i]);
+			if (!lines[i].contains("-") || !lines[i].contains("|") || lines[i].contains("REPEAT")) {
 				if (consecutive)
 					continue;
 				else {
@@ -993,7 +1024,8 @@ public class Controller {
 			if ((!lines[i].contains("-") || !lines[i].contains("|")) && !lines[i].equals("\\r?\\n")) {
 
 				t.setStrikethrough(true);
-				t.setFill(Color.RED);
+
+				t.setFill(Color.DARKGREY);
 
 			}
 			displayText.getChildren().add(t);
@@ -1071,5 +1103,27 @@ public class Controller {
 
 	public void closeInstrument() {
 		instrumentConfirm.getScene().getWindow().hide();
+	}
+
+	// -----------------Open Popup---------------------
+	private void openPopup(String file, String title, int height, int width) {
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource(file));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle(title);
+			popup.setScene(new Scene(root, height, width));
+			popup.setOnHidden(e -> {
+				popup.close();
+			});
+			popup.setResizable(false);
+			popup.show();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }

@@ -248,10 +248,10 @@ public class XmlGenerator {
 				// -<staff-details>
 				if (xutil.includeStaffDetails) {
 					Element staffDetails = doc.createElement("staff-details");
-					if(xutil.instrument=="GUITAR") {
-					addGuitarStaffDetails(staffDetails);
-					measureAttribute.appendChild(staffDetails);}
-					else if(xutil.instrument=="BASS") {
+					if (xutil.instrument == "GUITAR") {
+						addGuitarStaffDetails(staffDetails);
+						measureAttribute.appendChild(staffDetails);
+					} else if (xutil.instrument == "BASS") {
 						addBassStaffDetails(staffDetails);
 						measureAttribute.appendChild(staffDetails);
 					}
@@ -284,6 +284,13 @@ public class XmlGenerator {
 				Element e = doc.createElement(xutil.stepTagString);
 				e.appendChild(doc.createTextNode(n.step));
 				pitch.appendChild(e);
+
+				if (n.getAlter() != 0) {
+					// --<alter>
+					e = doc.createElement("alter");
+					e.appendChild(doc.createTextNode(String.valueOf(n.getAlter())));
+					pitch.appendChild(e);
+				}
 
 				// --<octave>
 				e = doc.createElement(xutil.octaveTagString);
@@ -456,6 +463,17 @@ public class XmlGenerator {
 			// right Barline
 			if (m.repeatEnd && m.repeats > 0) {
 				addBarline(measureElem, "right", m.repeats);
+			} else if (measureNum == measureList.size() - 1) { // ending barline
+				Element barline = doc.createElement("barline");
+				attr = doc.createAttribute("location");
+				attr.setValue("right");
+				barline.setAttributeNode(attr);
+				measureElem.appendChild(barline);
+
+				// <bar-style>
+				Element e = doc.createElement("bar-style");
+				e.appendChild(doc.createTextNode("light-heavy"));
+				barline.appendChild(e);
 			}
 		}
 	}
