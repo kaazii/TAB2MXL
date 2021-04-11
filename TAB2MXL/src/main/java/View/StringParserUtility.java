@@ -300,7 +300,7 @@ public class StringParserUtility {
 
 		int currMeasure = 1;
 
-		for (int charIndex = barIndex + 1; charIndex < firstLine.length(); charIndex++) {
+		for (int charIndex = barIndex + 1; charIndex < repeatLine.length(); charIndex++) {
 			char thisChar = firstLine.charAt(charIndex);
 
 			if (thisChar == '|') {
