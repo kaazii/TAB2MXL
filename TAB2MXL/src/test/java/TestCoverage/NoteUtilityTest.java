@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import TAB2MXL.DrumNote;
 import TAB2MXL.Note;
 import TAB2MXL.NoteUtility;
+import View.TuningController;
 
 class NoteUtilityTest {
 	NoteUtility noteUtil;
@@ -43,5 +44,34 @@ class NoteUtilityTest {
 		
 		assertEquals("whole", type);
 	}
+	
+	@Test
+	void testCounterGetterSetter() {
+		noteUtil.setCounter1(1);
+		noteUtil.setCounter2(2);
+		noteUtil.setCounter3(3);
+		noteUtil.setCounter4(4);
+		noteUtil.setCounter5(5);
+		noteUtil.setCounter6(6);
+		noteUtil.setOctave1(4);
+		noteUtil.setOctave2(3);
+		noteUtil.setOctave3(4);
+		noteUtil.setOctave4(5);
+		noteUtil.setOctave5(1);
+		noteUtil.setOctave6(4);
+		assertEquals(1, noteUtil.getCounter1());
+		assertEquals(2, noteUtil.getCounter2());
+		assertEquals(3, noteUtil.getCounter3());
+		assertEquals(4, noteUtil.getCounter4());
+		assertEquals(5, noteUtil.getCounter5());
+		assertEquals(6, noteUtil.getCounter6());
+		assertEquals(4, noteUtil.getOctave1());
+		assertEquals(3, noteUtil.getOctave2());
+		assertEquals(4, noteUtil.getOctave3());
+		assertEquals(5, noteUtil.getOctave4());
+		assertEquals(1, noteUtil.getOctave5());
+		assertEquals(4, noteUtil.getOctave6());
+	}
+
 
 }

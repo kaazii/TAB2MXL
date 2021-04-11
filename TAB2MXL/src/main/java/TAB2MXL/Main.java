@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import View.Controller;
 import View.StringParserUtility;
 import View.StringParserUtilityDrum;
+import View.TuningController;
 
 public class Main {
 	// I DID IT 
@@ -22,13 +23,19 @@ public class Main {
 		// Amer Lab Task
 		//govind
 		//test
-		BassNoteUtility bassUtil = new BassNoteUtility();
-		bassUtil.initialise();
-		Note note = bassUtil.BassNote[0][0];
-		System.out.println(note.getStep());
-		System.out.println( note.getOctave());
-		System.out.println(note.getFret());
-		System.out.println( note.getString());
+		
+		String res = Controller.cleanup("  |——Repeat—2X-----|\n"
+				+ "CC|x---------------|--------x-------|\n"
+				+ "HH|--x-x-x-x-x-x-x-|----------------|\n"
+				+ "SD|----o-------o---|oooo------------|\n"
+				+ "HT|----------------|----oo----------|\n"
+				+ "MT|----------------|------oo--------|\n"
+				+ "BD|o-------o-------|o-------o-------|\n"
+				+ "");
+		StringParserUtility.clearMeasureList();
+		ArrayList<Measure> measureList = StringParserUtility.stringParse(res);
+		String result = XmlGenerator.Generate(measureList, "DRUM");
+		System.out.println(result);
 		
 
 		//addidng 
