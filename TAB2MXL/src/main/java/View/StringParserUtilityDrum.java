@@ -26,9 +26,13 @@ public class StringParserUtilityDrum extends StringParserUtility {
 			String[] lines;
 			// Change all instances of || into |; will parse repeats separately
 			boolean has_repeats = false;
+			boolean has_repeats_above = false;
 			if (rawLines[0].matches(".*\\|\\|.*")) {
 				lines = convertRepeatsToNormal(rawLines);
 				has_repeats = true;
+			} else if (rawLines[0].matches(".+REPEAT.+")) {
+				lines = convertRepeatsToNormalRepeatsAbove(rawLines);
+				has_repeats_above = true;
 			} else {
 				lines = rawLines;
 			}
@@ -75,6 +79,8 @@ public class StringParserUtilityDrum extends StringParserUtility {
 			// Set measure repeats, if any
 			if (has_repeats) {
 				fillMeasureRepeats(rawLines);
+			} else if (has_repeats_above) {
+				fillMeasureRepeatsRepeatsAbove(rawLines);
 			}
 		}
 		fillBeams(measureList);
@@ -92,12 +98,15 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				// String instrument = getInstrument(lines, i);
 				String instrument = splitLines[j][0];
 				String curr = lines[j].substring(i, i + 1); // this is the current character that we are parsing
-				if (!(curr.equals("-"))) { // this must be a note!
+				if ((curr.equals("x")|| curr.equals("o"))) { // this must be a note!
 					Note note = getNote(instrument);
-					if (instrument.equals("HH"))
-						note = getNote("HHx");
-					if (curr.equals("x"))
+					
+					if (curr.equals("x")) {
+						if (instrument.equals("HH"))
+							note = getNote("HHx");
 						((DrumNote) note).setNotehead("x");
+					}
+						
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); // pass the current column index
 					note.floatDuration = note.duration / (float) 4;
@@ -119,4 +128,24 @@ public class StringParserUtilityDrum extends StringParserUtility {
 		noteGetter.initializeDrum();
 		return noteGetter.drumNotes.get(instrument);
 	}
+	
+	
+	public static int getDivison(String measure) { // returns the division of a measure
+		int division = 0;
+		String lines[] = measure.split("\\r?\\n");
+
+		for (int i = 0; i < lines[0].length() - 1; i++) { // i are the columns
+			for (int j = 0; j < lines.length; j++) { // j are the rows
+				String curr = lines[j].substring(i, i + 1);
+				if ((curr.equals("x") || curr.equals("o"))) { // does this work once we get holding/pulling?
+					division = lines[j].length() - i;
+					// System.out.println("division: " + division);
+					return division;
+				}
+			}
+		}
+		return division;
+	}
+	
+	
 }
