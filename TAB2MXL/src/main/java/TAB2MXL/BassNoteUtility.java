@@ -44,7 +44,7 @@ public class BassNoteUtility {
 
 	public void makeArray(int counter, int octave, int arline, int line, Note[] BassRepo, Note[][] BassNote) {
 		int repoCont;
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i < 13; i++) {
 			repoCont = counter % 11;
 			if (repoCont == 8) {
 				octave++;

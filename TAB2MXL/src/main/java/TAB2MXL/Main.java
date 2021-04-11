@@ -1,5 +1,7 @@
 package TAB2MXL;
 
+
+
 import java.util.ArrayList;
 
 import View.Controller;
@@ -20,18 +22,13 @@ public class Main {
 		// Amer Lab Task
 		//govind
 		//test
-		
-		String res = Controller.cleanup("CC|x---------------|--------x-------|\n"
-				+ "HH|--x-x-x-x-x-x-x-|----------------|\n"
-				+ "SD|----o-------o---|oooo------------|\n"
-				+ "HT|----------------|----oo----------|\n"
-				+ "MT|----------------|------oo--------|\n"
-				+ "BD|o-------o-------|o-------o-------|\n"
-				+ "");
-		StringParserUtility.clearMeasureList();
-		ArrayList<Measure> measureList = StringParserUtilityDrum.stringParse(res);
-		String result = XmlGenerator.Generate(measureList, "DRUMS");
-		System.out.println(result);
+		BassNoteUtility bassUtil = new BassNoteUtility();
+		bassUtil.initialise();
+		Note note = bassUtil.BassNote[0][0];
+		System.out.println(note.getStep());
+		System.out.println( note.getOctave());
+		System.out.println(note.getFret());
+		System.out.println( note.getString());
 		
 
 		//addidng 
