@@ -393,7 +393,6 @@ public class TuningController {
 		}
 		Controller con = new Controller();
 		Controller.state = 1;
-		
 		Controller.previousText = Controller.INPUT.getText();
 		confirmButton.getScene().getWindow().hide();
 		// TRANSLATE.setText("Save");
