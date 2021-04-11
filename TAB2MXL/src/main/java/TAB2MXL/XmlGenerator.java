@@ -248,10 +248,10 @@ public class XmlGenerator {
 				// -<staff-details>
 				if (xutil.includeStaffDetails) {
 					Element staffDetails = doc.createElement("staff-details");
-					if(xutil.instrument=="GUITAR") {
-					addGuitarStaffDetails(staffDetails);
-					measureAttribute.appendChild(staffDetails);}
-					else if(xutil.instrument=="BASS") {
+					if (xutil.instrument == "GUITAR") {
+						addGuitarStaffDetails(staffDetails);
+						measureAttribute.appendChild(staffDetails);
+					} else if (xutil.instrument == "BASS") {
 						addBassStaffDetails(staffDetails);
 						measureAttribute.appendChild(staffDetails);
 					}
@@ -284,6 +284,13 @@ public class XmlGenerator {
 				Element e = doc.createElement(xutil.stepTagString);
 				e.appendChild(doc.createTextNode(n.step));
 				pitch.appendChild(e);
+
+				if (n.getAlter() != 0) {
+					// --<alter>
+					e = doc.createElement("alter");
+					e.appendChild(doc.createTextNode(String.valueOf(n.getAlter())));
+					pitch.appendChild(e);
+				}
 
 				// --<octave>
 				e = doc.createElement(xutil.octaveTagString);
