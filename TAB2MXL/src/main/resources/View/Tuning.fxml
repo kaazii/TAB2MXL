@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="360.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.TuningController">
+   <children>
+      <HBox prefWidth="360.0">
+         <children>
+            <VBox prefWidth="360.0">
+               <children>
+                  <Label prefHeight="56.0" prefWidth="322.0" text="Tunning Options">
+                     <font>
+                        <Font name="System Bold" size="19.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets left="10.0" />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets left="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox>
+                     <children>
+                        <Label prefHeight="32.0" text="STRING 1" textFill="#828f9c">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label prefHeight="32.0" text="Step:">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin></Label>
+                        <MenuButton fx:id="fret1" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-insets: 2;" text="Default">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Default" />
+                            <MenuItem fx:id="E1" mnemonicParsing="false" text="E" />
+                              <MenuItem fx:id="F1" mnemonicParsing="false" text="F" />
+                              <MenuItem fx:id="FS1" mnemonicParsing="false" text="F#" />
+                              <MenuItem fx:id="G1" mnemonicParsing="false" text="G" />
+                              <MenuItem fx:id="GS1" mnemonicParsing="false" text="G#" />
+                              <MenuItem fx:id="A1" mnemonicParsing="false" text="A" />
+                              <MenuItem fx:id="AS1" mnemonicParsing="false" text="A#" />
+                              <MenuItem fx:id="B1" mnemonicParsing="false" text="B" />
+                              <MenuItem fx:id="C1" mnemonicParsing="false" text="C" />
+                              <MenuItem fx:id="CS1" mnemonicParsing="false" text="C#" />
+                              <MenuItem fx:id="D1" mnemonicParsing="false" text="D" />
+                              <MenuItem fx:id="DS1" mnemonicParsing="false" text="D#" />
+                          </items>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </MenuButton>
+                        <Label prefHeight="32.0" text="Octave:">
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin></Label>
+                        <TextField fx:id="octave1" prefWidth="83.0" promptText="Default" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-insets: 2; -fx-border-radius: 10;">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin></TextField>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="66.0">
+                     <children>
+                        <Label prefHeight="32.0" text="STRING 2" textFill="#828f9c">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label prefHeight="32.0" text="Step:">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <MenuButton fx:id="fret2" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-insets: 2;" text="Default">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Default" />
+                              <MenuItem fx:id="E2" mnemonicParsing="false" text="E" />
+                              <MenuItem fx:id="F2" mnemonicParsing="false" text="F" />
+                              <MenuItem fx:id="FS2" mnemonicParsing="false" text="F#" />
+                              <MenuItem fx:id="G2" mnemonicParsing="false" text="G" />
+                              <MenuItem fx:id="GS2" mnemonicParsing="false" text="G#" />
+                              <MenuItem fx:id="A2" mnemonicParsing="false" text="A" />
+                              <MenuItem fx:id="AS2" mnemonicParsing="false" text="A#" />
+                              <MenuItem fx:id="B2" mnemonicParsing="false" text="B" />
+                              <MenuItem fx:id="C2" mnemonicParsing="false" text="C" />
+                              <MenuItem fx:id="CS2" mnemonicParsing="false" text="C#" />
+                              <MenuItem fx:id="D2" mnemonicParsing="false" text="D" />
+                              <MenuItem fx:id="DS2" mnemonicParsing="false" text="D#" />
+                           </items>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </MenuButton>
+                        <Label prefHeight="32.0" text="Octave:">
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="octave2" prefWidth="83.0" promptText="Default" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-insets: 2; -fx-border-radius: 10;">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="99.0">
+                     <children>
+                        <Label prefHeight="32.0" text="STRING 3" textFill="#828f9c">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label prefHeight="32.0" text="Step:">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <MenuButton fx:id="fret3" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-insets: 2;" text="Default">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Default" />
+                              <MenuItem fx:id="E3" mnemonicParsing="false" text="E" />
+                              <MenuItem fx:id="F3" mnemonicParsing="false" text="F" />
+                              <MenuItem fx:id="FS3" mnemonicParsing="false" text="F#" />
+                              <MenuItem fx:id="G3" mnemonicParsing="false" text="G" />
+                              <MenuItem fx:id="GS3" mnemonicParsing="false" text="G#" />
+                              <MenuItem fx:id="A3" mnemonicParsing="false" text="A" />
+                              <MenuItem fx:id="AS3" mnemonicParsing="false" text="A#" />
+                              <MenuItem fx:id="B3" mnemonicParsing="false" text="B" />
+                              <MenuItem fx:id="C3" mnemonicParsing="false" text="C" />
+                              <MenuItem fx:id="CS3" mnemonicParsing="false" text="C#" />
+                              <MenuItem fx:id="D3" mnemonicParsing="false" text="D" />
+                              <MenuItem fx:id="DS3" mnemonicParsing="false" text="D#" />
+                           </items>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </MenuButton>
+                        <Label prefHeight="32.0" text="Octave:">
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="octave3" prefWidth="83.0" promptText="Default" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-insets: 2; -fx-border-radius: 10;">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="132.0">
+                     <children>
+                        <Label prefHeight="32.0" text="STRING 4" textFill="#828f9c">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label prefHeight="32.0" text="Step:">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <MenuButton fx:id="fret4" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-insets: 2;" text="Default">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Default" />
+                              <MenuItem fx:id="E4" mnemonicParsing="false" text="E" />
+                              <MenuItem fx:id="F4" mnemonicParsing="false" text="F" />
+                              <MenuItem fx:id="FS4" mnemonicParsing="false" text="F#" />
+                              <MenuItem fx:id="G4" mnemonicParsing="false" text="G" />
+                              <MenuItem fx:id="GS4" mnemonicParsing="false" text="G#" />
+                              <MenuItem fx:id="A4" mnemonicParsing="false" text="A" />
+                              <MenuItem fx:id="AS4" mnemonicParsing="false" text="A#" />
+                              <MenuItem fx:id="B4" mnemonicParsing="false" text="B" />
+                              <MenuItem fx:id="C4" mnemonicParsing="false" text="C" />
+                              <MenuItem fx:id="CS4" mnemonicParsing="false" text="C#" />
+                              <MenuItem fx:id="D4" mnemonicParsing="false" text="D" />
+                              <MenuItem fx:id="DS4" mnemonicParsing="false" text="D#" />
+                           </items>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </MenuButton>
+                        <Label prefHeight="32.0" text="Octave:">
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="octave4" prefWidth="83.0" promptText="Default" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-insets: 2; -fx-border-radius: 10;">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="165.0">
+                     <children>
+                        <Label prefHeight="32.0" text="STRING 5" textFill="#828f9c">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label prefHeight="32.0" text="Step:">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <MenuButton fx:id="fret5" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-insets: 2;" text="Default">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Default" />
+                              <MenuItem fx:id="E5" mnemonicParsing="false" text="E" />
+                              <MenuItem fx:id="F5" mnemonicParsing="false" text="F" />
+                              <MenuItem fx:id="FS5" mnemonicParsing="false" text="F#" />
+                              <MenuItem fx:id="G5" mnemonicParsing="false" text="G" />
+                              <MenuItem fx:id="GS5" mnemonicParsing="false" text="G#" />
+                              <MenuItem fx:id="A5" mnemonicParsing="false" text="A" />
+                              <MenuItem fx:id="AS5" mnemonicParsing="false" text="A#" />
+                              <MenuItem fx:id="B5" mnemonicParsing="false" text="B" />
+                              <MenuItem fx:id="C5" mnemonicParsing="false" text="C" />
+                              <MenuItem fx:id="CS5" mnemonicParsing="false" text="C#" />
+                              <MenuItem fx:id="D5" mnemonicParsing="false" text="D" />
+                              <MenuItem fx:id="DS5" mnemonicParsing="false" text="D#" />
+                           </items>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </MenuButton>
+                        <Label prefHeight="32.0" text="Octave:">
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="octave5" prefWidth="83.0" promptText="Default" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-insets: 2; -fx-border-radius: 10;">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="198.0">
+                     <children>
+                        <Label prefHeight="32.0" text="STRING 6" textFill="#828f9c">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label prefHeight="32.0" text="Step:">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <MenuButton fx:id="fret6" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10; -fx-border-insets: 2;" text="Default">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Default" />
+                              <MenuItem fx:id="E6" mnemonicParsing="false" text="E" />
+                              <MenuItem fx:id="F6" mnemonicParsing="false" text="F" />
+                              <MenuItem fx:id="FS6" mnemonicParsing="false" text="F#" />
+                              <MenuItem fx:id="G6" mnemonicParsing="false" text="G" />
+                              <MenuItem fx:id="GS6" mnemonicParsing="false" text="G#" />
+                              <MenuItem fx:id="A6" mnemonicParsing="false" text="A" />
+                              <MenuItem fx:id="AS6" mnemonicParsing="false" text="A#" />
+                              <MenuItem fx:id="B6" mnemonicParsing="false" text="B" />
+                              <MenuItem fx:id="C6" mnemonicParsing="false" text="C" />
+                              <MenuItem fx:id="CS6" mnemonicParsing="false" text="C#" />
+                              <MenuItem fx:id="D6" mnemonicParsing="false" text="D" />
+                              <MenuItem fx:id="DS6" mnemonicParsing="false" text="D#" />
+                           </items>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </MenuButton>
+                        <Label prefHeight="32.0" text="Octave:">
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="octave6" prefWidth="83.0" promptText="Default" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-insets: 2; -fx-border-radius: 10;">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox prefWidth="322.0">
+                     <VBox.margin>
+                        <Insets bottom="25.0" left="15.0" top="25.0" />
+                     </VBox.margin>
+                     <children>
+                        <Button id="optionCancel" fx:id="cancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="42.0" prefWidth="133.0" style="-fx-background-color: transparent; -fx-border-color: #F0F4F0; -fx-border-radius: 10;" text="Cancel">
+                           <HBox.margin>
+                              <Insets left="24.0" top="16.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#confirm" prefHeight="42.0" prefWidth="133.0" style="-fx-background-color: #828F9C;" text="Confirm" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="8.0" top="16.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="SansSerif Regular" size="13.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</Pane>

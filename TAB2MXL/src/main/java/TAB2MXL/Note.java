@@ -30,6 +30,27 @@ public class Note {
 
 	public String stem;
 
+	public int alter = 0;
+
+	public Note(String step, int alter) {
+		this.step = step;
+		this.alter = alter;
+	}
+
+	public Note(String step, int alter, int octave) {
+		this.step = step;
+		this.alter = alter;
+		this.octave = octave;
+	}
+
+	public Note(String step, int octave, int fret, int string, int alter) {
+		this.step = step;
+		this.octave = octave;
+		this.fret = fret;
+		this.string = string;
+		this.alter = alter;
+	}
+
 	public Note(String step, int octave, int fret, int string) {
 		this.step = step;
 		this.octave = octave;
@@ -113,4 +134,13 @@ public class Note {
 	public void stop() {
 		this.startOrStop = "stop";
 	}
+
+	public int getAlter() {
+		return alter;
+	}
+
+	public void setAlter(int alter) {
+		this.alter = alter;
+	}
+
 }

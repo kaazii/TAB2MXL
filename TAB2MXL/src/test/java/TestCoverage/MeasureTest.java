@@ -46,5 +46,7 @@ class MeasureTest {
 		measure = new Measure(2);
 		assertEquals(2, measure.getDivision());
 	}
+	
+	
 
 }
