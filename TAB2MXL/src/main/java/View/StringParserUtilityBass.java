@@ -18,7 +18,7 @@ public class StringParserUtilityBass extends StringParserUtility {
 	public static Hashtable<Integer, Integer> measureRepeats = new Hashtable<Integer, Integer>();
 
 	public static Note getNote(int string, int fret) {
-		BassNoteUtility noteGetter = new BassNoteUtility();
+		BassNoteUtility noteGetter = TuningController.BNU;
 		noteGetter.initialise();
 		return noteGetter.BassNote[string][fret];
 	}
