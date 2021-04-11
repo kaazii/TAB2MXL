@@ -11,9 +11,8 @@ import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.base.WindowMatchers;
-import org.testfx.matcher.control.LabeledMatchers;
-import org.testfx.matcher.control.TextMatchers;
+import org.testfx.matcher.base.NodeMatchers;
+import org.testfx.matcher.control.MenuItemMatchers;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,14 +20,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
-class TranslateOptionsTest {
+class TuningOptionTest {
 
 	@Start
 	private void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("OptionBox.fxml"));
-			primaryStage.setTitle("Translation Options");
-			primaryStage.setScene(new Scene(root,  360, 356));
+			Parent root = FXMLLoader.load(getClass().getResource("Tuning.fxml"));
+			primaryStage.setTitle("Tuning Options");
+			primaryStage.setScene(new Scene(root,  360, 377));
 			primaryStage.show();
 		}
 		catch(IOException e) {
@@ -36,21 +35,17 @@ class TranslateOptionsTest {
 		}
 	}
 
+	
 	@Test
-
-	void should_contain_confirm(FxRobot robot) {
-		FxAssert.verifyThat("#optionConfirm", LabeledMatchers.hasText("Confirm"));
+	void has_confirm_button(FxRobot robot) {
+		FxAssert.verifyThat("#confirmButton", NodeMatchers.isVisible());
 	}
 	
-	// Confirm option box has cancel button
 	@Test
-
-	void should_contain_cancel(FxRobot robot) {
-		FxAssert.verifyThat("#optionCancel", LabeledMatchers.hasText("Cancel"));
+	void has_cancel_button(FxRobot robot) {
+		FxAssert.verifyThat("#cancelButton", NodeMatchers.isVisible());
 	}
 	
-	
-	//Test illegal input are rejected
 	
 
 }

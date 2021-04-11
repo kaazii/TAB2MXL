@@ -540,7 +540,7 @@ public class Controller {
 		
 
 		if (selected == Type.BASS || selected == Type.GUITAR) {
-			openPopup("Tuning.fxml", "Tunning Option", 360, 377);
+			openPopup("Tuning.fxml", "Tuning Options", 360, 377);
 			closePopup();
 			return;
 		}
@@ -869,7 +869,7 @@ public class Controller {
 		// string containing all possible characters for the text tab for all 3
 		// instruments
 
-		String validChars = "0123456789-|EARPDGBECHSTMXxgmaoshp []*\n";
+		String validChars = "0123456789-|EARPDGBECHSTMXxgmaoshp []*\n—";
 
 		// must be same length
 		String[] splitInput = tempInput.split("\\r?\\n\\r?\\n");
@@ -972,7 +972,7 @@ public class Controller {
 		boolean consecutive = false; // if there is consecutive lines to be ignored
 		for (int i = 0; i < lines.length; i++) {
 			// System.out.println(lines[i]);
-			if (!lines[i].contains("-") || !lines[i].contains("|") || lines[i].contains("REPEAT")) {
+			if (!lines[i].contains("-") || !lines[i].contains("|") || lines[i].toUpperCase().contains("REPEAT")) {
 				if (consecutive)
 					continue;
 				else {
