@@ -386,7 +386,7 @@ public class NoteUtility {
 			type = "64th";
 			note.isDotted = true;
 		} else {
-			type = "null";
+			type = "NoNoteTypeFound";
 		}
 		note.duration = (int) (note.getFloatDuration() * 4);
 		return type;
