@@ -513,7 +513,7 @@ public class StringParserUtility {
 						String[] noteSplit = currNote.split("[phs]");
 
 						String complexType = currNote.replaceAll("\\d", ""); // only left with p, h, or s
-						
+
 						parsingFunctionComplex(noteSplit, lines, measure, i + 1, j, timeSignature, complexType, true);
 					}
 				}
@@ -559,7 +559,8 @@ public class StringParserUtility {
 		measure.noteList.add(note);
 	}
 
-	public static void parsingFunctionComplex(String[] noteSplit, String[] lines, Measure measure, int i, int j, float timeSignature, String complexType, boolean isGrace) {
+	public static void parsingFunctionComplex(String[] noteSplit, String[] lines, Measure measure, int i, int j,
+			float timeSignature, String complexType, boolean isGrace) {
 		int lengthTracker = 0;
 		if (isGrace) {
 			int indexAdder = 0;
@@ -568,29 +569,32 @@ public class StringParserUtility {
 			StringBuilder sb = new StringBuilder();
 			sb.append("g");
 			sb.append(complexType);
-			
-			String [] complexTypeList = sb.toString().split("");
+
+			String[] complexTypeList = sb.toString().split("");
 
 			for (int k = 0; k < noteSplit.length; k++) {
 				String currNoteString = noteSplit[k];
 				Note currNote = getNote(j, Integer.parseInt(currNoteString));
 				currNote.stem = "up";
-				currNote.setType(NoteUtility.getNoteType(currNote.getFloatDuration() / (float) measure.getDivision(), currNote));
-				
+				currNote.setType(
+						NoteUtility.getNoteType(currNote.getFloatDuration() / (float) measure.getDivision(), currNote));
+
 				if (k >= 2) {
 					indexAdder++;
 				}
-				
+
 				if (k == 0) {
 					currNote.setColumn(i + currNoteString.length() - 1);
-					currNote.floatDuration = (float) (getDuration(lines, i + currNoteString.length() - 1) * timeSignature);
-				}
-				else {
+					currNote.floatDuration = (float) (getDuration(lines, i + currNoteString.length() - 1)
+							* timeSignature);
+				} else {
 					currNote.setColumn(i + currNoteString.length() + lengthTracker + indexAdder);
-					currNote.floatDuration = (float) (getDuration(lines, i + currNoteString.length() + lengthTracker + indexAdder) * timeSignature);
+					currNote.floatDuration = (float) (getDuration(lines,
+							i + currNoteString.length() + lengthTracker + indexAdder) * timeSignature);
 				}
-				
-				currNote.setType(NoteUtility.getNoteType(currNote.getFloatDuration() / (float) measure.getDivision(), currNote));
+
+				currNote.setType(
+						NoteUtility.getNoteType(currNote.getFloatDuration() / (float) measure.getDivision(), currNote));
 
 				System.out.println("current note duration : "
 						+ (float) currNote.getFloatDuration() / (float) measure.getDivision());
@@ -600,12 +604,11 @@ public class StringParserUtility {
 
 				lengthTracker += currNoteString.length();
 				noteList.add(currNote);
-			} 
-			
+			}
+
 			GraceNote graceNote = new GraceNote(noteList, complexTypeList);
 			measure.graceNotes.add(graceNote);
-		} 
-		else { //note a grace note
+		} else { // note a grace note
 			for (int k = 0; k < noteSplit.length; k++) {
 				String currNoteString = noteSplit[k];
 
@@ -622,10 +625,12 @@ public class StringParserUtility {
 				if (k == 1) {
 					currNote.stop();
 					currNote.setColumn(i + lengthTracker + currNoteString.length());
-					currNote.floatDuration = (float) (getDuration(lines, i + currNoteString.length() + lengthTracker) * timeSignature);
+					currNote.floatDuration = (float) (getDuration(lines, i + currNoteString.length() + lengthTracker)
+							* timeSignature);
 				}
 
-				currNote.setType(NoteUtility.getNoteType(currNote.getFloatDuration() / (float) measure.getDivision(), currNote));
+				currNote.setType(
+						NoteUtility.getNoteType(currNote.getFloatDuration() / (float) measure.getDivision(), currNote));
 
 				switch (complexType) {
 				case "p":
@@ -718,7 +723,6 @@ public class StringParserUtility {
 
 	public static Note getNote(int string, int fret) {
 		NoteUtility noteGetter = TuningController.NU;
-		noteGetter.initialise();
 		return noteGetter.guitarNote[string][fret];
 	}
 
