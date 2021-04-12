@@ -869,7 +869,7 @@ public class Controller {
 		// string containing all possible characters for the text tab for all 3
 		// instruments
 
-		String validChars = "0123456789-|EARPDGBECHSTMXxgmaoshp []*\n—";
+		String validChars = "0123456789-|EARPDGBECHSTMXxgmao0shp []*\n—";
 
 		// must be same length
 		String[] splitInput = tempInput.split("\\r?\\n\\r?\\n");
