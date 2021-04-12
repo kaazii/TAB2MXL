@@ -26,7 +26,6 @@ public class XmlGenerator {
 
 	public static final String PART_NAME = " ";
 	private static Document doc;
-
 	private static String fifths = String.valueOf(0);
 
 	private static XMLUtility xutil = new XMLUtility("GUITAR"); // Guitar by default
@@ -260,8 +259,11 @@ public class XmlGenerator {
 			}
 
 			measureNum++;
+			// TODO
+
 			// Add notes
 			for (Note n : m.noteList) {
+
 				addNote(n, measureElem, false, "", "");
 			}
 
@@ -292,7 +294,6 @@ public class XmlGenerator {
 							addNote(n, measureElem, false, gn.complexTypeList[noteIndex + 1],
 									gn.complexTypeList[noteIndex]);
 						}
-
 						noteIndex++;
 					}
 				}
@@ -710,12 +711,12 @@ public class XmlGenerator {
 
 			// --<tuning-step>
 			e = doc.createElement("tuning-step");
-			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][0].type)));
+			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][0].getStep())));
 			staffTuning.appendChild(e);
 
 			// --<tuning-octave>
 			e = doc.createElement("tuning-octave");
-			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][0].octave)));
+			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][0].getOctave())));
 			staffTuning.appendChild(e);
 		}
 	}
