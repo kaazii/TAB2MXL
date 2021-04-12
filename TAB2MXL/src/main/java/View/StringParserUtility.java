@@ -1,7 +1,6 @@
 package View;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -94,7 +93,7 @@ public class StringParserUtility {
 	}
 
 	// any sequence that adds up to a quarter note, put beams in it
-	public static void fillBeams(ArrayList<Measure> measureList) {
+	public static void fillBeams(ArrayList<Measure> measureList) throws Exception {
 		HashMap<String, Float> noteEnum = new HashMap<>();
 		HashMap<String, Integer> beamNumberGuide = new HashMap<>();
 		noteEnum.put("whole", 1f);
@@ -119,6 +118,14 @@ public class StringParserUtility {
 
 			while (leader < noteList.size() && trailer != leader) {
 				currSum = 0;
+
+				if (!noteEnum.containsKey(noteList.get(leader).type)) {
+					throw new Exception(String.format(
+							"Found a note without a specified type." + "string:<%s> fret:<%s> column:<%s> type:<%s> ",
+							noteList.get(leader).string, noteList.get(leader).fret, noteList.get(leader).column,
+							noteList.get(leader).type));
+				}
+
 				if (noteEnum.get(noteList.get(leader).type) > noteEnum.get("eighth")) {
 					trailer = leader + 1;
 					leader = trailer + 1;
@@ -605,10 +612,10 @@ public class StringParserUtility {
 				lengthTracker += currNoteString.length();
 				noteList.add(currNote);
 			}
-			
+
 			GraceNote graceNote = new GraceNote(noteList, complexTypeList);
 			measure.graceNotes.add(graceNote);
-			measure.noteList.add(new Note (graceNote, true));
+			measure.noteList.add(new Note(graceNote, true));
 		} else { // note a grace note
 			for (int k = 0; k < noteSplit.length; k++) {
 				String currNoteString = noteSplit[k];
@@ -652,7 +659,6 @@ public class StringParserUtility {
 						slideCount++;
 					}
 				}
-
 				System.out.println("current note duration : "
 						+ (float) currNote.getFloatDuration() / (float) measure.getDivision());
 				System.out.println("firstNote information : fret: " + currNote.fret + " string: " + currNote.string

@@ -19,12 +19,13 @@ import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 
 import View.Controller;
+import View.StringParserUtility;
+import View.TuningController;
 
 public class XmlGenerator {
 
 	public static final String PART_NAME = " ";
 	private static Document doc;
-
 	private static String fifths = String.valueOf(0);
 
 	private static XMLUtility xutil = new XMLUtility("GUITAR"); // Guitar by default
@@ -195,9 +196,6 @@ public class XmlGenerator {
 			measureElem.setAttributeNode(attr);
 			partElement.appendChild(measureElem);
 
-			// fill in attributes for first measure
-			// TODO check if this is correct logic, not sure if only the first measure needs
-			// <attributes>
 			if (measureNum == 1) {
 				// <attributes>
 				Element measureAttribute = doc.createElement("attributes");
@@ -249,10 +247,7 @@ public class XmlGenerator {
 				if (xutil.includeStaffDetails) {
 					Element staffDetails = doc.createElement("staff-details");
 					if (xutil.instrument == "GUITAR") {
-						addGuitarStaffDetails(staffDetails);
-						measureAttribute.appendChild(staffDetails);
-					} else if (xutil.instrument == "BASS") {
-						addBassStaffDetails(staffDetails);
+						addStaffDetails(staffDetails, xutil.instrument);
 						measureAttribute.appendChild(staffDetails);
 					}
 				}
@@ -264,200 +259,44 @@ public class XmlGenerator {
 			}
 
 			measureNum++;
+			// TODO
+
 			// Add notes
 			for (Note n : m.noteList) {
-				// <note>
-				Element note = doc.createElement("note");
-				measureElem.appendChild(note);
 
-				if (n.isChord) {
-					// -<chord>
-					Element chord = doc.createElement("chord");
-					note.appendChild(chord);
-				}
+				addNote(n, measureElem, false, "", "");
+			}
 
-				// -<pitch>
-				Element pitch = doc.createElement(xutil.pitchTagString);
-				note.appendChild(pitch);
+			// Handle grace notes
+			if (m.graceNotes.size() != 0) {
+				for (GraceNote gn : m.graceNotes) {
+					int noteIndex = 0;
+					for (Note n : gn.noteList) {
+						// TODO GRACE NOTE SHOULD NOT BE STATIC
+						String letter = gn.complexTypeList[noteIndex];
 
-				// --<step>
-				Element e = doc.createElement(xutil.stepTagString);
-				e.appendChild(doc.createTextNode(n.step));
-				pitch.appendChild(e);
+						if (letter.equals("g")) {
+							// grace note
+							// start note[index] with letter[index + 1]
+							addNote(n, measureElem, true, gn.complexTypeList[noteIndex + 1], "");
 
-				if (n.getAlter() != 0) {
-					// --<alter>
-					e = doc.createElement("alter");
-					e.appendChild(doc.createTextNode(String.valueOf(n.getAlter())));
-					pitch.appendChild(e);
-				}
+						} else if (noteIndex == gn.noteList.size() - 1) {
+							// last element
+							// Stop note[index] with letter[index]
 
-				// --<octave>
-				e = doc.createElement(xutil.octaveTagString);
-				e.appendChild(doc.createTextNode(String.valueOf(n.octave)));
-				pitch.appendChild(e);
+							addNote(n, measureElem, false, "", gn.complexTypeList[noteIndex]);
 
-				// -<duration>
-				e = doc.createElement("duration");
-				e.appendChild(doc.createTextNode(String.valueOf(n.duration)));
-				note.appendChild(e);
-
-				// -<instrument> if it's drums
-				if (xutil.includeInstrumentInNote) {
-					DrumNote dn = (DrumNote) n;
-					e = doc.createElement("instrument");
-					attr = doc.createAttribute("id");
-					attr.setValue(dn.instrumentId);
-					e.setAttributeNode(attr);
-					note.appendChild(e);
-				}
-
-				// -<voice>
-				e = doc.createElement("voice");
-				e.appendChild(doc.createTextNode(String.valueOf(n.voice)));
-				note.appendChild(e);
-
-				// -<type>
-				e = doc.createElement("type");
-				e.appendChild(doc.createTextNode(n.type));
-				note.appendChild(e);
-				// -</dot>
-				if (n.isDotted) {
-					e = doc.createElement("dot");
-					note.appendChild(e);
-				}
-				// stem if it's drums
-
-				if (xutil.includeNoteHead) {
-					DrumNote dn = (DrumNote) n;
-					if (dn.stem != null) {
-						e = doc.createElement("stem");
-						e.appendChild(doc.createTextNode(dn.stem));
-						note.appendChild(e);
-					}
-
-				}
-
-				// -<notehead> if it's drums
-				if (xutil.includeNoteHead) {
-					DrumNote dn = (DrumNote) n;
-					if (dn.notehead != null) {
-						e = doc.createElement("notehead");
-						e.appendChild(doc.createTextNode(dn.notehead));
-						note.appendChild(e);
-					}
-
-				}
-
-				if (xutil.includeBeams) {
-					if (!n.beamList.isEmpty()) {
-						for (int i = 0; i < n.beamList.size(); i++) {
-							Beam b = n.beamList.get(i);
-							e = doc.createElement("beam");
-							attr = doc.createAttribute("number");
-							attr.setValue(String.valueOf(b.number));
-							e.setAttributeNode(attr);
-							e.appendChild(doc.createTextNode(b.state));
-							note.appendChild(e);
-						}
-
-					}
-				}
-
-				// -<notations>
-				if (xutil.includeNotations) {
-					Element notations = doc.createElement("notations");
-					note.appendChild(notations);
-
-					// -<technical>
-					Element technical = doc.createElement("technical");
-					notations.appendChild(technical);
-
-					// <hammer-on> / <pull-off>
-					if (n.complexType != "") {
-						String complexTypeString;
-						String complexType = n.complexType.toUpperCase();
-
-						if (complexType.equals("H")) {
-							complexTypeString = "hammer-on";
-						} else if (complexType.equals("P")) {
-							complexTypeString = "pull-off";
-						} else if (complexType.equals("S")) {
-							complexTypeString = "slide";
 						} else {
-							complexTypeString = "complexTypeStringNotFound";
+							// middle element
+							// stop note[index] with letter[index]
+							// start note[index] with letter[index + 1]
+
+							addNote(n, measureElem, false, gn.complexTypeList[noteIndex + 1],
+									gn.complexTypeList[noteIndex]);
 						}
-
-						if (complexTypeString == "slide") {
-							e = doc.createElement(complexTypeString);
-
-							attr = doc.createAttribute("line-type");
-							attr.setValue("solid");
-							e.setAttributeNode(attr);
-
-							attr = doc.createAttribute("number");
-							attr.setValue(String.valueOf(n.complexTypeNumber));
-							e.setAttributeNode(attr);
-
-							notations.appendChild(e);
-						} else {
-							e = doc.createElement(complexTypeString);
-							e.appendChild(doc.createTextNode(complexType));
-
-							attr = doc.createAttribute("number");
-							attr.setValue(String.valueOf(n.complexTypeNumber));
-							e.setAttributeNode(attr);
-
-							attr = doc.createAttribute("type");
-							attr.setValue(n.startOrStop);
-							e.setAttributeNode(attr);
-
-							technical.appendChild(e);
-
-							// <slur>
-							e = doc.createElement("slur");
-							attr = doc.createAttribute("number");
-							attr.setValue(String.valueOf(n.complexTypeNumber));
-							e.setAttributeNode(attr);
-
-							attr = doc.createAttribute("placement");
-							attr.setValue("above");
-							e.setAttributeNode(attr);
-
-							attr = doc.createAttribute("type");
-							attr.setValue(n.startOrStop);
-							e.setAttributeNode(attr);
-
-							notations.appendChild(e);
-						}
+						noteIndex++;
 					}
-
-					// <harmonic>
-					if (n.isHarmonic) {
-						e = doc.createElement("harmonic");
-
-						attr = doc.createAttribute("placement");
-						attr.setValue("above");
-						e.setAttributeNode(attr);
-
-						attr = doc.createAttribute("print-object");
-						attr.setValue("yes");
-						e.setAttributeNode(attr);
-
-						technical.appendChild(e);
-					}
-
-					// --<string>
-					e = doc.createElement("string");
-					e.appendChild(doc.createTextNode(String.valueOf(n.string)));
-					technical.appendChild(e);
-
-					// --<fret>
-					e = doc.createElement("fret");
-					e.appendChild(doc.createTextNode(String.valueOf(n.fret)));
-					technical.appendChild(e);
 				}
-
 			}
 
 			// right Barline
@@ -476,6 +315,302 @@ public class XmlGenerator {
 				barline.appendChild(e);
 			}
 		}
+	}
+
+	private static void addNote(Note n, Element measureElem, boolean isGrace, String startType, String endType) {
+		Attr attr;
+		Element e;
+
+		// <note>
+		Element note = doc.createElement("note");
+		measureElem.appendChild(note);
+
+		if (isGrace) {
+			e = doc.createElement("grace");
+			note.appendChild(e);
+		}
+
+		if (n.isChord) {
+			// -<chord>
+			Element chord = doc.createElement("chord");
+			note.appendChild(chord);
+		}
+
+		// -<pitch>
+		Element pitch = doc.createElement(xutil.pitchTagString);
+		note.appendChild(pitch);
+
+		// --<step>
+		e = doc.createElement(xutil.stepTagString);
+		e.appendChild(doc.createTextNode(n.step));
+		pitch.appendChild(e);
+
+		if (n.getAlter() != 0) {
+			// --<alter>
+			e = doc.createElement("alter");
+			e.appendChild(doc.createTextNode(String.valueOf(n.getAlter())));
+			pitch.appendChild(e);
+		}
+
+		// --<octave>
+		e = doc.createElement(xutil.octaveTagString);
+		e.appendChild(doc.createTextNode(String.valueOf(n.octave)));
+		pitch.appendChild(e);
+
+		// -<duration>
+		e = doc.createElement("duration");
+		e.appendChild(doc.createTextNode(String.valueOf(n.duration)));
+		note.appendChild(e);
+
+		// -<instrument> if it's drums
+		if (xutil.includeInstrumentInNote) {
+			DrumNote dn = (DrumNote) n;
+			e = doc.createElement("instrument");
+			attr = doc.createAttribute("id");
+			attr.setValue(dn.instrumentId);
+			e.setAttributeNode(attr);
+			note.appendChild(e);
+		}
+
+		// -<voice>
+		e = doc.createElement("voice");
+		e.appendChild(doc.createTextNode(String.valueOf(n.voice)));
+		note.appendChild(e);
+
+		// -<type>
+		e = doc.createElement("type");
+		e.appendChild(doc.createTextNode(n.type));
+		note.appendChild(e);
+		// -</dot>
+		if (n.isDotted) {
+			e = doc.createElement("dot");
+			note.appendChild(e);
+		}
+		// stem if it's drums
+
+		if (xutil.includeNoteHead) {
+			DrumNote dn = (DrumNote) n;
+			if (dn.stem != null) {
+				e = doc.createElement("stem");
+				e.appendChild(doc.createTextNode(dn.stem));
+				note.appendChild(e);
+			}
+
+		}
+
+		// -<notehead> if it's drums
+		if (xutil.includeNoteHead) {
+			DrumNote dn = (DrumNote) n;
+			if (dn.notehead != null) {
+				e = doc.createElement("notehead");
+				e.appendChild(doc.createTextNode(dn.notehead));
+				note.appendChild(e);
+			}
+
+		}
+
+		if (xutil.includeBeams) {
+			if (!n.beamList.isEmpty()) {
+				for (int i = 0; i < n.beamList.size(); i++) {
+					Beam b = n.beamList.get(i);
+					e = doc.createElement("beam");
+					attr = doc.createAttribute("number");
+					attr.setValue(String.valueOf(b.number));
+					e.setAttributeNode(attr);
+					e.appendChild(doc.createTextNode(b.state));
+					note.appendChild(e);
+				}
+			}
+		}
+
+		// -<notations>
+		if (xutil.includeNotations) {
+			Element notations = doc.createElement("notations");
+			note.appendChild(notations);
+
+			// -<technical>
+			Element technical = doc.createElement("technical");
+			notations.appendChild(technical);
+
+			// <hammer-on> / <pull-off>
+			if (n.complexType != "") {
+				String complexType = n.complexType.toUpperCase();
+
+				String complexTypeString = getComplexTypeString(complexType);
+
+				if (complexTypeString == "slide") {
+					e = doc.createElement(complexTypeString);
+
+					attr = doc.createAttribute("line-type");
+					attr.setValue("solid");
+					e.setAttributeNode(attr);
+
+					attr = doc.createAttribute("number");
+					attr.setValue(String.valueOf(n.complexTypeNumber));
+					e.setAttributeNode(attr);
+
+					notations.appendChild(e);
+				} else {
+					e = doc.createElement(complexTypeString);
+					e.appendChild(doc.createTextNode(complexType));
+
+					attr = doc.createAttribute("number");
+					attr.setValue(String.valueOf(n.complexTypeNumber));
+					e.setAttributeNode(attr);
+
+					attr = doc.createAttribute("type");
+					attr.setValue(n.startOrStop);
+					e.setAttributeNode(attr);
+
+					technical.appendChild(e);
+
+					// <slur>
+					e = doc.createElement("slur");
+					attr = doc.createAttribute("number");
+					attr.setValue(String.valueOf(n.complexTypeNumber));
+					e.setAttributeNode(attr);
+
+					attr = doc.createAttribute("placement");
+					attr.setValue("above");
+					e.setAttributeNode(attr);
+
+					attr = doc.createAttribute("type");
+					attr.setValue(n.startOrStop);
+					e.setAttributeNode(attr);
+
+					notations.appendChild(e);
+				}
+			} else if ((!startType.equals("")) || (!endType.equals(""))) {
+
+				System.out.println("Found a note that's part of a grace");
+				if ((!startType.equals("")) && (!endType.equals(""))) {
+					String ct1 = startType.toUpperCase();
+					String ct2 = endType.toUpperCase();
+					complexAdder(n, ct2, "stop", notations, technical);
+					complexAdder(n, ct1, "start", notations, technical);
+				} else if (!endType.equals("")) {
+					String ct = endType.toUpperCase();
+					complexAdder(n, ct, "stop", notations, technical);
+				} else {
+					String ct = startType.toUpperCase();
+					complexAdder(n, ct, "stop", notations, technical);
+				}
+			}
+
+			// <harmonic>
+			if (n.isHarmonic) {
+				e = doc.createElement("harmonic");
+
+				attr = doc.createAttribute("placement");
+				attr.setValue("above");
+				e.setAttributeNode(attr);
+
+				attr = doc.createAttribute("print-object");
+				attr.setValue("yes");
+				e.setAttributeNode(attr);
+
+				technical.appendChild(e);
+			}
+
+			// --<string>
+			e = doc.createElement("string");
+			e.appendChild(doc.createTextNode(String.valueOf(n.string)));
+			technical.appendChild(e);
+
+			// --<fret>
+			e = doc.createElement("fret");
+			e.appendChild(doc.createTextNode(String.valueOf(n.fret)));
+			technical.appendChild(e);
+		}
+
+	}
+
+	private static String getComplexTypeString(String complexType) {
+		String complexTypeString;
+
+		if (complexType.equals("H")) {
+			complexTypeString = "hammer-on";
+		} else if (complexType.equals("P")) {
+			complexTypeString = "pull-off";
+		} else if (complexType.equals("S")) {
+			complexTypeString = "slide";
+		} else {
+			complexTypeString = "complexTypeStringNotFound";
+		}
+		return complexTypeString;
+	}
+
+	private static void complexAdder(Note n, String complexType, String startOrStop, Element notations,
+			Element technical) {
+
+		int complexTypeNumber;
+		String complexTypeString = getComplexTypeString(complexType);
+		Element e;
+		Attr attr;
+
+		if (complexType.equals("H")) {
+			complexTypeNumber = StringParserUtility.hammerOnCount;
+		} else if (complexType.equals("P")) {
+			complexTypeNumber = StringParserUtility.pullOffCount;
+		} else if (complexType.equals("S")) {
+			complexTypeNumber = StringParserUtility.slideCount;
+		} else {
+			complexTypeNumber = 1;
+		}
+
+		if (complexTypeString == "slide") {
+			e = doc.createElement(complexTypeString);
+
+			attr = doc.createAttribute("line-type");
+			attr.setValue("solid");
+			e.setAttributeNode(attr);
+
+			attr = doc.createAttribute("number");
+			attr.setValue(String.valueOf(complexTypeNumber));
+			e.setAttributeNode(attr);
+
+			notations.appendChild(e);
+		} else {
+			e = doc.createElement(complexTypeString);
+			e.appendChild(doc.createTextNode(complexType));
+
+			attr = doc.createAttribute("number");
+			attr.setValue(String.valueOf(complexTypeNumber));
+			e.setAttributeNode(attr);
+
+			attr = doc.createAttribute("type");
+			attr.setValue(startOrStop);
+			e.setAttributeNode(attr);
+
+			technical.appendChild(e);
+
+			// <slur>
+			e = doc.createElement("slur");
+			attr = doc.createAttribute("number");
+			attr.setValue(String.valueOf(complexTypeNumber));
+			e.setAttributeNode(attr);
+
+			attr = doc.createAttribute("placement");
+			attr.setValue("above");
+			e.setAttributeNode(attr);
+
+			attr = doc.createAttribute("type");
+			attr.setValue(startOrStop);
+			e.setAttributeNode(attr);
+
+			notations.appendChild(e);
+		}
+
+		if (startOrStop.equals("stop")) {
+			if (complexType.equals("H")) {
+				StringParserUtility.hammerOnCount = (StringParserUtility.hammerOnCount + 1) % 6;
+			} else if (complexType.equals("P")) {
+				StringParserUtility.pullOffCount = (StringParserUtility.pullOffCount + 1) % 6;
+			} else if (complexType.equals("S")) {
+				StringParserUtility.slideCount = (StringParserUtility.slideCount + 1) % 6;
+			}
+		}
+
 	}
 
 	// addBarline(measure element, "left" / "right", # of repeats from measure)
@@ -538,20 +673,33 @@ public class XmlGenerator {
 
 	// Adds the guitar-specific staff details instructions to the XML file built
 	// Input is the root element of the <staff-details> tag
-	private static void addGuitarStaffDetails(Element staffDetailsElement) {
+	private static void addStaffDetails(Element staffDetailsElement, String instrument) {
 		// ts => tuning-step
 		// to => tuning octave
-		int guitarStaffLines = 6;
 
 		// 2d array for each <tuning-step> and its respective <tuning-octave>
-		String[][] tuning = { { "E", "2" }, { "A", "2" }, { "D", "3" }, { "G", "3" }, { "B", "3" }, { "E", "4" } };
+		// String[][] tuning = { { "E", "2" }, { "A", "2" }, { "D", "3" }, { "G", "3" },
+		// { "B", "3" }, { "E", "4" } };
+
+		Note[][] tuning;
+
+		if (instrument.equals("GUITAR")) {
+			NoteUtility nu = TuningController.NU;
+			tuning = nu.guitarNote;
+		} else {
+			BassNoteUtility nu = TuningController.BNU;
+			tuning = nu.BassNote;
+
+		}
+
+		int staffLines = tuning.length;
 
 		// -<staff-lines>
 		Element e = doc.createElement("staff-lines");
-		e.appendChild(doc.createTextNode(String.valueOf(guitarStaffLines)));
+		e.appendChild(doc.createTextNode(String.valueOf(staffLines)));
 		staffDetailsElement.appendChild(e);
 
-		for (int i = 0; i < guitarStaffLines; i++) {
+		for (int i = 0; i < staffLines; i++) {
 			// -<staff-tuning>
 			Element staffTuning = doc.createElement("staff-tuning");
 			staffDetailsElement.appendChild(staffTuning);
@@ -563,50 +711,14 @@ public class XmlGenerator {
 
 			// --<tuning-step>
 			e = doc.createElement("tuning-step");
-			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][0])));
+			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][0].getStep())));
 			staffTuning.appendChild(e);
 
 			// --<tuning-octave>
 			e = doc.createElement("tuning-octave");
-			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][1])));
+			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][0].getOctave())));
 			staffTuning.appendChild(e);
 		}
-
 	}
 
-	private static void addBassStaffDetails(Element staffDetailsElement) {
-		// ts => tuning-step
-		// to => tuning octave
-		int bassStaffLines = 4;
-
-		// 2d array for each <tuning-step> and its respective <tuning-octave>
-		String[][] tuning = { { "E", "1" }, { "A", "1" }, { "B", "2" }, { "G", "2" } };
-
-		// -<staff-lines>
-		Element e = doc.createElement("staff-lines");
-		e.appendChild(doc.createTextNode(String.valueOf(bassStaffLines)));
-		staffDetailsElement.appendChild(e);
-
-		for (int i = 0; i < bassStaffLines; i++) {
-			// -<staff-tuning>
-			Element staffTuning = doc.createElement("staff-tuning");
-			staffDetailsElement.appendChild(staffTuning);
-
-			// add "line" attribute to <staff-tuning>
-			Attr attr = doc.createAttribute("line");
-			attr.setValue(String.valueOf(i + 1));
-			staffTuning.setAttributeNode(attr);
-
-			// --<tuning-step>
-			e = doc.createElement("tuning-step");
-			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][0])));
-			staffTuning.appendChild(e);
-
-			// --<tuning-octave>
-			e = doc.createElement("tuning-octave");
-			e.appendChild(doc.createTextNode(String.valueOf(tuning[i][1])));
-			staffTuning.appendChild(e);
-		}
-
-	}
 }

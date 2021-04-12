@@ -5,6 +5,10 @@ import java.util.Map;
 
 public class NoteUtility {
 
+	public NoteUtility() {
+		initialise();
+	}
+
 	public Note[][] guitarNote = new Note[6][25];
 	public Map<String, Note> drumNotes = new HashMap<>();
 
@@ -48,7 +52,7 @@ public class NoteUtility {
 	public void makeArray(int counter, int octave, int arline, int line, Note[] guitarRepo, Note[][] guitarNote) {
 		int repoCont;
 		for (int i = 0; i < 25; i++) {
-			repoCont = counter % 11;
+			repoCont = counter % 12;
 			if (repoCont == 8) {
 				octave++;
 				guitarNote[arline][i] = new Note(guitarRepo[repoCont].getStep(), octave, i, line,
