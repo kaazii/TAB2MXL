@@ -70,8 +70,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				Map<Integer, Pair<Integer, Integer>> timeList = Controller.beatList;
 				if (timeList.containsKey(measureList.get(measureIndex).measureNumber)) {
 					// only passing on the numerator for now
-					measureList.get(measureIndex)
-							.setTimeSignature(timeList.get(measureList.get(measureIndex).measureNumber).getKey());
+					measureList.get(measureIndex).setTimeSignature(timeList.get(measureList.get(measureIndex).measureNumber).getKey());
 				}
 				measureIndex++;
 			}
@@ -88,7 +87,12 @@ public class StringParserUtilityDrum extends StringParserUtility {
 	}
 
 	public static Measure measureParser(String measureString, String[][] splitLines) {
+		measureString = measureString.replaceAll("X", "x");
+		measureString = measureString.replaceAll("O", "o");
+		System.out.println(measureString);
+		
 		Measure measure = new Measure(getDivison(measureString));
+		
 		measure.divisions = getDivison(measureString);
 
 		String lines[] = measureString.split("\\r?\\n");
@@ -106,7 +110,6 @@ public class StringParserUtilityDrum extends StringParserUtility {
 							note = getNote("HHx");
 						((DrumNote) note).setNotehead("x");
 					}
-
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); // pass the current column index
 					note.floatDuration = note.duration / (float) 4;
@@ -159,6 +162,4 @@ public class StringParserUtilityDrum extends StringParserUtility {
 		}
 		return division;
 	}
-
-	
 }

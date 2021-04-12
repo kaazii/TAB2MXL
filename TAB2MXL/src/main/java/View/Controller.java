@@ -427,7 +427,7 @@ public class Controller {
 
 		// basic checks
 		if ((lines[0].toUpperCase().startsWith("E") || (lines.length == 6)) && !lines[0].contains("o")
-				&& !lines[0].contains("x")) {
+				&& !lines[0].toLowerCase().contains("x")) {
 			// System.out.println("This is a guitar"); // testing
 			guitarButtonClicked();
 			/*
@@ -435,11 +435,11 @@ public class Controller {
 			 */
 
 		} else if (lines[0].toUpperCase().startsWith("G") || (lines.length == 5 || lines.length == 4)
-				&& !lines[0].contains("o") && !lines[0].contains("x")) {
+				&& !lines[0].toLowerCase().contains("o") && !lines[0].toLowerCase().contains("x")) {
 			// System.out.println("This is a bass"); // testing
 			bassButtonClicked();
 			// Bass
-		} else if (lines[0].contains("x") || lines[0].contains("o")) {
+		} else if (lines[0].toLowerCase().contains("x") || lines[0].toLowerCase().contains("o")) {
 			// System.out.println("This is a drum"); // testing
 			drumButtonClicked();
 			// Drum
@@ -869,7 +869,7 @@ public class Controller {
 		// string containing all possible characters for the text tab for all 3
 		// instruments
 
-		String validChars = "0123456789-|EARPDGBECHSTMXxgmaoshp []*\n";
+		String validChars = "0123456789-|EARPDGBECHSTMXxgmaoOshp []*\n";
 
 		// must be same length
 		String[] splitInput = tempInput.split("\\r?\\n\\r?\\n");
