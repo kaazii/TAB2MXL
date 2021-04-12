@@ -66,7 +66,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				measureList.get(measureIndex).measureNumber = globalMeasureNumber++;
 				measureList.get(measureIndex).setTimeSignature(Controller.nume);
 				setChord(measureList.get(measureIndex).getNoteList());
-		
+
 				Map<Integer, Pair<Integer, Integer>> timeList = Controller.beatList;
 				if (timeList.containsKey(measureList.get(measureIndex).measureNumber)) {
 					// only passing on the numerator for now
@@ -98,15 +98,15 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				// String instrument = getInstrument(lines, i);
 				String instrument = splitLines[j][0];
 				String curr = lines[j].substring(i, i + 1); // this is the current character that we are parsing
-				if ((curr.equals("x")|| curr.equals("o"))) { // this must be a note!
+				if ((curr.equals("x") || curr.equals("o"))) { // this must be a note!
 					Note note = getNote(instrument);
-					
+
 					if (curr.equals("x")) {
 						if (instrument.equals("HH"))
 							note = getNote("HHx");
 						((DrumNote) note).setNotehead("x");
 					}
-						
+
 					note.setColumn(i);
 					note.duration = getDuration(lines, i); // pass the current column index
 					note.floatDuration = note.duration / (float) 4;
@@ -128,8 +128,21 @@ public class StringParserUtilityDrum extends StringParserUtility {
 		noteGetter.initializeDrum();
 		return noteGetter.drumNotes.get(instrument);
 	}
-	
-	
+
+	public static int getDuration(String lines[], int column) { // uses isNumeric as a check so it only works for
+		int duration = 1;
+		for (int i = column + 1; i <= lines[0].length() - 1; i++) { // i are the columns
+			for (int j = 0; j < lines.length; j++) { // j are the rows
+				String curr = lines[j].substring(i, i + 1);
+				if (curr.equals("x") || curr.equals("o")) { 
+					return duration;
+				}
+			} 
+			duration++;
+		}
+		return duration;
+	}
+
 	public static int getDivison(String measure) { // returns the division of a measure
 		int division = 0;
 		String lines[] = measure.split("\\r?\\n");
@@ -146,6 +159,6 @@ public class StringParserUtilityDrum extends StringParserUtility {
 		}
 		return division;
 	}
-	
+
 	
 }
