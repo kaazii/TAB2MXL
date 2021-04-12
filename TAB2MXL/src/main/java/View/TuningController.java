@@ -34,7 +34,7 @@ public class TuningController {
 
 	@FXML
 	TextField octave1, octave2, octave3, octave4, octave5, octave6;
-	
+
 	@FXML
 	Button cancelButton, confirmButton;
 
@@ -345,7 +345,7 @@ public class TuningController {
 			setCounter6(11);
 			setFret6("D#");
 		});
-		
+
 		octave1.setTextFormatter(getFormatter());
 		octave2.setTextFormatter(getFormatter());
 		octave3.setTextFormatter(getFormatter());
@@ -354,40 +354,39 @@ public class TuningController {
 		octave6.setTextFormatter(getFormatter());
 
 	}
-	
-	//confirm button confirms the modification and confirm translation
+
+	// confirm button confirms the modification and confirm translation
 	public void confirm() {
-		if(Controller.selected == Controller.Type.BASS ) {
-			if(!octave1.getText().isEmpty()) {
+		if (Controller.selected == Controller.Type.BASS) {
+			if (!octave1.getText().isEmpty()) {
 				BNU.setOctave1(Integer.parseInt(octave1.getText()));
 			}
-			if(!octave2.getText().isEmpty()) {
+			if (!octave2.getText().isEmpty()) {
 				BNU.setOctave2(Integer.parseInt(octave2.getText()));
 			}
-			if(!octave3.getText().isEmpty()) {
+			if (!octave3.getText().isEmpty()) {
 				BNU.setOctave3(Integer.parseInt(octave3.getText()));
 			}
-			if(!octave4.getText().isEmpty()) {
+			if (!octave4.getText().isEmpty()) {
 				BNU.setOctave4(Integer.parseInt(octave4.getText()));
 			}
-		}
-		else {
-			if(!octave1.getText().isEmpty()) {
+		} else {
+			if (!octave1.getText().isEmpty()) {
 				NU.setOctave1(Integer.parseInt(octave1.getText()));
 			}
-			if(!octave2.getText().isEmpty()) {
+			if (!octave2.getText().isEmpty()) {
 				NU.setOctave2(Integer.parseInt(octave2.getText()));
 			}
-			if(!octave3.getText().isEmpty()) {
+			if (!octave3.getText().isEmpty()) {
 				NU.setOctave3(Integer.parseInt(octave3.getText()));
 			}
-			if(!octave4.getText().isEmpty()) {
+			if (!octave4.getText().isEmpty()) {
 				NU.setOctave4(Integer.parseInt(octave4.getText()));
 			}
-			if(!octave5.getText().isEmpty()) {
+			if (!octave5.getText().isEmpty()) {
 				NU.setOctave5(Integer.parseInt(octave5.getText()));
 			}
-			if(!octave6.getText().isEmpty()) {
+			if (!octave6.getText().isEmpty()) {
 				NU.setOctave6(Integer.parseInt(octave6.getText()));
 			}
 		}
@@ -407,7 +406,7 @@ public class TuningController {
 		Controller.DELETEBUTTON.setDisable(false);
 		Controller.TRANSLATE.setDisable(true);
 	}
-	
+
 	public void cancel() {
 		cancelButton.getScene().getWindow().hide();
 	}
@@ -475,23 +474,23 @@ public class TuningController {
 	private void setFret6(String fret) {
 		fret6.setText(fret);
 	}
-	
-	private TextFormatter<String> getFormatter() {
-		DecimalFormat format = new DecimalFormat( "0" );
-		return new TextFormatter<String>(c ->{
-		    if ( c.getControlNewText().isEmpty() ){
-		        return c;
-		    }
-		   
-		    ParsePosition parsePosition = new ParsePosition( 0 );
-		    Object object = format.parse( c.getControlNewText(), parsePosition );
 
-		    if ( object == null || parsePosition.getIndex() < c.getControlNewText().length() || c.getControlNewText().length()> 1 ){
-		        return null;
-		    }
-		    else{
-		        return c;
-		    }
+	private TextFormatter<String> getFormatter() {
+		DecimalFormat format = new DecimalFormat("0");
+		return new TextFormatter<String>(c -> {
+			if (c.getControlNewText().isEmpty()) {
+				return c;
+			}
+
+			ParsePosition parsePosition = new ParsePosition(0);
+			Object object = format.parse(c.getControlNewText(), parsePosition);
+
+			if (object == null || parsePosition.getIndex() < c.getControlNewText().length()
+					|| c.getControlNewText().length() > 1) {
+				return null;
+			} else {
+				return c;
+			}
 		});
 	}
 }

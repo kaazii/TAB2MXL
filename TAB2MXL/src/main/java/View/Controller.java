@@ -427,19 +427,19 @@ public class Controller {
 
 		// basic checks
 		if ((lines[0].toUpperCase().startsWith("E") || (lines.length == 6)) && !lines[0].contains("o")
-				&& !lines[0].contains("x")) {
+				&& !lines[0].toLowerCase().contains("x")) {
 			// System.out.println("This is a guitar"); // testing
 			guitarButtonClicked();
 			/*
 			 * Guitar
 			 */
 
-		} else if (lines[0].toUpperCase().startsWith("G") || (lines.length == 5 || lines.length == 4)
-				&& !lines[0].contains("o") && !lines[0].contains("x")) {
+		} else if ((lines[0].toUpperCase().startsWith("G") || (lines.length == 5 || lines.length == 4))
+				&& !lines[0].toLowerCase().contains("o") && !lines[0].toLowerCase().contains("x")) {
 			// System.out.println("This is a bass"); // testing
 			bassButtonClicked();
 			// Bass
-		} else if (lines[0].contains("x") || lines[0].contains("o")) {
+		} else if (lines[0].toLowerCase().contains("x") || lines[0].toLowerCase().contains("o")) {
 			// System.out.println("This is a drum"); // testing
 			drumButtonClicked();
 			// Drum
@@ -537,14 +537,13 @@ public class Controller {
 		// set the list
 		COMPOSER = composerField.getText();
 		TITLE = titleField.getText();
-		
 
 		if (selected == Type.BASS || selected == Type.GUITAR) {
 			openPopup("Tuning.fxml", "Tuning Options", 360, 377);
 			closePopup();
 			return;
 		}
-		
+
 		state = 1;
 		previousText = INPUT.getText();
 		INPUT.setText(XMLGenerate());
@@ -894,7 +893,6 @@ public class Controller {
 				if (splitLines[j].length() != length)
 					return true;
 			}
-
 		}
 		// remove new line from the string(the contains method wasn't working properly
 		// otherwise)
@@ -908,7 +906,6 @@ public class Controller {
 				illegalChar = true;
 			}
 		}
-
 		return illegalChar;
 		// if(INPUT.getText().startsWith("s")) return true;
 		// return false;
