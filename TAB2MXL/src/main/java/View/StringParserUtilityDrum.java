@@ -137,7 +137,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				if (curr.equals("x") || curr.equals("o")) { 
 					return duration;
 				}
-			}
+			} 
 			duration++;
 		}
 		return duration;
