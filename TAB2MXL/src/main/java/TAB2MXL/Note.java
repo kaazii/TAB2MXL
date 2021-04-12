@@ -5,12 +5,15 @@ import java.util.ArrayList;
 public class Note {
 
 	public ArrayList<Beam> beamList = new ArrayList<Beam>();
+	public GraceNote graceNote = new GraceNote();
 
 	public boolean isChord = false; // true if it's a chord
 	public int column; // for chords
 	public boolean isDotted = false; // true if it's a dotted note
 	public boolean isHarmonic = false; // true if it's a harmonic
-
+	
+	public boolean isGrace = false;
+	
 	public String startOrStop = ""; // either "start" or "stop"
 	public String complexType = ""; // h, s or p
 
@@ -59,6 +62,11 @@ public class Note {
 	}
 
 	public Note() {
+	}
+	
+	public Note(GraceNote graceNote, boolean isGrace) {
+		this.graceNote = graceNote;
+		this.isGrace = isGrace;
 	}
 	// *************************setter**************************
 
