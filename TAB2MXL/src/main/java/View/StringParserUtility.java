@@ -605,8 +605,8 @@ public class StringParserUtility {
 				lengthTracker += currNoteString.length();
 				noteList.add(currNote);
 			}
-
-			GraceNote graceNote = new GraceNote(noteList, complexTypeList);
+			
+			GraceNote graceNote = new GraceNote(noteList, complexTypeList, measure.noteList.size() - 1);
 			measure.graceNotes.add(graceNote);
 		} else { // note a grace note
 			for (int k = 0; k < noteSplit.length; k++) {
