@@ -570,7 +570,9 @@ public class StringParserUtility {
 
 	public static void parsingFunctionComplex(String[] noteSplit, String[] lines, Measure measure, int i, int j,
 			float timeSignature, String complexType, boolean isGrace) {
+		if (isGrace) {
 
+		}
 		int lengthTracker = 0;
 		for (int k = 0; k < noteSplit.length; k++) {
 			String currNoteString = noteSplit[k];
