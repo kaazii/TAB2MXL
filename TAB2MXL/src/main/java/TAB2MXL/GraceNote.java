@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 public class GraceNote {
 
-	public static ArrayList <Note> noteList;
-	public static String []  complexTypeList; //g, h, p, s
+	public ArrayList <Note> noteList;
+	public String [] complexTypeList; //g, h, p, s
 
+	public GraceNote (ArrayList<Note> noteList, String [] complexTypeList) {
+		this.noteList = noteList;
+		this.complexTypeList = complexTypeList;
+	}
 }
