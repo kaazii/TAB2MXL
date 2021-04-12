@@ -613,7 +613,7 @@ public class StringParserUtility {
 				noteList.add(currNote);
 			}
 
-			GraceNote graceNote = new GraceNote(noteList, complexTypeList);
+			GraceNote graceNote = new GraceNote(noteList, complexTypeList, measure.noteList.size() - 1);
 			measure.graceNotes.add(graceNote);
 		} else { // note a grace note
 			for (int k = 0; k < noteSplit.length; k++) {
@@ -729,7 +729,6 @@ public class StringParserUtility {
 
 	public static Note getNote(int string, int fret) {
 		NoteUtility noteGetter = TuningController.NU;
-		noteGetter.initialise();
 		return noteGetter.guitarNote[string][fret];
 	}
 
