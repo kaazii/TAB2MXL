@@ -1,13 +1,13 @@
 package View;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
 import TAB2MXL.Beam;
+import TAB2MXL.GraceNote;
 import TAB2MXL.Measure;
 import TAB2MXL.Note;
 import TAB2MXL.NoteUtility;
@@ -500,10 +500,7 @@ public class StringParserUtility {
 
 						String complexType = currNote.replaceAll("\\d", ""); // only left with p, h, or s
 
-						System.out.println(Arrays.deepToString(noteSplit));
-						System.out.println(complexType);
-
-						parsingFunctionComplex(noteSplit, lines, measure, i, j, timeSignature, complexType, true);
+						parsingFunctionComplex(noteSplit, lines, measure, i + 1, j, timeSignature, complexType, true);
 					}
 				} else if (i == 0) {
 					if (isNumeric(curr)) {
@@ -523,7 +520,8 @@ public class StringParserUtility {
 						String[] noteSplit = currNote.split("[phs]");
 
 						String complexType = currNote.replaceAll("\\d", ""); // only left with p, h, or s
-						parsingFunctionComplex(noteSplit, lines, measure, i, j, timeSignature, complexType, true);
+
+						parsingFunctionComplex(noteSplit, lines, measure, i + 1, j, timeSignature, complexType, true);
 					}
 				}
 			}
@@ -570,60 +568,105 @@ public class StringParserUtility {
 
 	public static void parsingFunctionComplex(String[] noteSplit, String[] lines, Measure measure, int i, int j,
 			float timeSignature, String complexType, boolean isGrace) {
-		if (isGrace) {
-
-		}
 		int lengthTracker = 0;
-		for (int k = 0; k < noteSplit.length; k++) {
-			String currNoteString = noteSplit[k];
+		if (isGrace) {
+			int indexAdder = 0;
+			ArrayList<Note> noteList = new ArrayList<Note>();
 
-			Note currNote = getNote(j, Integer.parseInt(currNoteString));
-			currNote.stem = "up";
-			currNote.complexType = complexType;
+			StringBuilder sb = new StringBuilder();
+			sb.append("g");
+			sb.append(complexType);
 
-			if (k == 0) {
-				currNote.start();
-				currNote.setColumn(i + currNoteString.length() - 1);
-				currNote.floatDuration = (float) (getDuration(lines, i + currNoteString.length() - 1) * timeSignature);
-			}
-			if (k == 1) {
-				currNote.stop();
-				currNote.setColumn(i + lengthTracker + currNoteString.length());
-				currNote.floatDuration = (float) (getDuration(lines, i + currNoteString.length() + lengthTracker)
-						* timeSignature);
-			}
+			String[] complexTypeList = sb.toString().split("");
 
-			currNote.setType(
-					NoteUtility.getNoteType(currNote.getFloatDuration() / (float) measure.getDivision(), currNote));
+			for (int k = 0; k < noteSplit.length; k++) {
+				String currNoteString = noteSplit[k];
+				Note currNote = getNote(j, Integer.parseInt(currNoteString));
+				currNote.stem = "up";
+				currNote.setType(
+						NoteUtility.getNoteType(currNote.getFloatDuration() / (float) measure.getDivision(), currNote));
 
-			switch (complexType) {
-			case "p":
-				currNote.complexTypeNumber = pullOffCount;
-				if (k == 1) {
-					pullOffCount++;
+				if (k >= 2) {
+					indexAdder++;
 				}
 
-			case "h":
-				currNote.complexTypeNumber = hammerOnCount;
-				if (k == 1) {
-					hammerOnCount++;
+				if (k == 0) {
+					currNote.setColumn(i + currNoteString.length() - 1);
+					currNote.floatDuration = (float) (getDuration(lines, i + currNoteString.length() - 1)
+							* timeSignature);
+				} else {
+					currNote.setColumn(i + currNoteString.length() + lengthTracker + indexAdder);
+					currNote.floatDuration = (float) (getDuration(lines,
+							i + currNoteString.length() + lengthTracker + indexAdder) * timeSignature);
 				}
 
-			case "s":
-				currNote.complexTypeNumber = slideCount;
-				if (k == 1) {
-					slideCount++;
-				}
+				currNote.setType(
+						NoteUtility.getNoteType(currNote.getFloatDuration() / (float) measure.getDivision(), currNote));
+
+				System.out.println("current note duration : "
+						+ (float) currNote.getFloatDuration() / (float) measure.getDivision());
+				System.out.println("firstNote information : fret: " + currNote.fret + " string: " + currNote.string
+						+ " duration: " + currNote.duration + " type: " + currNote.getType() + " division :"
+						+ measure.getDivision()); // test
+
+				lengthTracker += currNoteString.length();
+				noteList.add(currNote);
 			}
 
-			System.out.println(
-					"current note duration : " + (float) currNote.getFloatDuration() / (float) measure.getDivision());
-			System.out.println("firstNote information : fret: " + currNote.fret + " string: " + currNote.string
-					+ " duration: " + currNote.duration + " type: " + currNote.getType() + " division :"
-					+ measure.getDivision()); // test
+			GraceNote graceNote = new GraceNote(noteList, complexTypeList);
+			measure.graceNotes.add(graceNote);
+		} else { // note a grace note
+			for (int k = 0; k < noteSplit.length; k++) {
+				String currNoteString = noteSplit[k];
 
-			lengthTracker += currNoteString.length();
-			measure.noteList.add(currNote);
+				Note currNote = getNote(j, Integer.parseInt(currNoteString));
+				currNote.stem = "up";
+				currNote.complexType = complexType;
+
+				if (k == 0) {
+					currNote.start();
+					currNote.setColumn(i + currNoteString.length() - 1);
+					currNote.floatDuration = (float) (getDuration(lines, i + currNoteString.length() - 1)
+							* timeSignature);
+				}
+				if (k == 1) {
+					currNote.stop();
+					currNote.setColumn(i + lengthTracker + currNoteString.length());
+					currNote.floatDuration = (float) (getDuration(lines, i + currNoteString.length() + lengthTracker)
+							* timeSignature);
+				}
+
+				currNote.setType(
+						NoteUtility.getNoteType(currNote.getFloatDuration() / (float) measure.getDivision(), currNote));
+
+				switch (complexType) {
+				case "p":
+					currNote.complexTypeNumber = pullOffCount;
+					if (k == 1) {
+						pullOffCount++;
+					}
+
+				case "h":
+					currNote.complexTypeNumber = hammerOnCount;
+					if (k == 1) {
+						hammerOnCount++;
+					}
+
+				case "s":
+					currNote.complexTypeNumber = slideCount;
+					if (k == 1) {
+						slideCount++;
+					}
+				}
+				System.out.println("current note duration : "
+						+ (float) currNote.getFloatDuration() / (float) measure.getDivision());
+				System.out.println("firstNote information : fret: " + currNote.fret + " string: " + currNote.string
+						+ " duration: " + currNote.duration + " type: " + currNote.getType() + " division :"
+						+ measure.getDivision()); // test
+
+				lengthTracker += currNoteString.length();
+				measure.noteList.add(currNote);
+			}
 		}
 	}
 
