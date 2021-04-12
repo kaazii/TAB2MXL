@@ -6,12 +6,14 @@ public class GraceNote {
 
 	public ArrayList <Note> noteList;
 	public String [] complexTypeList; //g, h, p, s
-	
-	public int relativeIndex;
 
-	public GraceNote (ArrayList<Note> noteList, String [] complexTypeList, int relativeIndex) {
+	public GraceNote (ArrayList<Note> noteList, String [] complexTypeList) {
 		this.noteList = noteList;
 		this.complexTypeList = complexTypeList;
-		this.relativeIndex = relativeIndex;
+	}
+	
+	public GraceNote() {
+		this.noteList = new ArrayList<Note>();
+		this.complexTypeList = null;
 	}
 }

@@ -613,8 +613,9 @@ public class StringParserUtility {
 				noteList.add(currNote);
 			}
 
-			GraceNote graceNote = new GraceNote(noteList, complexTypeList, measure.noteList.size() - 1);
+			GraceNote graceNote = new GraceNote(noteList, complexTypeList);
 			measure.graceNotes.add(graceNote);
+			measure.noteList.add(new Note(graceNote, true));
 		} else { // note a grace note
 			for (int k = 0; k < noteSplit.length; k++) {
 				String currNoteString = noteSplit[k];
