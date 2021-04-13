@@ -1,55 +1,35 @@
 package TAB2MXL;
 
-
-
 import java.util.ArrayList;
 
-import View.Controller;
-import View.StringParserUtility;
-import View.StringParserUtilityDrum;
-import View.TuningController;
-
 public class Main {
-	// I DID IT 
+	// I DID IT
 	// Comment - Amer Alshoghri
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		//Comment - Govind/
+		// Comment - Govind/
 		// this is for the lab test
-		//commit before lab test
+		// commit before lab test
 		// Amer test commit
-		//i did it 
-		//Doris
+		// i did it
+		// Doris
 		// Amer Lab Task
-		//govind
-		//test
-		
-		String res = Controller.cleanup("  |--REPEAT-2X-----|\n"
-				+ "CC|x---------------|--------x-------|\n"
-				+ "HH|--x-x-x-x-x-x-x-|----------------|\n"
-				+ "SD|----o-------o---|oooo------------|\n"
-				+ "HT|----------------|----oo----------|\n"
-				+ "MT|----------------|------oo--------|\n"
-				+ "BD|o-------o-------|o-------o-------|\n"
-				+ "");
-		StringParserUtility.clearMeasureList();
-		ArrayList<Measure> measureList = StringParserUtilityDrum.stringParse(res);
-		String result = XmlGenerator.Generate(measureList, "DRUMS");
-		System.out.println(result);
-		
-		res = Controller.cleanup("CC|x---------------||---------x-------4|\n"
-				+ "HH|--x-x-x-x-x-x-x-||-----------------||\n"
-				+ "SD|----o-------o---||*oooo-----------*||\n"
-				+ "HT|----------------||*----oo---------*||\n"
-				+ "MT|----------------||-------oo--------||\n"
-				+ "BD|o-------o-------||-o-------o-------||");
-		StringParserUtility.clearMeasureList();
-		measureList = StringParserUtilityDrum.stringParse(res);
-		result = XmlGenerator.Generate(measureList, "DRUMS");
-		System.out.println(result);
-		
+		// govind
+		// test
 
-		//addidng 
+		ArrayList<Measure> measureList = new ArrayList<>();
+		Measure measure = new Measure(1, 2);
+		measureList.add(measure);
+		Note note = new Note("E", 4, 0, 1);
+		note.setColumn(1);
+		note.setType("whole");
+		note.setVoice(1);
+		note.setDuration(1);
+		measure.noteList.add(note);
+		String result = XmlGenerator.Generate(measureList, "GUITAR");
+		System.out.println(result);
+
+		// addidng
 //		System.out.println("Hola World23");
 //
 //		System.out.println("Hola World22");
@@ -297,5 +277,5 @@ public class Main {
 //				+ "  (1 + 2 + 3 + 4 + |1 + 2 + 3 + 4 + |1 + 2 + 3 + 4 + )");
 //		System.out.println(res);
 	}
-	
+
 }
