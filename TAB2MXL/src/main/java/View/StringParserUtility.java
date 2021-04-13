@@ -621,7 +621,7 @@ public class StringParserUtility {
 				currNote.setType(
 						NoteUtility.getNoteType(currNote.getFloatDuration() / (float) measure.getDivision(), currNote));
 
-				/*
+				
 				System.out.println("current note duration : "
 						+ (float) currNote.getFloatDuration() / (float) measure.getDivision());
 				System.out.println("firstNote information : fret: " + currNote.fret + " string: " + currNote.string
@@ -680,12 +680,12 @@ public class StringParserUtility {
 						slideCount++;
 					}
 				}
-				/*
+				
 				System.out.println("current note duration : "
 						+ (float) currNote.getFloatDuration() / (float) measure.getDivision());
 				System.out.println("firstNote information : fret: " + currNote.fret + " string: " + currNote.string
 						+ " duration: " + currNote.duration + " type: " + currNote.getType() + " division :"
-						+ measure.getDivision() + " column: " + currNote.column); // test */
+						+ measure.getDivision() + " column: " + currNote.column); // test 
 
 				lengthTracker += currNoteString.length();
 				measure.noteList.add(currNote);
