@@ -62,6 +62,11 @@ public class BassNoteUtility {
 		}
 	}
 
+	public Note getBassNote(int row, int column) {
+		Note n = BassNote[row][column];
+		return new Note(n.getStep(), n.getOctave(), n.getFret(), n.getString(), n.getAlter());
+	}
+
 	public int getCounter1() {
 		return counter1;
 	}
