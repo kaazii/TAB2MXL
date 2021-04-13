@@ -46,8 +46,10 @@ public class BassNoteUtility {
 
 	public void makeArray(int counter, int octave, int arline, int line, Note[] BassRepo, Note[][] BassNote) {
 		int repoCont;
+
 		for (int i = 0; i < BassNote[0].length; i++) {
 			repoCont = counter % 12;
+
 			if (repoCont == 8) {
 				octave++;
 				BassNote[arline][i] = new Note(BassRepo[repoCont].getStep(), octave, i, line,
@@ -58,6 +60,11 @@ public class BassNoteUtility {
 			}
 			counter++;
 		}
+	}
+
+	public Note getBassNote(int row, int column) {
+		Note n = BassNote[row][column];
+		return new Note(n.getStep(), n.getOctave(), n.getFret(), n.getString(), n.getAlter());
 	}
 
 	public int getCounter1() {

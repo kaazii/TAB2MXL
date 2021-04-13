@@ -70,7 +70,8 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				Map<Integer, Pair<Integer, Integer>> timeList = Controller.beatList;
 				if (timeList.containsKey(measureList.get(measureIndex).measureNumber)) {
 					// only passing on the numerator for now
-					measureList.get(measureIndex).setTimeSignature(timeList.get(measureList.get(measureIndex).measureNumber).getKey());
+					measureList.get(measureIndex)
+							.setTimeSignature(timeList.get(measureList.get(measureIndex).measureNumber).getKey());
 				}
 				measureIndex++;
 			}
@@ -90,9 +91,9 @@ public class StringParserUtilityDrum extends StringParserUtility {
 		measureString = measureString.replaceAll("X", "x");
 		measureString = measureString.replaceAll("O", "o");
 		System.out.println(measureString);
-		
+
 		Measure measure = new Measure(getDivison(measureString));
-		
+
 		measure.divisions = getDivison(measureString);
 
 		String lines[] = measureString.split("\\r?\\n");
@@ -129,7 +130,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 	public static Note getNote(String instrument) {
 		NoteUtility noteGetter = new NoteUtility();
 		noteGetter.initializeDrum();
-		return noteGetter.drumNotes.get(instrument);
+		return noteGetter.getDrumNote(instrument);
 	}
 
 	public static int getDuration(String lines[], int column) { // uses isNumeric as a check so it only works for
@@ -137,10 +138,10 @@ public class StringParserUtilityDrum extends StringParserUtility {
 		for (int i = column + 1; i <= lines[0].length() - 1; i++) { // i are the columns
 			for (int j = 0; j < lines.length; j++) { // j are the rows
 				String curr = lines[j].substring(i, i + 1);
-				if (curr.equals("x") || curr.equals("o")) { 
+				if (curr.equals("x") || curr.equals("o")) {
 					return duration;
 				}
-			} 
+			}
 			duration++;
 		}
 		return duration;

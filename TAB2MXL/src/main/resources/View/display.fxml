@@ -17,17 +17,17 @@
                         <Font size="19.0" />
                      </font>
                      <VBox.margin>
-                        <Insets left="30.0" top="20.0" />
+                        <Insets left="30.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <Label text="Some of your input will be ignored. The ignored text is highlighted in red">
+                  <Label text="Some of your input will be ignored. The ignored text is shwon below:">
                      <VBox.margin>
-                        <Insets left="30.0" top="20.0" />
+                        <Insets left="30.0" top="10.0" />
                      </VBox.margin>
                   </Label>
                   <TextFlow fx:id="displayText" prefHeight="300.0" prefWidth="548.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #828F9C; -fx-border-radius: 10;" visible="false">
                      <VBox.margin>
-                        <Insets left="35.0" right="35.0" top="25.0" />
+                        <Insets left="35.0" right="35.0" top="10.0" />
                      </VBox.margin></TextFlow>
                   <HBox prefWidth="400.0">
                      <children>
@@ -39,7 +39,7 @@
                         </Button>
                      </children>
                      <VBox.margin>
-                        <Insets bottom="20.0" left="100.0" top="20.0" />
+                        <Insets bottom="20.0" left="120.0" top="20.0" />
                      </VBox.margin>
                   </HBox>
                </children>
