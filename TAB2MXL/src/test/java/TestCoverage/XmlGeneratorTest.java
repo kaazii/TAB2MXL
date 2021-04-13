@@ -13,11 +13,15 @@ import TAB2MXL.Measure;
 import TAB2MXL.Note;
 import TAB2MXL.NoteUtility;
 import TAB2MXL.XmlGenerator;
+import View.Controller;
+import View.StringParserUtility;
 
 class XmlGeneratorTest {
 	
 	@BeforeEach
 	void setUp() throws Exception {
+		Controller.TITLE = "";
+		Controller.COMPOSER = "";
 	}
 
 	@Test
@@ -273,4 +277,98 @@ class XmlGeneratorTest {
 				+ ""
 				+ "");
 	}
+	
+	@Test
+	void testTitleComposer() throws Exception {
+		ArrayList<Measure> measureList = new ArrayList<>();
+		Controller.TITLE = "Song";
+		Controller.COMPOSER = "Mozart";
+		Measure measure = new Measure(1,2);
+		measureList.add(measure);
+		Note note = new Note("E",4,0,1);
+		note.setColumn(1);
+		note.setType("whole");
+		note.setVoice(1);
+		note.setDuration(1);
+		measure.noteList.add( note);
+		String result = XmlGenerator.Generate(measureList, "GUITAR");
+		assertEquals(result, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
+				+ "<score-partwise version=\"3.1\">\n"
+				+ "    <work>\n"
+				+ "        <work-title>Song</work-title>\n"
+				+ "    </work>\n"
+				+ "    <identification>\n"
+				+ "        <creator type=\"composer\">Mozart</creator>\n"
+				+ "    </identification>\n"
+				+ "    <part-list>\n"
+				+ "        <score-part id=\"P1\">\n"
+				+ "            <part-name>GUITAR</part-name>\n"
+				+ "        </score-part>\n"
+				+ "    </part-list>\n"
+				+ "    <part id=\"P1\">\n"
+				+ "        <measure number=\"1\">\n"
+				+ "            <attributes>\n"
+				+ "                <divisions>0</divisions>\n"
+				+ "                <key>\n"
+				+ "                    <fifths>0</fifths>\n"
+				+ "                </key>\n"
+				+ "                <time>\n"
+				+ "                    <beats>0</beats>\n"
+				+ "                    <beat-type>4</beat-type>\n"
+				+ "                </time>\n"
+				+ "                <clef>\n"
+				+ "                    <sign>TAB</sign>\n"
+				+ "                    <line>5</line>\n"
+				+ "                </clef>\n"
+				+ "                <staff-details>\n"
+				+ "                    <staff-lines>6</staff-lines>\n"
+				+ "                    <staff-tuning line=\"1\">\n"
+				+ "                        <tuning-step>E</tuning-step>\n"
+				+ "                        <tuning-octave>2</tuning-octave>\n"
+				+ "                    </staff-tuning>\n"
+				+ "                    <staff-tuning line=\"2\">\n"
+				+ "                        <tuning-step>A</tuning-step>\n"
+				+ "                        <tuning-octave>2</tuning-octave>\n"
+				+ "                    </staff-tuning>\n"
+				+ "                    <staff-tuning line=\"3\">\n"
+				+ "                        <tuning-step>D</tuning-step>\n"
+				+ "                        <tuning-octave>3</tuning-octave>\n"
+				+ "                    </staff-tuning>\n"
+				+ "                    <staff-tuning line=\"4\">\n"
+				+ "                        <tuning-step>G</tuning-step>\n"
+				+ "                        <tuning-octave>3</tuning-octave>\n"
+				+ "                    </staff-tuning>\n"
+				+ "                    <staff-tuning line=\"5\">\n"
+				+ "                        <tuning-step>B</tuning-step>\n"
+				+ "                        <tuning-octave>3</tuning-octave>\n"
+				+ "                    </staff-tuning>\n"
+				+ "                    <staff-tuning line=\"6\">\n"
+				+ "                        <tuning-step>E</tuning-step>\n"
+				+ "                        <tuning-octave>4</tuning-octave>\n"
+				+ "                    </staff-tuning>\n"
+				+ "                </staff-details>\n"
+				+ "            </attributes>\n"
+				+ "            <note>\n"
+				+ "                <pitch>\n"
+				+ "                    <step>E</step>\n"
+				+ "                    <octave>4</octave>\n"
+				+ "                </pitch>\n"
+				+ "                <duration>1</duration>\n"
+				+ "                <voice>1</voice>\n"
+				+ "                <type>whole</type>\n"
+				+ "                <notations>\n"
+				+ "                    <technical>\n"
+				+ "                        <string>1</string>\n"
+				+ "                        <fret>0</fret>\n"
+				+ "                    </technical>\n"
+				+ "                </notations>\n"
+				+ "            </note>\n"
+				+ "        </measure>\n"
+				+ "    </part>\n"
+				+ "</score-partwise>\n"
+				+ "");
+	}
+	
+
 }

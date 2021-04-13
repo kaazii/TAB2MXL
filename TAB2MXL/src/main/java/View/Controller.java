@@ -434,7 +434,7 @@ public class Controller {
 			 * Guitar
 			 */
 
-		} else if (lines[0].toUpperCase().startsWith("G") || (lines.length == 5 || lines.length == 4)
+		} else if ((lines[0].toUpperCase().startsWith("G") || (lines.length == 5 || lines.length == 4))
 				&& !lines[0].toLowerCase().contains("o") && !lines[0].toLowerCase().contains("x")) {
 			// System.out.println("This is a bass"); // testing
 			bassButtonClicked();
@@ -537,16 +537,16 @@ public class Controller {
 		// set the list
 		COMPOSER = composerField.getText();
 		TITLE = titleField.getText();
-		
 
 		if (selected == Type.BASS || selected == Type.GUITAR) {
-			openPopup("Tuning.fxml", "Tunning Option", 360, 377);
+			openPopup("Tuning.fxml", "Tuning Options", 360, 377);
 			closePopup();
 			return;
 		}
-		INPUT.setText(XMLGenerate());
+
 		state = 1;
 		previousText = INPUT.getText();
+		INPUT.setText(XMLGenerate());
 		closePopup();
 		// TRANSLATE.setText("Save");
 		DELETEBUTTON.setDisable(false);
@@ -869,7 +869,7 @@ public class Controller {
 		// string containing all possible characters for the text tab for all 3
 		// instruments
 
-		String validChars = "0123456789-|EARPDGBECHSTMXxgmaoOshp []*\n";
+		String validChars = "0123456789-|EARPDGBECHSTMXxgmao0shp []*\n—";
 
 		// must be same length
 		String[] splitInput = tempInput.split("\\r?\\n\\r?\\n");
@@ -970,7 +970,7 @@ public class Controller {
 		boolean consecutive = false; // if there is consecutive lines to be ignored
 		for (int i = 0; i < lines.length; i++) {
 			// System.out.println(lines[i]);
-			if (!lines[i].contains("-") || !lines[i].contains("|") || lines[i].contains("REPEAT")) {
+			if (!lines[i].contains("-") || !lines[i].contains("|") || lines[i].toUpperCase().contains("REPEAT")) {
 				if (consecutive)
 					continue;
 				else {

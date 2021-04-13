@@ -39,6 +39,9 @@ public class TuningController {
 	Button cancelButton, confirmButton;
 
 	public void initialize() {
+
+		NU = new NoteUtility();
+		BNU = new BassNoteUtility();
 		if (Controller.selected == Controller.Type.BASS) {
 			fret5.setDisable(true);
 			fret6.setDisable(true);
