@@ -6,6 +6,7 @@ public class Measure {
 
 	public int measureNumber;
 
+	public ArrayList<Note> completeNoteList = new ArrayList<Note>();
 	public ArrayList<Note> noteList = new ArrayList<Note>();
 	public ArrayList<GraceNote> graceNotes = new ArrayList<GraceNote>(); 
 	
@@ -42,6 +43,10 @@ public class Measure {
 
 	public ArrayList<Note> getNoteList() {
 		return noteList;
+	}
+	
+	public ArrayList<Note> getCompleteNoteList() {
+		return completeNoteList;
 	}
 
 	public int getClefLine() {
