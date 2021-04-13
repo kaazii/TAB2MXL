@@ -49,6 +49,11 @@ public class NoteUtility {
 		drumNotes.put("FT", new DrumNote("A", 4, "P1-I42", "Low Floor Tom"));
 	}
 
+	public Note getDrumNote(String instrument) {
+		DrumNote n = (DrumNote) drumNotes.get(instrument);
+		return (Note) new DrumNote(n.step, n.octave, n.instrumentId, n.instrumentName);
+	}
+
 	public void makeArray(int counter, int octave, int arline, int line, Note[] guitarRepo, Note[][] guitarNote) {
 		int repoCont;
 		for (int i = 0; i < 25; i++) {
@@ -350,6 +355,11 @@ public class NoteUtility {
 		makeArray(counter2, octave2, 1, 2, guitarRepo, guitarNote); // line 2
 		makeArray(counter1, octave1, 0, 1, guitarRepo, guitarNote); // line 1
 
+	}
+
+	public Note getGuitarNote(int row, int column) {
+		Note n = guitarNote[row][column];
+		return new Note(n.getStep(), n.getOctave(), n.getFret(), n.getString(), n.getAlter());
 	}
 
 	public static String getNoteType(float typeAsNum, Note note) { // maybe convert to map if we have time later

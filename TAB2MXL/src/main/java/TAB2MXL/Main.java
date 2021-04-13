@@ -1,10 +1,13 @@
 package TAB2MXL;
 
+
+
 import java.util.ArrayList;
 
 import View.Controller;
 import View.StringParserUtility;
 import View.StringParserUtilityDrum;
+import View.TuningController;
 
 public class Main {
 	// I DID IT 
@@ -21,7 +24,8 @@ public class Main {
 		//govind
 		//test
 		
-		String res = Controller.cleanup("CC|x---------------|--------x-------|\n"
+		String res = Controller.cleanup("  |--REPEAT-2X-----|\n"
+				+ "CC|x---------------|--------x-------|\n"
 				+ "HH|--x-x-x-x-x-x-x-|----------------|\n"
 				+ "SD|----o-------o---|oooo------------|\n"
 				+ "HT|----------------|----oo----------|\n"
@@ -31,6 +35,17 @@ public class Main {
 		StringParserUtility.clearMeasureList();
 		ArrayList<Measure> measureList = StringParserUtilityDrum.stringParse(res);
 		String result = XmlGenerator.Generate(measureList, "DRUMS");
+		System.out.println(result);
+		
+		res = Controller.cleanup("CC|x---------------||---------x-------4|\n"
+				+ "HH|--x-x-x-x-x-x-x-||-----------------||\n"
+				+ "SD|----o-------o---||*oooo-----------*||\n"
+				+ "HT|----------------||*----oo---------*||\n"
+				+ "MT|----------------||-------oo--------||\n"
+				+ "BD|o-------o-------||-o-------o-------||");
+		StringParserUtility.clearMeasureList();
+		measureList = StringParserUtilityDrum.stringParse(res);
+		result = XmlGenerator.Generate(measureList, "DRUMS");
 		System.out.println(result);
 		
 
