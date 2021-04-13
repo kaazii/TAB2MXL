@@ -357,6 +357,11 @@ public class NoteUtility {
 
 	}
 
+	public Note getGuitarNote(int row, int column) {
+		Note n = guitarNote[row][column];
+		return new Note(n.getStep(), n.getOctave(), n.getFret(), n.getString(), n.getAlter());
+	}
+
 	public static String getNoteType(float typeAsNum, Note note) { // maybe convert to map if we have time later
 		String type = "";
 		if (Float.compare(typeAsNum, 1f) == 0) {
