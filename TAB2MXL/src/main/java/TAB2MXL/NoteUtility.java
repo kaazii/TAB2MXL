@@ -49,6 +49,11 @@ public class NoteUtility {
 		drumNotes.put("FT", new DrumNote("A", 4, "P1-I42", "Low Floor Tom"));
 	}
 
+	public Note getDrumNote(String instrument) {
+		DrumNote n = (DrumNote) drumNotes.get(instrument);
+		return (Note) new DrumNote(n.step, n.octave, n.instrumentId, n.instrumentName);
+	}
+
 	public void makeArray(int counter, int octave, int arline, int line, Note[] guitarRepo, Note[][] guitarNote) {
 		int repoCont;
 		for (int i = 0; i < 25; i++) {
