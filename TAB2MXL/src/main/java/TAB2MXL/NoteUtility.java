@@ -72,7 +72,7 @@ public class NoteUtility {
 
 	public int getCounter1() {
 		return counter1;
-	}
+	} 
 
 	public void setCounter1(int counter1) {
 		this.counter1 = counter1;
