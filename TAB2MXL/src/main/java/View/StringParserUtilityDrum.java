@@ -140,7 +140,7 @@ public class StringParserUtilityDrum extends StringParserUtility {
 				String curr = lines[j].substring(i, i + 1);
 				if (curr.equals("x") || curr.equals("o")) {
 					return duration;
-				}
+				} 
 			}
 			duration++;
 		}
