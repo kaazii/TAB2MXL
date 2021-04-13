@@ -260,44 +260,48 @@ public class XmlGenerator {
 
 			measureNum++;
 			// TODO
-
+			int graceCounter = 0;
 			// Add notes
 			for (Note n : m.noteList) {
-
-				addNote(n, measureElem, false, "", "");
-			}
-
-			// Handle grace notes
-			if (m.graceNotes.size() != 0) {
-				for (GraceNote gn : m.graceNotes) {
+				if (n.isGrace) {
+					GraceNote gn = m.graceNotes.get(graceCounter++);
 					int noteIndex = 0;
-					for (Note n : gn.noteList) {
+					for (Note gnote : gn.noteList) {
 						// TODO GRACE NOTE SHOULD NOT BE STATIC
 						String letter = gn.complexTypeList[noteIndex];
 
 						if (letter.equals("g")) {
 							// grace note
 							// start note[index] with letter[index + 1]
-							addNote(n, measureElem, true, gn.complexTypeList[noteIndex + 1], "");
+							addNote(gnote, measureElem, true, gn.complexTypeList[noteIndex + 1], "");
 
 						} else if (noteIndex == gn.noteList.size() - 1) {
 							// last element
 							// Stop note[index] with letter[index]
 
-							addNote(n, measureElem, false, "", gn.complexTypeList[noteIndex]);
+							addNote(gnote, measureElem, false, "", gn.complexTypeList[noteIndex]);
 
 						} else {
 							// middle element
 							// stop note[index] with letter[index]
 							// start note[index] with letter[index + 1]
 
-							addNote(n, measureElem, false, gn.complexTypeList[noteIndex + 1],
+							addNote(gnote, measureElem, false, gn.complexTypeList[noteIndex + 1],
 									gn.complexTypeList[noteIndex]);
 						}
 						noteIndex++;
 					}
+				} else {
+					addNote(n, measureElem, false, "", "");
 				}
 			}
+
+			// Handle grace notes
+			// if (m.graceNotes.size() != 0) {
+//				for (GraceNote gn : m.graceNotes) {
+//					
+//				}
+			// }
 
 			// right Barline
 			if (m.repeatEnd && m.repeats > 0) {
@@ -493,7 +497,7 @@ public class XmlGenerator {
 					complexAdder(n, ct, "stop", notations, technical);
 				} else {
 					String ct = startType.toUpperCase();
-					complexAdder(n, ct, "stop", notations, technical);
+					complexAdder(n, ct, "start", notations, technical);
 				}
 			}
 

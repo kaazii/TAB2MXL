@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 
 import TAB2MXL.Beam;
@@ -115,6 +116,15 @@ public class StringParserUtility {
 			int leader = 1;
 			float currSum = 0;
 			ArrayList<Note> noteList = getNoteListToBeam(measureList.get(i).noteList);
+
+			Iterator<Note> iter = noteList.iterator();
+
+			while (iter.hasNext()) {
+				Note element = iter.next();
+				if (element.isGrace) {
+					iter.remove();
+				}
+			}
 
 			while (leader < noteList.size() && trailer != leader) {
 				currSum = 0;
