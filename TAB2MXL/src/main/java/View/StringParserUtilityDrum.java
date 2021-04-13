@@ -129,7 +129,6 @@ public class StringParserUtilityDrum extends StringParserUtility {
 
 	public static Note getNote(String instrument) {
 		NoteUtility noteGetter = new NoteUtility();
-		noteGetter.initializeDrum();
 		return noteGetter.getDrumNote(instrument);
 	}
 

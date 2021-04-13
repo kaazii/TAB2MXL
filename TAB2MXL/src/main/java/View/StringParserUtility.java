@@ -743,7 +743,6 @@ public class StringParserUtility {
 
 	public static Note getNote(int string, int fret) {
 		NoteUtility noteGetter = TuningController.NU;
-		noteGetter.initialise();
 		return noteGetter.getGuitarNote(string, fret);
 	}
 
