@@ -1,5 +1,6 @@
 package View;
 
+import java.awt.Color;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
@@ -20,15 +21,19 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
 public class TimeHBOX{
 	
 	HBox hbox;
-	public int timeSig = 1;
+	public int nume = 4;
+	public int deno = 4;
 	public TextField range1;
 	public TextField range2;
+	public TextField numeText;
+	public TextField denoText;
 	public VBox parent;
 	public  List<TimeHBOX> list;
 	
@@ -37,59 +42,37 @@ public class TimeHBOX{
 		this.parent = parent;
 		list.add(this);
 		hbox = new HBox();
-		hbox.setPrefSize(200, 31);
+		hbox.setPrefSize(320, 32);
 		hbox.setPadding(new Insets(0,15,0,15));
-		TextField range1 = new TextField();
-		TextField range2 = new TextField();
-		RadioMenuItem item1 = new RadioMenuItem("1/4");
+		range1 = new TextField();
+		range2 = new TextField();
+//		RadioMenuItem item1 = new RadioMenuItem("1/4");
+//		
+//		RadioMenuItem item2 = new RadioMenuItem("2/4");
+//		RadioMenuItem item3 = new RadioMenuItem("3/4");
+//		RadioMenuItem item4 = new RadioMenuItem("4/4");
+//		MenuButton time = new MenuButton("4/4");
+		numeText = new TextField();
+		numeText.setPromptText("4");
 		
-		RadioMenuItem item2 = new RadioMenuItem("2/4");
-		RadioMenuItem item3 = new RadioMenuItem("3/4");
-		RadioMenuItem item4 = new RadioMenuItem("4/4");
-		MenuButton time = new MenuButton("4/4");
+		denoText = new TextField();
+		denoText.setPromptText("4");
+		
 		//default
-		item4.setSelected(true);
-		//when item 1 is selected all other unselected
-		item1.setOnAction(e -> {
-			item2.setSelected(false);
-			item3.setSelected(false);
-			item4.setSelected(false);
-			timeSig = 1;
-			time.setText(timeSig + "/4");
-		});
-		//item 2 selected -> all other unselected
-		item2.setOnAction(e -> {
-			item1.setSelected(false);
-			item3.setSelected(false);
-			item4.setSelected(false);
-			timeSig = 2;
-			time.setText(timeSig + "/4");
-		});
-		//item 3 selected -> all other unselected
-		item3.setOnAction(e -> {
-			item1.setSelected(false);
-			item2.setSelected(false);
-			item4.setSelected(false);
-			timeSig = 3;
-			time.setText(timeSig + "/4");
-		});
-		
-		//item 4 selected -> all other unselected
-		item4.setOnAction(e -> {
-			item1.setSelected(false);
-			item2.setSelected(false);
-			item3.setSelected(false);
-			timeSig = 4;
-			time.setText(timeSig + "/4");
-		});
-		time.getItems().add(item1);
-		time.getItems().add(item2);
-		time.getItems().add(item3);
-		time.getItems().add(item4);
-		time.setStyle("-fx-background-color: transparent;\r\n"
+		numeText.setStyle("-fx-background-color: transparent;\r\n"
 				+ "-fx-border-radius: 10;\r\n"
 				+ "-fx-border-color:  #F0F4F0; \r\n"
 				+ "-fx-border-width: 2");
+		numeText.setPrefWidth(40);
+		Label dash = new Label("/");
+		dash.setPadding(new Insets(5,0,0,0));
+		dash.setStyle("-fx-text-fill: #828f9c");
+		denoText.setStyle("-fx-background-color: transparent;\r\n"
+				+ "-fx-border-radius: 10;\r\n"
+				+ "-fx-border-color:  #F0F4F0; \r\n"
+				+ "-fx-border-width: 2");
+		denoText.setPrefWidth(40);
+		
 		range1.setPrefWidth(40);
 		DecimalFormat format = new DecimalFormat( "0" );
 		range1.setTextFormatter( new TextFormatter<>(c ->{
@@ -107,6 +90,37 @@ public class TimeHBOX{
 		        return c;
 		    }
 		}));
+		numeText.setTextFormatter( new TextFormatter<>(c ->{
+		    if ( c.getControlNewText().isEmpty() ){
+		        return c;
+		    }
+		   
+		    ParsePosition parsePosition = new ParsePosition( 0 );
+		    Object object = format.parse( c.getControlNewText(), parsePosition );
+
+		    if ( object == null || parsePosition.getIndex() < c.getControlNewText().length() ){
+		        return null;
+		    }
+		    else{
+		        return c;
+		    }
+		}));
+		denoText.setTextFormatter( new TextFormatter<>(c ->{
+		    if ( c.getControlNewText().isEmpty() ){
+		        return c;
+		    }
+		   
+		    ParsePosition parsePosition = new ParsePosition( 0 );
+		    Object object = format.parse( c.getControlNewText(), parsePosition );
+
+		    if ( object == null || parsePosition.getIndex() < c.getControlNewText().length() ){
+		        return null;
+		    }
+		    else{
+		        return c;
+		    }
+		}));
+		
 		range2.setPrefWidth(40);
 		range2.setTextFormatter( new TextFormatter<>(c ->{
 		    if ( c.getControlNewText().isEmpty() ){
@@ -128,7 +142,9 @@ public class TimeHBOX{
 		from.setPadding(new Insets(5,10,0,10));
 		to.setPadding(new Insets(5,10,0,10));
 		
-		hbox.getChildren().add(time);
+		hbox.getChildren().add(numeText);
+		hbox.getChildren().add(dash);
+		hbox.getChildren().add(denoText);
 		hbox.getChildren().add(from);
 		
 		hbox.getChildren().add(range1);
@@ -137,7 +153,7 @@ public class TimeHBOX{
 		
 		
 		//for spacing
-		Label space = new Label("      ");
+		Label space = new Label(" ");
 		hbox.getChildren().add(space);
 		
 		//- button
@@ -178,12 +194,37 @@ public class TimeHBOX{
 		return hbox;
 	}
 	
-	public int getTimeSignature() {
-		return timeSig;
+	public Pair<Integer,Integer> getTimeSignature() {
+		int nume;
+		int deno;
+		
+		if(numeText.getText().isEmpty()) {
+			nume = 4;
+			
+		}
+		else nume = Integer.parseInt(numeText.getText());
+		if(denoText.getText().isEmpty()) {
+			deno = 4;
+		}
+		else deno = Integer.parseInt(denoText.getText());
+		
+		return new Pair<>(nume, deno);
 	}
 	public Pair<Integer,Integer> getRange(){
+		int r1;
+		int r2;
 		
-		return new Pair<>(Integer.parseInt(range1.getText()), Integer.parseInt(range2.getText()));
+		if(range1.getText().isEmpty()) {
+			r1 = 1;
+			
+		}
+		else r1 = Integer.parseInt(range1.getText());
+		if(range2.getText().isEmpty()) {
+			r2 = r1;
+		}
+		else r2 = Integer.parseInt(range2.getText());
+		
+		return new Pair<>(r1,r2);
 	}
 
 }
