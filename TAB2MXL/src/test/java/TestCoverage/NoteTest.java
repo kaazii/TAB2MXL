@@ -76,6 +76,27 @@ class NoteTest {
 		note.setType("half");
 		assertEquals("half", note.getType());
 	}
+	
+	@Test
+	public void testAlter() {
+		note.setAlter(1);
+		assertEquals(1, note.getAlter());
+	}
+	
+	@Test
+	public void testConstructorAlter() {
+		note = new Note("E",0);
+		assertEquals("E",note.getStep());
+		assertEquals(0,note.getAlter());
+	}
+	
+	@Test
+	public void testConstructorAlterOctave() {
+		note = new Note("E",0,4);
+		assertEquals("E",note.getStep());
+		assertEquals(0,note.getAlter());
+		assertEquals(4, note.getOctave());
+	}
 
 
 }
