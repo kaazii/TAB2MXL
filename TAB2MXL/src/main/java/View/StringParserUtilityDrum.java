@@ -62,18 +62,8 @@ public class StringParserUtilityDrum extends StringParserUtility {
 			}
 
 			for (int i = 0; i < measureArray.length; i++) {
-				measureList.add(measureParser(measureArray[i], splitLines));
-				measureList.get(measureIndex).measureNumber = globalMeasureNumber++;
-				measureList.get(measureIndex).setTimeSignature(Controller.nume);
-				setChord(measureList.get(measureIndex).getNoteList());
-
-				Map<Integer, Pair<Integer, Integer>> timeList = Controller.beatList;
-				if (timeList.containsKey(measureList.get(measureIndex).measureNumber)) {
-					// only passing on the numerator for now
-					measureList.get(measureIndex)
-							.setTimeSignature(timeList.get(measureList.get(measureIndex).measureNumber).getKey());
-				}
-				measureIndex++;
+				measureList.add(measureParser(measureArray[i], splitLines, globalMeasureNumber++));
+				setChord(measureList.get(measureIndex++).getNoteList());
 			}
 
 			// Set measure repeats, if any
@@ -87,14 +77,26 @@ public class StringParserUtilityDrum extends StringParserUtility {
 		return measureList;
 	}
 
-	public static Measure measureParser(String measureString, String[][] splitLines) {
+	public static Measure measureParser(String measureString, String[][] splitLines, int measureNum) {
 		measureString = measureString.replaceAll("X", "x");
 		measureString = measureString.replaceAll("O", "o");
 		System.out.println(measureString);
-
+		
 		Measure measure = new Measure(getDivison(measureString));
-
+		measure.measureNumber = measureNum;
 		measure.divisions = getDivison(measureString);
+		
+		Pair<Integer, Integer> pair = new Pair<Integer, Integer>(Controller.nume, Controller.deno);
+		measure.setTimeSignature(Controller.nume);
+		measure.setTimeBeatType(Controller.deno);
+
+		if (timeList.containsKey(measureNum)) {
+			pair = timeList.get(measureNum);
+			measure.setTimeSignature(pair.getKey());
+			measure.setTimeBeatType(pair.getValue());
+		}
+		
+		float timeSignature = (float) measure.timeBeats / (float) measure.timeBeatType;
 
 		String lines[] = measureString.split("\\r?\\n");
 
@@ -111,12 +113,11 @@ public class StringParserUtilityDrum extends StringParserUtility {
 							note = getNote("HHx");
 						((DrumNote) note).setNotehead("x");
 					}
-					note.setColumn(i);
-					note.duration = getDuration(lines, i); // pass the current column index
-					note.floatDuration = note.duration / (float) 4;
+					note.setColumn(i);			
+					note.floatDuration = (float) getDuration(lines, i) * timeSignature;
 					note.stem = "up";
 					note.string = j; // unsure if this will break anything
-					note.setType(NoteUtility.getNoteType((float) note.getDuration() / (float) measure.divisions, note));
+					note.setType(NoteUtility.getNoteType((float) note.getFloatDuration() / (float) measure.divisions, note));
 					System.out.println("instrument " + instrument + " string: " + note.string + " duration: "
 							+ note.duration + " type: " + note.getType() + " division :" + measure.divisions); // for
 																												// testing
