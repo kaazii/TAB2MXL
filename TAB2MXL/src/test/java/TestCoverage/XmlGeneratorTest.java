@@ -82,7 +82,7 @@ class XmlGeneratorTest {
 				+ "                        <fret>0</fret>\n" + "                    </technical>\n"
 				+ "                </notations>\n" + "            </note>\n" + "        </measure>\n" + "    </part>\n"
 				+ "</score-partwise>\n";
-		assertEquals(correct, result);
+		assertEquals(correct.replaceAll("\\r\\n?", "\n"), result.replaceAll("\\r\\n?", "\n"));
 	}
 
 	@Test
@@ -100,8 +100,7 @@ class XmlGeneratorTest {
 		measure.noteList.add(note);
 
 		String result = XmlGenerator.Generate(measureList, "DRUMS");
-
-		assertEquals(result, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+		String testString = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "    <part-list>\n" + "        <score-part id=\"P1\">\n"
 				+ "            <part-name>DRUMS</part-name>\n" + "            <score-instrument id=\"P1-I36\">\n"
@@ -118,7 +117,9 @@ class XmlGeneratorTest {
 				+ "                    <display-octave>4</display-octave>\n" + "                </unpitched>\n"
 				+ "                <duration>1</duration>\n" + "                <instrument id=\"P1-I36\"/>\n"
 				+ "                <voice>1</voice>\n" + "                <type>whole</type>\n"
-				+ "            </note>\n" + "        </measure>\n" + "    </part>\n" + "</score-partwise>\n");
+				+ "            </note>\n" + "        </measure>\n" + "    </part>\n" + "</score-partwise>\n";
+
+		assertEquals(result.replaceAll("\\r\\n?", "\n"), testString.replaceAll("\\r\\n?", "\n"));
 
 	}
 
@@ -142,8 +143,7 @@ class XmlGeneratorTest {
 		measure.repeats = 4;
 
 		String result = XmlGenerator.Generate(measureList, "BASS");
-
-		assertEquals(result, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+		String testString = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "    <part-list>\n" + "        <score-part id=\"P1\">\n"
 				+ "            <part-name>BASS</part-name>\n" + "        </score-part>\n" + "    </part-list>\n"
@@ -167,7 +167,8 @@ class XmlGeneratorTest {
 				+ "                </notations>\n" + "            </note>\n"
 				+ "            <barline location=\"right\">\n" + "                <bar-style>heavy-light</bar-style>\n"
 				+ "                <repeat direction=\"backward\"/>\n" + "            </barline>\n"
-				+ "        </measure>\n" + "    </part>\n" + "</score-partwise>\n" + "");
+				+ "        </measure>\n" + "    </part>\n" + "</score-partwise>\n" + "";
+		assertEquals(result.replaceAll("\\r\\n?", "\n"), testString.replaceAll("\\r\\n?", "\n"));
 	}
 
 	@Test
@@ -184,7 +185,9 @@ class XmlGeneratorTest {
 		note.setDuration(1);
 		measure.noteList.add(note);
 		String result = XmlGenerator.Generate(measureList, "GUITAR");
-		assertEquals(result, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+		// content.replaceAll("\\r\\n?", "\n")
+
+		String compareString = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "    <work>\n" + "        <work-title>Song</work-title>\n"
 				+ "    </work>\n" + "    <identification>\n" + "        <creator type=\"composer\">Mozart</creator>\n"
@@ -223,7 +226,9 @@ class XmlGeneratorTest {
 				+ "                    <technical>\n" + "                        <string>1</string>\n"
 				+ "                        <fret>0</fret>\n" + "                    </technical>\n"
 				+ "                </notations>\n" + "            </note>\n" + "        </measure>\n" + "    </part>\n"
-				+ "</score-partwise>\n" + "");
+				+ "</score-partwise>\n" + "";
+		compareString = compareString.replaceAll("\\r\\n?", "\n");
+		assertEquals(result.replaceAll("\\r\\n?", "\n"), compareString);
 	}
 
 }

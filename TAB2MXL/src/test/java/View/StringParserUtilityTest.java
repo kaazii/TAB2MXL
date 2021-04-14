@@ -18,14 +18,16 @@ class StringParserUtilityTest {
 
 	@Test
 	void testSimple() throws Exception {
-		String res = Controller
-				.cleanup("|-----------0-----|-0---------------|\n" + "|---------0---0---|-0---------------|\n"
-						+ "|-------1-------1-|-1---------------|\n" + "|-----2-----------|-2---------------|\n"
-						+ "|---2-------------|-2---------------|\n" + "|-0---------------|-0---------------|\n" + "");
+		String cleanupString = "|-----------0-----|-0---------------|\n" + "|---------0---0---|-0---------------|\n"
+				+ "|-------1-------1-|-1---------------|\n" + "|-----2-----------|-2---------------|\n"
+				+ "|---2-------------|-2---------------|\n" + "|-0---------------|-0---------------|\n" + "";
+		cleanupString = cleanupString.replaceAll("\\r\\n?", "\n");
+		String res = Controller.cleanup(cleanupString);
 		StringParserUtility.clearMeasureList();
 		ArrayList<Measure> measureList = StringParserUtility.stringParse(res);
 		String result = XmlGenerator.Generate(measureList, "GUITAR");
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+
+		String testString = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "    <part-list>\n" + "        <score-part id=\"P1\">\n"
 				+ "            <part-name>GUITAR</part-name>\n" + "        </score-part>\n" + "    </part-list>\n"
@@ -156,20 +158,24 @@ class StringParserUtilityTest {
 				+ "                    </technical>\n" + "                </notations>\n" + "            </note>\n"
 				+ "        </measure>\n" + "    </part>\n" + "</score-partwise>\n"
 
-				+ "", result);
+				+ "";
+
+		assertEquals(testString.replaceAll("\\r\\n?", "\n"), result.replaceAll("\\r\\n?", "\n"));
 	}
 
 	@Test
 	void testDrumSimple() throws Exception {
+		String cleanupString = "CC|x---------------|--------x-------|\n" + "HH|--x-x-x-x-x-x-x-|----------------|\n"
+				+ "SD|----o-------o---|oooo------------|\n" + "HT|----------------|----oo----------|\n"
+				+ "MT|----------------|------oo--------|\n" + "BD|o-------o-------|o-------o-------|\n" + "";
+		cleanupString = cleanupString.replaceAll("\\r\\n?", "\n");
 
-		String res = Controller
-				.cleanup("CC|x---------------|--------x-------|\n" + "HH|--x-x-x-x-x-x-x-|----------------|\n"
-						+ "SD|----o-------o---|oooo------------|\n" + "HT|----------------|----oo----------|\n"
-						+ "MT|----------------|------oo--------|\n" + "BD|o-------o-------|o-------o-------|\n" + "");
+		String res = Controller.cleanup(cleanupString);
 		StringParserUtility.clearMeasureList();
 		ArrayList<Measure> measureList = StringParserUtilityDrum.stringParse(res);
 		String result = XmlGenerator.Generate(measureList, "DRUMS");
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+
+		String testString = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "    <part-list>\n" + "        <score-part id=\"P1\">\n"
 				+ "            <part-name>DRUMS</part-name>\n" + "            <score-instrument id=\"P1-I50\">\n"
@@ -330,7 +336,10 @@ class StringParserUtilityTest {
 				+ "                <duration>8</duration>\n" + "                <instrument id=\"P1-I36\"/>\n"
 				+ "                <voice>1</voice>\n" + "                <type>half</type>\n"
 				+ "                <stem>up</stem>\n" + "            </note>\n" + "        </measure>\n"
-				+ "    </part>\n" + "</score-partwise>\n", result);
+				+ "    </part>\n" + "</score-partwise>\n";
+
+		testString = testString.replaceAll("\\r\\n?", "\n");
+		assertEquals(testString, result.replaceAll("\\r\\n?", "\n"));
 	}
 
 	@Test
@@ -347,14 +356,17 @@ class StringParserUtilityTest {
 		TuningController.NU.setOctave4(5);
 		TuningController.NU.setOctave5(1);
 		TuningController.NU.setOctave6(4);
-		String res = Controller
-				.cleanup("|-----------0-----|-0---------------|\n" + "|---------0---0---|-0---------------|\n"
-						+ "|-------1-------1-|-1---------------|\n" + "|-----2-----------|-2---------------|\n"
-						+ "|---2-------------|-2---------------|\n" + "|-0---------------|-0---------------|\n" + "");
+
+		String cleanupString = "|-----------0-----|-0---------------|\n" + "|---------0---0---|-0---------------|\n"
+				+ "|-------1-------1-|-1---------------|\n" + "|-----2-----------|-2---------------|\n"
+				+ "|---2-------------|-2---------------|\n" + "|-0---------------|-0---------------|\n" + "";
+
+		String res = Controller.cleanup(cleanupString.replaceAll("\\r\\n?", "\n"));
 		StringParserUtility.clearMeasureList();
 		ArrayList<Measure> measureList = StringParserUtility.stringParse(res);
 		String result = XmlGenerator.Generate(measureList, "GUITAR");
-		assertEquals(result, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+
+		String testString = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "    <part-list>\n" + "        <score-part id=\"P1\">\n"
 				+ "            <part-name>GUITAR</part-name>\n" + "        </score-part>\n" + "    </part-list>\n"
@@ -485,19 +497,24 @@ class StringParserUtilityTest {
 				+ "                    <technical>\n" + "                        <string>6</string>\n"
 				+ "                        <fret>0</fret>\n" + "                    </technical>\n"
 				+ "                </notations>\n" + "            </note>\n" + "        </measure>\n" + "    </part>\n"
-				+ "</score-partwise>\n" + "");
+				+ "</score-partwise>\n" + "";
+
+		assertEquals(result.replaceAll("\\r\\n?", "\n"), testString.replaceAll("\\r\\n?", "\n"));
 	}
 
 	@Test
 	void testComplex() throws Exception {
-		String res = Controller
-				.cleanup("|-----------0-----|-0---------------|\n" + "|---------0---0---|-0---------------|\n"
-						+ "|-------g0h1----1-|-1---------------|\n" + "|-----2-----------|-2---------------|\n"
-						+ "|---2-------------|-2---------------|\n" + "|-0---------------|-0---------------|\n" + "");
+
+		String cleanupString = "|-----------0-----|-0---------------|\n" + "|---------0---0---|-0---------------|\n"
+				+ "|-------g0h1----1-|-1---------------|\n" + "|-----2-----------|-2---------------|\n"
+				+ "|---2-------------|-2---------------|\n" + "|-0---------------|-0---------------|\n" + "";
+
+		String res = Controller.cleanup(cleanupString.replaceAll("\\r\\n?", "\n"));
 		StringParserUtility.clearMeasureList();
 		ArrayList<Measure> measureList = StringParserUtility.stringParse(res);
 		String result = XmlGenerator.Generate(measureList, "GUITAR");
-		assertEquals(result, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+
+		String testString = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "    <part-list>\n" + "        <score-part id=\"P1\">\n"
 				+ "            <part-name>GUITAR</part-name>\n" + "        </score-part>\n" + "    </part-list>\n"
@@ -639,20 +656,25 @@ class StringParserUtilityTest {
 				+ "                <notations>\n" + "                    <technical>\n"
 				+ "                        <string>6</string>\n" + "                        <fret>0</fret>\n"
 				+ "                    </technical>\n" + "                </notations>\n" + "            </note>\n"
-				+ "        </measure>\n" + "    </part>\n" + "</score-partwise>" + "\n");
+				+ "        </measure>\n" + "    </part>\n" + "</score-partwise>" + "\n";
+
+		assertEquals(result.replaceAll("\\r\\n?", "\n"), testString.replaceAll("\\r\\n?", "\n"));
 	}
 
 	@Test
 	void testRepeat() throws Exception {
-		String res = Controller.cleanup("  |--REPEAT-2X-----|\n" + "CC|x---------------|--------x-------|\n"
+
+		String cleanupString = "  |--REPEAT-2X-----|\n" + "CC|x---------------|--------x-------|\n"
 				+ "HH|--x-x-x-x-x-x-x-|----------------|\n" + "SD|----o-------o---|oooo------------|\n"
 				+ "HT|----------------|----oo----------|\n" + "MT|----------------|------oo--------|\n"
-				+ "BD|o-------o-------|o-------o-------|\n" + "");
+				+ "BD|o-------o-------|o-------o-------|\n" + "";
+
+		String res = Controller.cleanup(cleanupString.replaceAll("\\r\\n?", "\n"));
 		StringParserUtility.clearMeasureList();
 		ArrayList<Measure> measureList = StringParserUtilityDrum.stringParse(res);
 		String result = XmlGenerator.Generate(measureList, "DRUMS");
 //		assertEquals(result, )
-		assertEquals(result, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+		String testString = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "    <part-list>\n" + "        <score-part id=\"P1\">\n"
 				+ "            <part-name>DRUMS</part-name>\n" + "            <score-instrument id=\"P1-I50\">\n"
@@ -820,7 +842,9 @@ class StringParserUtilityTest {
 				+ "                <duration>8</duration>\n" + "                <instrument id=\"P1-I36\"/>\n"
 				+ "                <voice>1</voice>\n" + "                <type>half</type>\n"
 				+ "                <stem>up</stem>\n" + "            </note>\n" + "        </measure>\n"
-				+ "    </part>\n" + "</score-partwise>\n");
+				+ "    </part>\n" + "</score-partwise>\n";
+
+		assertEquals(result.replaceAll("\\r\\n?", "\n"), testString.replaceAll("\\r\\n?", "\n"));
 
 	}
 }
